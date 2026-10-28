@@ -11,6 +11,10 @@ import (
 
 // ListPresets 查询真实配置，不缓存跨 profile 的列表，也不在读取时触发控制。
 func (s *Service) ListPresets() ([]autobgi.TaskPreset, error) {
+	// 日志链路在线后可能尚未建立业务适配器，菜单读取前补做一次只读探测。
+	if err := s.ensureMenuAdapter(); err != nil {
+		return nil, err
+	}
 	s.mu.Lock()
 	if s.state.Capabilities == nil || !s.state.Capabilities.TaskPresets {
 		s.mu.Unlock()

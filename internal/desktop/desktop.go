@@ -74,6 +74,17 @@ type DesktopService struct {
 	sleeping             bool
 	powerSleepingIntent  bool
 	power                powerController
+	// 一条龙菜单只保留当前连接的读取结果，连接代次变化时立即失效旧名称。
+	oneLongMenuStatus          string
+	oneLongMenuHint            string
+	oneLongMenuNames           []string
+	oneLongMenuProfileID       string
+	oneLongMenuActiveProfileID string
+	oneLongMenuGeneration      uint64
+	oneLongMenuReadSequence    uint64
+	oneLongMenuStateRevision   uint64
+	oneLongMenuLoading         bool
+	oneLongStartPending        bool
 }
 
 // New 由宿主注入唯一业务服务；所有窗口共用它的采集状态。
@@ -140,23 +151,15 @@ func (d *DesktopService) Attach(app *application.App, icon []byte) {
 	})
 	d.service.SetPanelVisible(false)
 	// 原生菜单既用于托盘，也用于角色右键；固定目的地和穿透开关随调用读取当前状态。
-	menu := application.NewMenu()
-	menu.Add("显示桌宠 / 恢复交互").OnClick(func(*application.Context) { d.ShowPet(); d.SetClickThrough(false) })
-	menu.Add("桌宠设置").OnClick(func(*application.Context) { d.ShowPanel() })
-	menu.Add("切换鼠标穿透").OnClick(func(*application.Context) { d.ToggleClickThrough() })
-	menu.Add("关闭鼠标穿透").OnClick(func(*application.Context) { d.SetClickThrough(false) })
-	menu.Add("重置桌宠位置").OnClick(func(*application.Context) { d.ResetPosition() })
-	menu.Add("隐藏桌宠（保持连接）").OnClick(func(*application.Context) { d.HidePet() })
-	menu.AddSeparator()
-	menu.Add("断开连接").OnClick(func(*application.Context) { d.service.Disconnect() })
-	menu.AddSeparator()
-	menu.Add("退出桌宠").OnClick(func(*application.Context) { d.Quit() })
+	menu := d.buildTrayMenu()
 	d.tray = app.SystemTray.New()
 	d.tray.SetIcon(icon)
 	d.tray.SetTooltip("芙宁娜桌宠 · 双击打开设置")
 	d.tray.SetMenu(menu)
 	d.tray.OnClick(d.ShowPet)
 	d.tray.OnDoubleClick(d.ShowPanel)
+	// 初次连接前先保留禁用提示，连接状态变化后由 Apply 异步读取真实配置。
+	d.scheduleOneLongMenuRefresh(state, false)
 	app.Event.OnApplicationEvent(events.Common.ApplicationStarted, func(*application.ApplicationEvent) {
 		d.startDesktop(needsInitialSetup(state.Profiles, state.ActiveProfileID), p.RecoveryShortcut)
 	})
@@ -175,6 +178,8 @@ func (d *DesktopService) Apply(state service.AppState) {
 		if d.stopped() {
 			return
 		}
+		// 连接代次、活动资料或能力变化都会让一条龙菜单重新读取当前服务。
+		d.scheduleOneLongMenuRefresh(state, false)
 		// 重入只保留最高版本，不能在外层原生调用尚未返回时再次写入窗口。
 		d.mu.Lock()
 		if state.Revision > max(d.appliedRevision, d.applyingRevision) &&
@@ -486,8 +491,311 @@ func (d *DesktopService) OpenAutoBGI() error {
 	return nil
 }
 
+// buildTrayMenu 每次从当前内存状态重建托盘菜单，避免旧连接名称继续作为可点击命令。
+func (d *DesktopService) buildTrayMenu() *application.Menu {
+	menu := application.NewMenu()
+	menu.Add("显示桌宠 / 恢复交互").OnClick(func(*application.Context) { d.ShowPet(); d.SetClickThrough(false) })
+	menu.Add("桌宠设置").OnClick(func(*application.Context) { d.ShowPanel() })
+	menu.Add("切换鼠标穿透").OnClick(func(*application.Context) { d.ToggleClickThrough() })
+	menu.Add("关闭鼠标穿透").OnClick(func(*application.Context) { d.SetClickThrough(false) })
+	menu.Add("重置桌宠位置").OnClick(func(*application.Context) { d.ResetPosition() })
+	menu.Add("隐藏桌宠（保持连接）").OnClick(func(*application.Context) { d.HidePet() })
+
+	// 复制一条龙菜单快照后再构建原生项，避免持有桌面锁调用 Wails。
+	d.mu.Lock()
+	status := d.oneLongMenuStatus
+	hint := d.oneLongMenuHint
+	names := append([]string(nil), d.oneLongMenuNames...)
+	startPending := d.oneLongStartPending
+	menuProfileID := d.oneLongMenuProfileID
+	menuActiveProfileID := d.oneLongMenuActiveProfileID
+	menuGeneration := d.oneLongMenuGeneration
+	d.mu.Unlock()
+	oneLongMenu := menu.AddSubmenu("启动一条龙")
+	switch status {
+	case oneLongMenuReady:
+		if startPending {
+			oneLongMenu.Add("正在启动一条龙，请稍候").SetEnabled(false)
+		}
+		for _, name := range names {
+			selectedName := name
+			item := oneLongMenu.Add(selectedName)
+			item.SetEnabled(!startPending).OnClick(func(*application.Context) {
+				d.startOneLongFromMenu(selectedName, menuProfileID, menuActiveProfileID, menuGeneration)
+			})
+		}
+		if len(names) == 0 {
+			// 防止服务端返回空白名称时出现可展开但没有内容的菜单。
+			oneLongMenu.Add("暂无一条龙配置").SetEnabled(false)
+		}
+	default:
+		if hint == "" {
+			hint = oneLongMenuDefaultHint(status)
+		}
+		oneLongMenu.Add(hint).SetEnabled(false)
+	}
+
+	menu.AddSeparator()
+	menu.Add("断开连接").OnClick(func(*application.Context) { d.service.Disconnect() })
+	menu.AddSeparator()
+	menu.Add("退出桌宠").OnClick(func(*application.Context) { d.Quit() })
+	return menu
+}
+
+// rebuildTrayMenu 通过托盘的 SetMenu 替换整棵菜单，避免后台请求直接修改已显示的菜单项。
+func (d *DesktopService) rebuildTrayMenu() {
+	d.mu.Lock()
+	tray := d.tray
+	d.mu.Unlock()
+	if tray == nil || d.stopped() {
+		return
+	}
+	tray.SetMenu(d.buildTrayMenu())
+}
+
 // ShowContextMenu 复用原生托盘菜单，不能接受前端传入任意菜单命令。
-func (d *DesktopService) ShowContextMenu() { d.tray.ShowMenu() }
+func (d *DesktopService) ShowContextMenu() {
+	d.mu.Lock()
+	tray := d.tray
+	retry := d.oneLongMenuStatus == oneLongMenuError
+	d.mu.Unlock()
+	if tray == nil {
+		return
+	}
+	// 读取失败时下一次打开菜单自动重试；成功列表不因每次右键而重复请求。
+	d.scheduleOneLongMenuRefresh(d.service.GetState(), retry)
+	tray.ShowMenu()
+}
+
+const (
+	// 一条龙菜单状态只在桌面宿主内部使用，不向 Wails 前端暴露。
+	oneLongMenuUnavailable = "unavailable"
+	oneLongMenuLoading     = "loading"
+	oneLongMenuReady       = "ready"
+	oneLongMenuEmpty       = "empty"
+	oneLongMenuError       = "error"
+)
+
+// oneLongMenuDefaultHint 为未连接和能力未就绪场景提供固定的禁用提示。
+func oneLongMenuDefaultHint(status string) string {
+	switch status {
+	case oneLongMenuLoading:
+		return "正在读取一条龙列表"
+	case oneLongMenuEmpty:
+		return "暂无一条龙配置"
+	case oneLongMenuError:
+		return "读取失败，请稍后重试"
+	default:
+		return "未连接或连接尚未完成"
+	}
+}
+
+// oneLongMenuIdentityMatches 严格核对连接资料、活动资料和连接代次。
+func oneLongMenuIdentityMatches(state service.AppState, profileID, activeProfileID string, generation uint64) bool {
+	return state.Connection.ProfileID == profileID &&
+		state.ActiveProfileID == activeProfileID &&
+		state.Connection.Generation == generation
+}
+
+// oneLongMenuOnlineIdentityMatches 在列表读取和菜单点击前额外要求连接仍处于在线状态。
+func oneLongMenuOnlineIdentityMatches(state service.AppState, profileID, activeProfileID string, generation uint64) bool {
+	return state.Connection.Status == "online" && oneLongMenuIdentityMatches(state, profileID, activeProfileID, generation)
+}
+
+// scheduleOneLongMenuRefresh 根据当前状态决定是否启动一次后台列表读取。
+func (d *DesktopService) scheduleOneLongMenuRefresh(state service.AppState, force bool) {
+	if d.stopped() {
+		return
+	}
+	// Apply 可能排队收到较旧快照；旧 revision 只能被丢弃，不能回滚菜单身份。
+	d.mu.Lock()
+	if state.Revision > 0 && state.Revision < d.oneLongMenuStateRevision {
+		d.mu.Unlock()
+		return
+	}
+	if state.Revision > d.oneLongMenuStateRevision {
+		d.oneLongMenuStateRevision = state.Revision
+	}
+	d.mu.Unlock()
+	// 日志连接先进入 online，再由服务层补齐适配器和能力；此时仍应尝试读取列表。
+	online := state.Connection.Status == "online"
+	unsupported := online && state.Capabilities != nil && !state.Capabilities.TaskPresets
+	if !online || unsupported {
+		if d.markOneLongMenuUnavailable(state) {
+			d.rebuildTrayMenu()
+		}
+		return
+	}
+
+	d.mu.Lock()
+	identityChanged := d.oneLongMenuProfileID != state.Connection.ProfileID ||
+		d.oneLongMenuActiveProfileID != state.ActiveProfileID ||
+		d.oneLongMenuGeneration != state.Connection.Generation
+	forceRefresh := force && (d.oneLongMenuStatus == oneLongMenuError ||
+		d.oneLongMenuStatus == oneLongMenuReady || d.oneLongMenuStatus == oneLongMenuEmpty)
+	shouldRead := identityChanged || d.oneLongMenuStatus == oneLongMenuUnavailable || forceRefresh
+	if d.oneLongMenuLoading {
+		shouldRead = false
+	}
+	if !shouldRead {
+		d.mu.Unlock()
+		return
+	}
+	// 连接切换时仍保留在途启动标记，服务层全局互斥锁释放前不能让新连接误显示为可启动。
+	d.oneLongMenuProfileID = state.Connection.ProfileID
+	d.oneLongMenuActiveProfileID = state.ActiveProfileID
+	d.oneLongMenuGeneration = state.Connection.Generation
+	d.oneLongMenuReadSequence++
+	sequence := d.oneLongMenuReadSequence
+	d.oneLongMenuLoading = true
+	d.oneLongMenuStatus = oneLongMenuLoading
+	d.oneLongMenuHint = ""
+	d.oneLongMenuNames = nil
+	d.mu.Unlock()
+
+	d.rebuildTrayMenu()
+	go d.readOneLongMenu(state.Connection.ProfileID, state.ActiveProfileID, state.Connection.Generation, sequence)
+}
+
+// markOneLongMenuUnavailable 清除连接失效时的旧名称并让迟到列表回包失效。
+func (d *DesktopService) markOneLongMenuUnavailable(state service.AppState) bool {
+	hint := "未连接或连接尚未完成"
+	if state.Connection.Status == "online" && state.Capabilities != nil && !state.Capabilities.TaskPresets {
+		hint = "当前连接未提供一条龙配置"
+	}
+	d.mu.Lock()
+	defer d.mu.Unlock()
+	changed := d.oneLongMenuStatus != oneLongMenuUnavailable ||
+		d.oneLongMenuHint != hint ||
+		d.oneLongMenuLoading ||
+		d.oneLongMenuProfileID != state.Connection.ProfileID ||
+		d.oneLongMenuActiveProfileID != state.ActiveProfileID ||
+		d.oneLongMenuGeneration != state.Connection.Generation ||
+		len(d.oneLongMenuNames) != 0
+	if !changed {
+		return false
+	}
+	d.oneLongMenuReadSequence++
+	d.oneLongMenuStatus = oneLongMenuUnavailable
+	d.oneLongMenuHint = hint
+	d.oneLongMenuNames = nil
+	d.oneLongMenuLoading = false
+	d.oneLongMenuProfileID = state.Connection.ProfileID
+	d.oneLongMenuActiveProfileID = state.ActiveProfileID
+	d.oneLongMenuGeneration = state.Connection.Generation
+	return true
+}
+
+// readOneLongMenu 在后台读取当前连接列表，提交前再次验证代次和菜单读取序号。
+func (d *DesktopService) readOneLongMenu(profileID, activeProfileID string, generation, sequence uint64) {
+	presets, err := d.service.ListPresets()
+	names := oneLongMenuNames(presets)
+	application.InvokeAsync(func() {
+		if d.stopped() {
+			return
+		}
+		state := d.service.GetState()
+		d.mu.Lock()
+		valid := sequence == d.oneLongMenuReadSequence &&
+			oneLongMenuOnlineIdentityMatches(state, profileID, activeProfileID, generation)
+		if !valid {
+			d.mu.Unlock()
+			return
+		}
+		d.oneLongMenuLoading = false
+		if err != nil {
+			d.oneLongMenuStatus = oneLongMenuError
+			d.oneLongMenuHint = "读取失败，请稍后重试"
+			d.oneLongMenuNames = nil
+		} else if len(names) == 0 {
+			d.oneLongMenuStatus = oneLongMenuEmpty
+			d.oneLongMenuHint = "暂无一条龙配置"
+			d.oneLongMenuNames = nil
+		} else {
+			d.oneLongMenuStatus = oneLongMenuReady
+			d.oneLongMenuHint = ""
+			d.oneLongMenuNames = names
+		}
+		d.mu.Unlock()
+		d.rebuildTrayMenu()
+	})
+}
+
+// oneLongMenuNames 去重并清理服务端返回的空白名称，保留服务端原有顺序。
+func oneLongMenuNames(presets []autobgi.TaskPreset) []string {
+	names := make([]string, 0, len(presets))
+	seen := make(map[string]struct{}, len(presets))
+	for _, preset := range presets {
+		name := strings.TrimSpace(preset.Name)
+		if name == "" {
+			continue
+		}
+		if _, exists := seen[name]; exists {
+			continue
+		}
+		seen[name] = struct{}{}
+		names = append(names, name)
+	}
+	return names
+}
+
+// startOneLongFromMenu 只允许原生菜单名称触发固定的一条龙入口，并在回包前核对连接身份。
+func (d *DesktopService) startOneLongFromMenu(name, expectedProfileID, expectedActiveProfileID string, expectedGeneration uint64) {
+	target := strings.TrimSpace(name)
+	if target == "" {
+		return
+	}
+	state := d.service.GetState()
+	if !oneLongMenuOnlineIdentityMatches(state, expectedProfileID, expectedActiveProfileID, expectedGeneration) {
+		// 菜单显示期间若连接切换，不能把旧菜单名称转发到新连接。
+		d.showBubbleForState(state, "连接已变化，请重新打开菜单后选择一条龙", "error")
+		d.scheduleOneLongMenuRefresh(state, false)
+		return
+	}
+	d.mu.Lock()
+	if d.oneLongStartPending {
+		d.mu.Unlock()
+		d.showBubble("已有一条龙启动请求正在处理，请稍后查看桌宠提示", "error")
+		return
+	}
+	d.oneLongStartPending = true
+	d.mu.Unlock()
+	d.rebuildTrayMenu()
+	profileID, activeProfileID, generation := expectedProfileID, expectedActiveProfileID, expectedGeneration
+	go func() {
+		err := d.service.StartOneLongFromMenuForConnection(target, profileID, activeProfileID, generation)
+		application.InvokeAsync(func() {
+			if d.stopped() {
+				return
+			}
+			current := d.service.GetState()
+			d.mu.Lock()
+			sameConnection := oneLongMenuIdentityMatches(current, profileID, activeProfileID, generation)
+			d.oneLongStartPending = false
+			d.mu.Unlock()
+			if !sameConnection {
+				// 旧连接的启动结果不进入新连接的通知队列；新连接菜单由 Apply 重新读取。
+				d.rebuildTrayMenu()
+				return
+			}
+			d.rebuildTrayMenu()
+			if err == nil {
+				d.showBubble("一条龙启动请求已受理："+target, "status")
+				return
+			}
+			var startErr *service.OneLongStartError
+			if errors.As(err, &startErr) {
+				d.showBubble(startErr.Message, "error")
+				if startErr.Code == "PRESET_NOT_FOUND" || startErr.Code == "LIST_FAILED" {
+					// 服务端列表可能已变化，失败后重新读取一次以修正菜单名称。
+					d.scheduleOneLongMenuRefresh(current, true)
+				}
+				return
+			}
+			d.showBubble(err.Error(), "error")
+		})
+	}()
+}
 
 // PetClicked 按需展示当前 BGI 状态，较早请求不能覆盖较新的点击结果。
 func (d *DesktopService) PetClicked() {
@@ -788,11 +1096,20 @@ func (d *DesktopService) cancelUnstartedLogTrigger(id string) {
 
 // showBubble 将本地手动摘要也交由中心排队，避免绕开优先级和提醒开关。
 func (d *DesktopService) showBubble(text, kind string) {
+	d.showBubbleForState(d.service.GetState(), text, kind)
+}
+
+// showBubbleForState 先把通知中心切到指定连接，再排入当前连接的手动提示。
+func (d *DesktopService) showBubbleForState(state service.AppState, text, kind string) {
 	now := time.Now()
 	d.mu.Lock()
 	if d.stopped() {
 		d.mu.Unlock()
 		return
+	}
+	if d.notices.center == nil || d.notices.scope != notificationScope(state) {
+		// 连接切换与菜单回调可能交错，先清理旧作用域，避免新提示被旧队列吞掉。
+		_ = d.notices.update(d.visibleNotificationStateLocked(state), d.sleeping, now)
 	}
 	// 设置写入失败属于本地系统错误，不能被普通点击摘要降低优先级。
 	if kind == "warning" {

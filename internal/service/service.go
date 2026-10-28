@@ -71,6 +71,9 @@ type Service struct {
 	targetHistoryOnly   bool
 	notificationBlocked bool   // 宿主临时禁播事实不进入前端偏好，也不能由页面伪造来源。
 	petDragGeneration   uint64 // 只随已提交的交互策略变化递增，普通快照不能中断手势。
+	oneLongStartMu      sync.Mutex
+	oneLongStarting     bool       // 原生菜单启动期间拒绝重复点击，旧接口没有幂等保证。
+	adapterInitMu       sync.Mutex // 菜单首次读取时串行探测适配器，避免并发创建多个连接适配器。
 }
 
 // New 加载非敏感配置，连接仅由宿主在启动就绪后按用户偏好发起。

@@ -7,7 +7,7 @@ import (
 	"time"
 )
 
-// LegacyAdapter 只映射当前仓库已经核实的两个 GET 接口。
+// LegacyAdapter 只映射当前仓库已经核实的只读接口和固定的一条龙启动接口。
 type LegacyAdapter struct {
 	readOnlyBoundary
 	client  *Client
