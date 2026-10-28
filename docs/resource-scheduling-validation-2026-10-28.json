@@ -1,0 +1,233 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-28",
+  "version": "0.2.8",
+  "scope": "Desktop recovery shortcut status and retry, deadline sprite scheduling, bounded successful PNG validation cache",
+  "tests": {
+    "recoveryShortcut": {
+      "go": "go1.26.10 windows/amd64",
+      "race": true,
+      "topLevelCases": 4,
+      "repetitions": 1,
+      "concurrentApplySnapshotIterations": 480,
+      "vueCases": 33,
+      "evidence": ".validation/recovery-shortcut-20261028.json",
+      "evidenceSHA256": "5288ce73ae637bd25f1e4be22be051f1b445d99598093a35f0e7bb9f6656f837"
+    },
+    "renderer": {
+      "cases": 19,
+      "compiler": "5.9.3",
+      "node": "v24.21.0",
+      "steady8FPS": "480 draws and RAF callbacks per 60 seconds at both 60 and 144 Hz in the controlled clock",
+      "steady30FPS": "1800 draws per 60 seconds at both display rates",
+      "evidence": ".validation/renderer-deadline-review-21518c94-a1ab-4fea-8865-530a6f3ce50f/renderer-controlled-clock.json",
+      "evidenceSHA256": "21f60dbed56ad349a811a401f7e80f135496f75435b947df11ce22d71507a08a"
+    },
+    "pngCache": {
+      "go": "go1.26.10 windows/amd64",
+      "race": true,
+      "repetitions": 3,
+      "topLevelTests": 10,
+      "namedRecords": 23,
+      "leafTests": 21,
+      "passingExecutions": 69,
+      "failures": 0,
+      "races": 0,
+      "capacity": 32,
+      "repeatedOr32ConcurrentHTTPDecodes": 1,
+      "concurrent12ImportDecodes": 1,
+      "evidence": ".validation/skin-png-cache-20261028/validation.json",
+      "evidenceSHA256": "bc56e192bd38da89656319b5b57d32dc19df5f7d1c9aa0f25fd810a78cf58fd4"
+    }
+  },
+  "build": {
+    "go": "go1.26.10",
+    "wails": "3.0.0",
+    "frontendRuntime": "3.0.0",
+    "node": "v24.21.0",
+    "npm": "11.19.0",
+    "vet": "passed all desktop packages",
+    "build": "passed all desktop packages",
+    "frontend": "vue-tsc --noEmit and Vite 7.2.2, 87 modules",
+    "bindings": {
+      "services": 2,
+      "methods": 40,
+      "models": 42
+    },
+    "os": "windows",
+    "arch": "amd64",
+    "production": true,
+    "trimpath": true,
+    "fileVersion": "0.2.8.0",
+    "productVersion": "0.2.8",
+    "exe": "bin/AutoBGI-Pet.exe",
+    "exeSHA256": "46104ea4a60fc869d4379f4f4f21244ea812dff0fa43fb0e19df991169983e5d",
+    "evidenceDirectory": ".validation/resource-scheduling-5eb7341264904ad880ac921238703abe"
+  },
+  "cleanup": {
+    "newGoTestSources": [
+      "internal/desktop/recovery_shortcut_20261028_validation_tmp_test.go",
+      "internal/skin/png_cache_domain_temporary_test.go"
+    ],
+    "deleted": true,
+    "cleanupAttemptsPerSource": 1,
+    "frontendTests": "stdin only; no test source written",
+    "olderRejectedTargets": "untouched; no cleanup retried"
+  },
+  "testedSourceAudit": [
+    {
+      "path": "internal/desktop/recovery_shortcut.go",
+      "sha256": "dc8acf4f08d0b6bc75d31bec89ac2f742c43cbe43700b734b272114e7c2900f3",
+      "matchesTestedSource": true
+    },
+    {
+      "path": "internal/desktop/desktop.go",
+      "sha256": "cefd29dd8be6f89a14fabc58f267cf075b22bf98cdc5859319d183ae12d37539",
+      "matchesTestedSource": true
+    },
+    {
+      "path": "internal/desktop/panel.go",
+      "sha256": "45c34f2d47d7c2af37964a969276267abf954d348e9170922045fcdbf47ce8f1",
+      "matchesTestedSource": true
+    },
+    {
+      "path": "frontend/src/bridge.ts",
+      "sha256": "ff06aa147b8f5c7153daddf9bbd8d92466544e43a2a200f3d430214836d1f2b9",
+      "matchesTestedSource": true
+    },
+    {
+      "path": "frontend/src/stores/app.ts",
+      "sha256": "5584198d467a50fcda849d4cf9711dff9d239a847b18e42cd78bb8e0d52a3c2e",
+      "matchesTestedSource": true
+    },
+    {
+      "path": "frontend/src/views/PanelView.vue",
+      "sha256": "4350561894f3537c18fda6d580e1948ea1fe6ef213ba0499d80451a76d3c1976",
+      "matchesTestedSource": true
+    },
+    {
+      "path": "frontend/bindings/autobgi-pet/internal/desktop/desktopservice.ts",
+      "sha256": "4b43bd2b73aeb3d97d03fc35e1b3377f9ad881f0a08d948f2ac12e3c0559f83a",
+      "matchesTestedSource": true
+    },
+    {
+      "path": "internal/skin/archive.go",
+      "sha256": "0ab25524ed2805fcadb0b2fa10eeab5c4ea31d4eb9f2044f6428c50ca779d72b",
+      "matchesTestedSource": true
+    },
+    {
+      "path": "internal/skin/http.go",
+      "sha256": "d7b23eebd2b8d2b95e81bd18483f96cfa09c44ca8f056fe87fb36f1e0fc3c940",
+      "matchesTestedSource": true
+    },
+    {
+      "path": "internal/skin/manager.go",
+      "sha256": "5e71dc874af98da9dd8a0c873370932cb7cdf89d734b773b3bfdd26551cda54b",
+      "matchesTestedSource": true
+    },
+    {
+      "path": "internal/skin/manifest.go",
+      "sha256": "aa5e618d4033dc84d7a630ec142e38e02082493ee9d54918e3f89aa08f1fc18c",
+      "matchesTestedSource": true
+    },
+    {
+      "path": "internal/skin/validation_cache.go",
+      "sha256": "7c195192de3a4f7d1a97749ea94cd0ca39fc0a0c686e4a031c5400465f013648",
+      "matchesTestedSource": true
+    },
+    {
+      "path": "frontend/src/pet/renderer.ts",
+      "sha256": "90a41f9b1ca815cb40db26b61c9d89fdc299587b37fa9ea913d3267f9aae9f23",
+      "matchesTestedSource": true
+    }
+  ],
+  "additionalFiles": [
+    {
+      "path": "frontend/package.json",
+      "sha256": "8845ffd8025712732a1c761721ad2497942b22724927bd0d05cfbdaa8206f9fb"
+    },
+    {
+      "path": "frontend/package-lock.json",
+      "sha256": "173d3c9d40759c84940d6483a29d71b42d943e6626559e8a1856b586b6dd791e"
+    },
+    {
+      "path": "build/windows/info.json",
+      "sha256": "98d113adf991da6223af0028d5525357a877f87709b7a4ec8cfaed7a7fe8b5a9"
+    },
+    {
+      "path": "build/windows/app.manifest",
+      "sha256": "742e23066d799da1d2b365261a57007801f0c9af3c2ab4fd66291a994b5363d1"
+    },
+    {
+      "path": "scripts/build.ps1",
+      "sha256": "61e2f4b3ffad5090019f646b0f5b9f50d3048e8886ccc39e653ef68bd5b5b078"
+    },
+    {
+      "path": "go.mod",
+      "sha256": "5900cde3766df7587db5aa3942eff7123090c64da128f40e451fb909c718c37b"
+    },
+    {
+      "path": "go.sum",
+      "sha256": "68ec609dc2b698d763d09bbea26c77ed4326d109fd1b3ef2b176914e72f2d4f9"
+    },
+    {
+      "path": "main.go",
+      "sha256": "746816de884054ff447e7810f500a19d5ec319ee15ae1e2a8daaef4238c11b9a"
+    },
+    {
+      "path": "frontend/src/components/PetCanvas.vue",
+      "sha256": "69303b7fa33494eecb96571cdc1d6f5a10d18bd6e432bf47deff0cd2ad5a81d1"
+    },
+    {
+      "path": "README.md",
+      "sha256": "0c1fff8a5c3c68eb1f4d0cb9fe2e6cbbe659339fc9581e7b2eb44c7927eaed82"
+    },
+    {
+      "path": "docs/acceptance.md",
+      "sha256": "811bae163e815c475ce3751985ec7b9a40f5d927535a8c018cb70fcaf0f081f2"
+    },
+    {
+      "path": "docs/resource-scheduling-2026-10-28.md",
+      "sha256": "6954d45b35b5b9fb8eab88a598ae7be9f27fd4815322ab9c3db0b055f13d45f8"
+    },
+    {
+      "path": "autobgi_pet_windows_amd64.syso",
+      "sha256": "5832d0648b0de9ab6ecd0469105490ecd91b291dda154438dfd0819878e43e5a"
+    }
+  ],
+  "preservedBaseline": [
+    {
+      "path": "menu/web/index.html",
+      "sha256": "ca96ceb33080ee823d448d0a6da44029cf1aad63553d7a731209a193f93c23aa",
+      "unchanged": true
+    },
+    {
+      "path": "menu/web/version.txt",
+      "sha256": "28ae199272f193ac9368dc9f4abcd8bbe4631ea6eba15f167675ec53512b5c01",
+      "unchanged": true
+    },
+    {
+      "path": "abgi-updater.exe",
+      "sha256": "0279ba6eee199c3c1fd8fead6b360405bef5d68f07067b6ab95b26d6a6150b79",
+      "unchanged": true
+    },
+    {
+      "path": "menu/routes_integrations.go",
+      "sha256": "6b9646ea8ec1ad40304f0455177298ad263ead6646f88008c9a5e8e60eaaa20a",
+      "unchanged": true
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/bin/AutoBGI-Pet-0.2.7-windows-amd64.zip",
+      "sha256": "dc4720af9c9bb68e958eb19e085ba519ec708a9d8593d6a5818781f55496b84b",
+      "unchanged": true
+    }
+  ],
+  "boundaries": [
+    "No native GUI or actual global shortcut registration in this release validation",
+    "Controlled browser clock and Vue renderer are not native Windows acceptance",
+    "250 MB process-tree memory target remains unpassed; no current CPU or memory measurement",
+    "No production credentials, AutoBGI or game execution, network or sleep change",
+    "Execution, verified inventory and reliable completion events remain unavailable",
+    "Existing companion AutoBGI source still requires its own rebuild and deployment"
+  ]
+}

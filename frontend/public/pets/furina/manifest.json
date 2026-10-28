@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "id": "furina",
+  "name": "芙宁娜",
+  "author": "AI 生成图像",
+  "license": "芙宁娜同人图；角色及相关权利归原权利人所有",
+  "atlas": "atlas.png",
+  "frameWidth": 444,
+  "frameHeight": 444,
+  "columns": 4,
+  "rows": 2,
+  "scale": 1,
+  "anchor": { "x": 0.5, "y": 1 },
+  "actions": {
+    "idle": { "frames": [0], "fps": 1, "loop": true },
+    "wave": { "frames": [1], "fps": 1, "loop": true },
+    "happy": { "frames": [2], "fps": 1, "loop": true },
+    "surprised": { "frames": [6], "fps": 1, "loop": true },
+    "sad": { "frames": [7], "fps": 1, "loop": true },
+    "hungry": { "frames": [7], "fps": 1, "loop": true },
+    "weak": { "frames": [7], "fps": 1, "loop": true },
+    "faint": { "frames": [4], "fps": 1, "loop": true },
+    "warning": { "frames": [3], "fps": 1, "loop": true },
+    "sleep": { "frames": [4], "fps": 1, "loop": true },
+    "working": { "frames": [5], "fps": 1, "loop": true },
+    "dragging": { "frames": [6], "fps": 1, "loop": true },
+    "offline": { "frames": [7], "fps": 1, "loop": true }
+  },
+  "fallbackAction": "idle"
+}

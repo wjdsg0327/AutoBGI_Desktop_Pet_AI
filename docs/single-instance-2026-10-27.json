@@ -1,0 +1,10 @@
+{
+  "recordedAt": "2026-10-27T20:13:53.1000370+08:00",
+  "executableSha256": "69ac07cc514b8eb896d97e9db942b15ce7d152747468fcbb964dc02270cf1b1d",
+  "secondExitedWithin5Seconds": true,
+  "secondExitCode": 0,
+  "originalInstanceRemainedAlive": true,
+  "matchingProcessCount": 1,
+  "passed": true,
+  "scope": "只验证Windows同用户重复启动后的进程互斥；未通过截图验证托盘、聚焦、动画或真实网络连接"
+}

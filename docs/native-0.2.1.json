@@ -1,0 +1,58 @@
+{
+  "recordedAt": "2026-10-27T20:32:03.9958659+08:00",
+  "version": "0.2.1",
+  "executableSha256": "340d3f63e631bbbc5cb3e23b80ce40942f37851741f7939867132571f8250107",
+  "originalPid": 105016,
+  "originalAlive": true,
+  "secondPid": 89484,
+  "secondExitedWithin5Seconds": true,
+  "secondExitCode": 0,
+  "matchingClientProcessCount": 1,
+  "source": "same-isolated-offline-profile; no apiKey; no connection",
+  "uia": {
+    "observed": true,
+    "sourceUrl": "http://wails.localhost/?view=panel",
+    "documentText": "AutoBGI\n桌边小助手\n0.2\nYOUR DESKTOP COMPANION\n运行概览\n连接管理\n问问小助手\n一条龙配置\n桌宠设置\n隔离离线检查\n尚未连接\n本地运行 · 无需大模型\nOVERVIEW\n运行概览.\n仅查询模式\n￼\n尚未连接\n连接之后，进度就在身边。\n填写 AutoBGI 服务地址与 API 密钥，让小助手替你看一眼运行状态。\n连接 AutoBGI\n没有可靠完成事件时，我不会误报任务完成。\nABGI\nBUDDY\n￼\nalways by your side\n此刻的 AutoBGI\n暂无更新\nBGI 进程\n尚未读取\n进程存在不代表一条龙正在运行\n任务状态\n暂无可靠任务状态\n以服务端结构化状态为准\n数据范围\n实例级状态\n隔离离线检查\n运行详情\n等待连接\n配置组\n—\n当前路线\n—\n当前脚本\n—\n运行进度\n—\n脚本进度\n—\n预计结束\n暂无展示信息\n打开 AutoBGI 网页\nA LITTLE HEADS-UP\n不猜测，只展示事实。\n业务摘要只读取已有数据与缓存。未采集的信息显示未知，扫描账号与游戏执行账号分别标注。\n今日收益\n服务端能力协商后读取\n背包摘要\n服务端能力协商后读取\n培养计划\n服务端能力协商后读取\n试试「当前状态」\n已有业务数据\n读取业务摘要\n当前连接未协商收益、背包或培养计划能力。更新 AutoBGI 服务端后重新连接可检测。\nA little buddy. A clearer picture.\nAutoBGI Desktop Pet v0.2.1",
+    "nativeVersionObserved": true,
+    "isolatedProfileObserved": true
+  },
+  "capture": {
+    "attempts": 2,
+    "errors": [
+      "window capture timed out: timed out waiting on channel",
+      "window capture timed out: timed out waiting on channel"
+    ],
+    "inputsPerformed": false
+  },
+  "emptyFirstSetup": {
+    "familyProcessCount": 8,
+    "rendererCount": 2,
+    "profileCount": 0,
+    "nativePictureVerified": false,
+    "rootAlive": true,
+    "observedWithinSeconds": 0.921,
+    "stderr": "2026/10/27 20:35:28 [WebView2] Environment created successfully\n2026/10/27 20:35:28 [WebView2] Environment created successfully\n"
+  },
+  "cleanup": {
+    "method": "只对精确路径与启动时间匹配的隔离客户端使用进程树终止；不作为正常Quit验收",
+    "runtimeDirectory": "D:\\Documents\\go\\autobgi\\AutoBGI_Desktop_Pet_AI\\bin\\runtime-021-74e945216a6a48f48dff6625d7af2edb",
+    "runtimeDirectoryRemoved": false,
+    "testProcessesStopped": true,
+    "cleanupRejected": true,
+    "rejectionReason": "automatic approval rejected the directory cleanup: blocked by policy; command did not execute; no alternate deletion attempted",
+    "retainedContextFile": "bin/runtime-021-context.json"
+  },
+  "environment": {
+    "os": {
+      "Caption": "Microsoft Windows 10 专业版",
+      "Version": "10.0.19045",
+      "BuildNumber": "19045"
+    },
+    "cpu": {
+      "Name": "12th Gen Intel(R) Core(TM) i5-12490F",
+      "NumberOfLogicalProcessors": 12
+    },
+    "windowVisibility": "控制台由原生窗口工具及UIA读取；没有成功截图；角色未被工具枚举",
+    "dpi": "未核验有效DPI"
+  }
+}

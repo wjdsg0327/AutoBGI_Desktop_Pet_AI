@@ -1,0 +1,691 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-28",
+  "stage": "Real skill selection and explicit target confirmation after frozen 0.2.14",
+  "status": "Source implemented and isolated validation passed; complete specification remains unfinished",
+  "goalComplete": false,
+  "clientSourceDirectory": "AutoBGI_Desktop_Pet_AI",
+  "changes": {
+    "actualSkillSourceFields": [
+      "skill_id",
+      "skill_type"
+    ],
+    "selectionIdentity": "Exact character ID, explicit element and unique full skill name joined with public calculator metadata",
+    "classification": "Calculator PosName and upgradeability; no numeric skill_type enum inferred",
+    "confirmation": "Empty A/E/Q selectors, review, final explicit confirmation, CAS save",
+    "persistedBinding": "targetSkills:{element,skillIds}",
+    "transientProof": "skillSelectionFingerprint",
+    "metadataEndpoint": "POST /api/talentPlan/skill-options/refresh",
+    "requirementsPropagation": [
+      "cached progress",
+      "explicit requirements refresh",
+      "inventory material preparation"
+    ],
+    "legacyTargetJSONAndFingerprintPreserved": true,
+    "legacyDesktopDTOUnchanged": true,
+    "noProductionTrustedPanel": true,
+    "executionAvailable": false,
+    "inventoryVerified": false,
+    "completionEventsAvailable": false
+  },
+  "validation": {
+    "domainAndActualMenu": {
+      "normal": {
+        "topLevel": 38,
+        "subtests": 262,
+        "namedTests": 300,
+        "leafCases": 276,
+        "failOrSkipActions": 0,
+        "noTestPackageSkips": [],
+        "dataRaceWarnings": 0
+      },
+      "race": {
+        "topLevel": 38,
+        "subtests": 262,
+        "namedTests": 300,
+        "leafCases": 276,
+        "failOrSkipActions": 0,
+        "noTestPackageSkips": [],
+        "dataRaceWarnings": 0
+      },
+      "vetExit": 0,
+      "sourceCopies": 36,
+      "sourceSetSHA256": "55cdbc32fcdd4aab3706ee8abefa471cb79932dfbbd500372bc1525e270e29bc"
+    },
+    "metadataAndActualCalculatorHelpers": {
+      "normal": {
+        "topLevel": 7,
+        "subtests": 57,
+        "namedTests": 64,
+        "leafCases": 59,
+        "failOrSkipActions": 0,
+        "noTestPackageSkips": [
+          "auto-bgi/Mihoyo"
+        ],
+        "dataRaceWarnings": 0
+      },
+      "race": {
+        "topLevel": 7,
+        "subtests": 57,
+        "namedTests": 64,
+        "leafCases": 59,
+        "failOrSkipActions": 0,
+        "noTestPackageSkips": [
+          "auto-bgi/Mihoyo"
+        ],
+        "dataRaceWarnings": 0
+      },
+      "vetExit": 0,
+      "scope": "isolated actual production helpers, selection and explicit target calculation; no production initialization",
+      "copyMap": {
+        "harness/CharacterPlanService/SkillSelection.go": "full byte-identical CharacterPlanService/SkillSelection.go",
+        "harness/CharacterPlanService/Targeted.go": "full byte-identical CharacterPlanService/Targeted.go",
+        "harness/CharacterPlanService/calculator_actual.go": "AST extracted actual calculator types, selection, request construction, response validation, merge and material helpers; actual CachedCharacterRequirements types; actual findAvatarByName/buildCharacterTalents/normalizeMaterialName",
+        "harness/Mihoyo/skill_actual.go": "AST extracted exact Mihoyo.GenshinAvatarSkill"
+      }
+    },
+    "vue": {
+      "scenarios": 14,
+      "assertions": 64,
+      "warnings": 0,
+      "runtimeErrors": 0
+    },
+    "frontend": {
+      "sourceInputs": 189,
+      "sourceStable": true,
+      "outputFiles": 172,
+      "buildExit": 0
+    },
+    "host": {
+      "goVersion": "go version go1.27.1 windows/amd64",
+      "vetExit": 0,
+      "buildExit": 0,
+      "sourceInputs": 660,
+      "sourceStable": true,
+      "executable": "D:\\Documents\\go\\autobgi\\AutoBGI_Desktop_Pet_AI\\.validation\\skills-root-a3b7f3944af54ded96d796c9e2c0b01a\\AutoBGI-skill-binding-compile.exe",
+      "executableRun": false,
+      "executableSHA256": "85289d686900f036a85f78ce701a240ad9de1e78533602a549de659aeeb9f9b4"
+    },
+    "buildChecks": {
+      "frontend": {
+        "inputs": 189,
+        "beforeAfterEqual": true,
+        "currentMatches": true
+      },
+      "host": {
+        "inputs": 660,
+        "beforeAfterEqual": true,
+        "currentMatches": true
+      }
+    },
+    "sourceAndDocumentBindings": 48,
+    "frozenAndHistoricalItems": 13,
+    "independentReview": {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/skill-selection-887ec23130ac41a0a483d0077a3d1518/review.json",
+      "sha256": "07cb89011c4530ccb4335348a5b6d68d7643e6221c70c92294dac2389c545d6a"
+    },
+    "independentBuildAudit": {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/skill-binding-ui-87287ccf3a4c4d0a8e13202a6a72fe7c/cross-audit.json",
+      "sha256": "6f1879ab5825b986abe53c6af397d5a89ab5024e98ddb70d6a0a7535a3fc4291"
+    }
+  },
+  "cleanup": {
+    "status": "All four exact single cleanup attempts rejected before execution: blocked by policy",
+    "metadataFiles": 2307,
+    "domainAndMenuFiles": 64,
+    "uiScriptFiles": 1,
+    "rootExecutableFiles": 1,
+    "totalProtectedResiduals": 2373,
+    "deletedFiles": 0,
+    "retries": 0,
+    "alternativeCleanup": 0,
+    "ancestorDeletion": 0,
+    "cleanupSucceeded": false
+  },
+  "initialFailuresRetained": [
+    "Unused import after inventory helper unification; corrected before final menu runs",
+    "Two metadata fixture mutations collided with existing IDs; corrected fixtures before final normal and race",
+    "Initial UI stdin script syntax error before scenarios executed; final explicit script passed"
+  ],
+  "limitations": [
+    "No production AutoBGI, BetterGI, game or native desktop launch",
+    "Synthetic identities, isolated SQLite, in-memory account/public metadata/execution boundaries only",
+    "Vue renderer and CSS inspection do not prove browser or native layout",
+    "Public metadata refresh does not refresh account panel or establish trustworthy base talents/source time",
+    "No frozen release artifacts rebuilt or overwritten",
+    "Native focus, touch, monitor/DPI, production integration and long-term performance remain unaccepted",
+    "2373 cleanup targets retained unchanged because automatic approval refused all exact deletion attempts"
+  ],
+  "sourceBindings": [
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/README.md",
+      "expected": "4d7a46c53f9d06a6bee68db85b4eeb8d2c5cd4846720b0c9e2b86fea50147800",
+      "actual": "4d7a46c53f9d06a6bee68db85b4eeb8d2c5cd4846720b0c9e2b86fea50147800",
+      "matched": true
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/docs/acceptance.md",
+      "expected": "321649747c5d25ae424609ac22b3bee3ab194791386ea08f9d8deb1c97d41306",
+      "actual": "321649747c5d25ae424609ac22b3bee3ab194791386ea08f9d8deb1c97d41306",
+      "matched": true
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/docs/cultivation-queue.md",
+      "expected": "cd1483d88e3f2ba111aadbba5e7d6d0c7223dd30b097298529c898e2d42350dd",
+      "actual": "cd1483d88e3f2ba111aadbba5e7d6d0c7223dd30b097298529c898e2d42350dd",
+      "matched": true
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/docs/skill-selection-2026-10-28.md",
+      "expected": "b32311926513b020c1ac000e9a853fe93dab59dd424ec3bf4493f691e5c05196",
+      "actual": "b32311926513b020c1ac000e9a853fe93dab59dd424ec3bf4493f691e5c05196",
+      "matched": true
+    },
+    {
+      "path": "CharacterPlanService/CalculatorRemote.go",
+      "expected": "917dcb561dbc3392c9fd51c9b4aec4af123fed2acb482b579204ce688abbc1c7",
+      "actual": "917dcb561dbc3392c9fd51c9b4aec4af123fed2acb482b579204ce688abbc1c7",
+      "matched": true
+    },
+    {
+      "path": "CharacterPlanService/CharacterInformation.go",
+      "expected": "d45256784bdb432acc42150e11ccc4de92a037fb60c47a2cb0fa011f1113233f",
+      "actual": "d45256784bdb432acc42150e11ccc4de92a037fb60c47a2cb0fa011f1113233f",
+      "matched": true
+    },
+    {
+      "path": "CharacterPlanService/ReadOnly.go",
+      "expected": "5032ae8a4533ae976676377b7b87970cb135b754ed060881d4d373bf2757bb78",
+      "actual": "5032ae8a4533ae976676377b7b87970cb135b754ed060881d4d373bf2757bb78",
+      "matched": true
+    },
+    {
+      "path": "CharacterPlanService/SkillSelection.go",
+      "expected": "850013b77f71a90a3aae0c7420a1bf4b9f199d52bf5c1bb0dceb71c015a9a756",
+      "actual": "850013b77f71a90a3aae0c7420a1bf4b9f199d52bf5c1bb0dceb71c015a9a756",
+      "matched": true
+    },
+    {
+      "path": "CharacterPlanService/Targeted.go",
+      "expected": "960b4c729ef3a4af481918bfc87559a9fbf57c8359c4c5820c0a4853e98de6b7",
+      "actual": "960b4c729ef3a4af481918bfc87559a9fbf57c8359c4c5820c0a4853e98de6b7",
+      "matched": true
+    },
+    {
+      "path": "Mihoyo/character_info.go",
+      "expected": "6d0bdc0bdc545636e846eecdff8a13d082072bd7fb998445ec706f8babef3cd6",
+      "actual": "6d0bdc0bdc545636e846eecdff8a13d082072bd7fb998445ec706f8babef3cd6",
+      "matched": true
+    },
+    {
+      "path": "TalentPlanService/catalog.go",
+      "expected": "024dc897808fa0e001bff75a291a979c023bdd5e07cc4a6f2619c3172732b26b",
+      "actual": "024dc897808fa0e001bff75a291a979c023bdd5e07cc4a6f2619c3172732b26b",
+      "matched": true
+    },
+    {
+      "path": "TalentPlanService/catalog_evidence.go",
+      "expected": "21594df707be8e1fd1ff2b4715c2f3031a68780bc1576ba895a13cb4e33a29d5",
+      "actual": "21594df707be8e1fd1ff2b4715c2f3031a68780bc1576ba895a13cb4e33a29d5",
+      "matched": true
+    },
+    {
+      "path": "TalentPlanService/catalog_types.go",
+      "expected": "d6fcbbad669e346470eda11020dfeb45bd4c8cc3e6b9f07cc80301206a96c964",
+      "actual": "d6fcbbad669e346470eda11020dfeb45bd4c8cc3e6b9f07cc80301206a96c964",
+      "matched": true
+    },
+    {
+      "path": "TalentPlanService/collection_codec.go",
+      "expected": "30c3665aef1d938c16e173b6009880d6c451edff714e231f878d4aa9f2312557",
+      "actual": "30c3665aef1d938c16e173b6009880d6c451edff714e231f878d4aa9f2312557",
+      "matched": true
+    },
+    {
+      "path": "TalentPlanService/collection_store.go",
+      "expected": "3ed5375660e27f1ffce54dda8bbd94e529ab62d40105cf8c8e67d71edcd1ac0a",
+      "actual": "3ed5375660e27f1ffce54dda8bbd94e529ab62d40105cf8c8e67d71edcd1ac0a",
+      "matched": true
+    },
+    {
+      "path": "TalentPlanService/collection_types.go",
+      "expected": "f3f5ec1f74be048245f449fee6ad983ac27ddf77eaf6e5441124d80d9f5f816b",
+      "actual": "f3f5ec1f74be048245f449fee6ad983ac27ddf77eaf6e5441124d80d9f5f816b",
+      "matched": true
+    },
+    {
+      "path": "TalentPlanService/daily.go",
+      "expected": "ab39e3acbd6c1ababcee851312125758eee4a5df383fb997a1fd757e3cc26dcc",
+      "actual": "ab39e3acbd6c1ababcee851312125758eee4a5df383fb997a1fd757e3cc26dcc",
+      "matched": true
+    },
+    {
+      "path": "TalentPlanService/evaluate.go",
+      "expected": "5416be48a9ccaaaad45e9d96f955797f5030270391951cdbcf7f3c88961f8185",
+      "actual": "5416be48a9ccaaaad45e9d96f955797f5030270391951cdbcf7f3c88961f8185",
+      "matched": true
+    },
+    {
+      "path": "TalentPlanService/launch.go",
+      "expected": "42d2e11e852372fbb0fd0fd851fb16c538832d586c6c9ec562d54430521127d7",
+      "actual": "42d2e11e852372fbb0fd0fd851fb16c538832d586c6c9ec562d54430521127d7",
+      "matched": true
+    },
+    {
+      "path": "TalentPlanService/lifecycle.go",
+      "expected": "8a42e2bbf643f953fba76244a62664d56c94222f5c19e4d93a54e8932ccd6af7",
+      "actual": "8a42e2bbf643f953fba76244a62664d56c94222f5c19e4d93a54e8932ccd6af7",
+      "matched": true
+    },
+    {
+      "path": "TalentPlanService/lifecycle_types.go",
+      "expected": "5216dd62f3063506a1855b62b1779a088fc220bc5d7e10bc85b420df6c192968",
+      "actual": "5216dd62f3063506a1855b62b1779a088fc220bc5d7e10bc85b420df6c192968",
+      "matched": true
+    },
+    {
+      "path": "TalentPlanService/material_event_store.go",
+      "expected": "24ee72a6a8605474576fca910740617c48ca6ddb5e0ef20908a92de2e93b93e1",
+      "actual": "24ee72a6a8605474576fca910740617c48ca6ddb5e0ef20908a92de2e93b93e1",
+      "matched": true
+    },
+    {
+      "path": "TalentPlanService/material_event_types.go",
+      "expected": "5b7fee3d745a81ffd829183cba9356930e46113975eea4ffa97dbf62656fff8f",
+      "actual": "5b7fee3d745a81ffd829183cba9356930e46113975eea4ffa97dbf62656fff8f",
+      "matched": true
+    },
+    {
+      "path": "TalentPlanService/panel_evaluate.go",
+      "expected": "efb3c4ed622438370ffbdb1ccc014e6aa1ad2ad23f01ea1f293324918c4cd3f0",
+      "actual": "efb3c4ed622438370ffbdb1ccc014e6aa1ad2ad23f01ea1f293324918c4cd3f0",
+      "matched": true
+    },
+    {
+      "path": "TalentPlanService/start_events.go",
+      "expected": "cd9ce1bff14e0d78aac3a9c9bd9510e9b46abad56512f54fce0a4ba1d1688aff",
+      "actual": "cd9ce1bff14e0d78aac3a9c9bd9510e9b46abad56512f54fce0a4ba1d1688aff",
+      "matched": true
+    },
+    {
+      "path": "TalentPlanService/start_prepare.go",
+      "expected": "5cb60690947ca662f2e938f032868f56b59a40a46bbc971ed7ceaf455bffaffd",
+      "actual": "5cb60690947ca662f2e938f032868f56b59a40a46bbc971ed7ceaf455bffaffd",
+      "matched": true
+    },
+    {
+      "path": "TalentPlanService/start_store.go",
+      "expected": "91c065c45a9246e16b156276961288b911a18bda2d6796ee6cbf4483e394815d",
+      "actual": "91c065c45a9246e16b156276961288b911a18bda2d6796ee6cbf4483e394815d",
+      "matched": true
+    },
+    {
+      "path": "TalentPlanService/start_types.go",
+      "expected": "6c131edbd050b67ebc3b74e5f6322fc8cb6ca5b58776ff793b6137ec212ebec7",
+      "actual": "6c131edbd050b67ebc3b74e5f6322fc8cb6ca5b58776ff793b6137ec212ebec7",
+      "matched": true
+    },
+    {
+      "path": "TalentPlanService/start_validate.go",
+      "expected": "6d1d92d331a68718c997df3a6696398dc5fc269b0484a5e7392f33f17a0be39e",
+      "actual": "6d1d92d331a68718c997df3a6696398dc5fc269b0484a5e7392f33f17a0be39e",
+      "matched": true
+    },
+    {
+      "path": "TalentPlanService/store.go",
+      "expected": "b4ee95aee21204921492acc9a678591e6b868b60c8814d45a0e4c8d3162d72bc",
+      "actual": "b4ee95aee21204921492acc9a678591e6b868b60c8814d45a0e4c8d3162d72bc",
+      "matched": true
+    },
+    {
+      "path": "TalentPlanService/target_event_store.go",
+      "expected": "dc13b720312a4efab4de25fee127d3cfe511b4827bbaeeeb61d2da2d4f6fbcf1",
+      "actual": "dc13b720312a4efab4de25fee127d3cfe511b4827bbaeeeb61d2da2d4f6fbcf1",
+      "matched": true
+    },
+    {
+      "path": "TalentPlanService/target_event_types.go",
+      "expected": "6c58fe7ffe0cee21e6e2841b0ee068abbfefe605fd398c562458a48eaeb8e6a7",
+      "actual": "6c58fe7ffe0cee21e6e2841b0ee068abbfefe605fd398c562458a48eaeb8e6a7",
+      "matched": true
+    },
+    {
+      "path": "TalentPlanService/types.go",
+      "expected": "2bd7e80a7a9cb7373b5e57823086d8a190837bdae486c77ae399767bf6939882",
+      "actual": "2bd7e80a7a9cb7373b5e57823086d8a190837bdae486c77ae399767bf6939882",
+      "matched": true
+    },
+    {
+      "path": "desktopPet/cultivation_queue_types.go",
+      "expected": "a778ec4647b39e470bfbf3ee8e3e553f8fdea4376cbbb0e097a9a78ae782ea60",
+      "actual": "a778ec4647b39e470bfbf3ee8e3e553f8fdea4376cbbb0e097a9a78ae782ea60",
+      "matched": true
+    },
+    {
+      "path": "menu/routes_talent_queue.go",
+      "expected": "7b396b925e852bdb096b4167cb6ca2ddb906dc15239a36ab1f52444fccc2678c",
+      "actual": "7b396b925e852bdb096b4167cb6ca2ddb906dc15239a36ab1f52444fccc2678c",
+      "matched": true
+    },
+    {
+      "path": "menu/talent_inventory_collection.go",
+      "expected": "0f7f7afd0bac17bdda5b6d8fae6b13309adf41d46be91dcc0be5cd2eba7395c2",
+      "actual": "0f7f7afd0bac17bdda5b6d8fae6b13309adf41d46be91dcc0be5cd2eba7395c2",
+      "matched": true
+    },
+    {
+      "path": "menu/talent_queue_json.go",
+      "expected": "ecf4de2100431cc2301200ba742a310c3d838d09c8c1973b4040889c50515b6c",
+      "actual": "ecf4de2100431cc2301200ba742a310c3d838d09c8c1973b4040889c50515b6c",
+      "matched": true
+    },
+    {
+      "path": "menu/talent_queue_requirements_refresh.go",
+      "expected": "5f0daa61b574f1b5886acf6d8d8cd341eba08fceb813aa6158fa53c2cfd470d5",
+      "actual": "5f0daa61b574f1b5886acf6d8d8cd341eba08fceb813aa6158fa53c2cfd470d5",
+      "matched": true
+    },
+    {
+      "path": "menu/talent_queue_skill_refresh.go",
+      "expected": "f919f67b8118ab68f831bc756930bb5151d16dc484092400fd1e3dd3072f9406",
+      "actual": "f919f67b8118ab68f831bc756930bb5151d16dc484092400fd1e3dd3072f9406",
+      "matched": true
+    },
+    {
+      "path": "menu/talent_queue_skill_selection.go",
+      "expected": "ccdec89bdcb6dbf6ae4d3724e62277becfdd8bd177cc70529cae96a8186b4564",
+      "actual": "ccdec89bdcb6dbf6ae4d3724e62277becfdd8bd177cc70529cae96a8186b4564",
+      "matched": true
+    },
+    {
+      "path": "menu/web/src/components/TalentQueueEditor.vue",
+      "expected": "049e00cdfd610d7623b5282a98e70363b78c6f4bc850ebe6a555eb49ec76274f",
+      "actual": "049e00cdfd610d7623b5282a98e70363b78c6f4bc850ebe6a555eb49ec76274f",
+      "matched": true
+    },
+    {
+      "path": "menu/web/src/utils/api/plans.js",
+      "expected": "c159d801ca47986c6e226f7e6b1994c5251702facff5ab0cbed1b74ced717dac",
+      "actual": "c159d801ca47986c6e226f7e6b1994c5251702facff5ab0cbed1b74ced717dac",
+      "matched": true
+    },
+    {
+      "path": "models/DesktopPetMaterialEventModel.go",
+      "expected": "b245829b6f26d3aaaa8563c1774ce5b7c39edd2b7bb806678156854fef837378",
+      "actual": "b245829b6f26d3aaaa8563c1774ce5b7c39edd2b7bb806678156854fef837378",
+      "matched": true
+    },
+    {
+      "path": "models/DesktopPetTargetEventModel.go",
+      "expected": "9ee04d0fd74938e83a370b053ab90ef179d9eda8ee695955cdc701578cb966da",
+      "actual": "9ee04d0fd74938e83a370b053ab90ef179d9eda8ee695955cdc701578cb966da",
+      "matched": true
+    },
+    {
+      "path": "models/TalentInventoryCollectionModel.go",
+      "expected": "7259a2b2de81220a2949923d6936ef1ee72c61be0af16aa3928814b28f3ae5e4",
+      "actual": "7259a2b2de81220a2949923d6936ef1ee72c61be0af16aa3928814b28f3ae5e4",
+      "matched": true
+    },
+    {
+      "path": "models/TalentQueueLifecycleModel.go",
+      "expected": "64ce989fe085b4c39a21872d5d3bff1ba1e5235b2e4739817853a827c2c1eed7",
+      "actual": "64ce989fe085b4c39a21872d5d3bff1ba1e5235b2e4739817853a827c2c1eed7",
+      "matched": true
+    },
+    {
+      "path": "models/TalentQueueModel.go",
+      "expected": "3ea9bbbcfe56954fb3fa757e7742a999fa8b8a01913c8de9ffbd0fa8a54afe13",
+      "actual": "3ea9bbbcfe56954fb3fa757e7742a999fa8b8a01913c8de9ffbd0fa8a54afe13",
+      "matched": true
+    },
+    {
+      "path": "models/TalentQueueStartModel.go",
+      "expected": "326fd5f36913f6842b9f48ae473e2cc3e23ab748c4262c939666744b495248ca",
+      "actual": "326fd5f36913f6842b9f48ae473e2cc3e23ab748c4262c939666744b495248ca",
+      "matched": true
+    }
+  ],
+  "evidence": [
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/skill-binding-http-tests-a97dd0e7ce5a42da8cfdcfc55a2badcd/cleanup-result.json",
+      "sha256": "f9b925801bec3cb4b9f91fbbe77352ff8a4728e9d8e925e27ceaf8c1fe5bf8a8"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/skill-binding-http-tests-a97dd0e7ce5a42da8cfdcfc55a2badcd/cleanup-targets.json",
+      "sha256": "3bdec2aa80a45faaac102d0068da1bbe4a6888fa8eb1538470bfe0166abcee21"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/skill-binding-http-tests-a97dd0e7ce5a42da8cfdcfc55a2badcd/commands.json",
+      "sha256": "f9beee4575eec892ad15fad08df6147a6992940e5d74e42511b0070ffea5b744"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/skill-binding-http-tests-a97dd0e7ce5a42da8cfdcfc55a2badcd/normal-final.exit.txt",
+      "sha256": "13bf7b3039c63bf5a50491fa3cfd8eb4e699d1ba1436315aef9cbe5711530354"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/skill-binding-http-tests-a97dd0e7ce5a42da8cfdcfc55a2badcd/normal-final.stdout.ndjson",
+      "sha256": "70b87e9859756e5fe27e3cfad69896ff152a84056b14701993618cea885aba88"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/skill-binding-http-tests-a97dd0e7ce5a42da8cfdcfc55a2badcd/normal.stdout.ndjson",
+      "sha256": "ac7bc19cba04a2037cc4f9211acc5a8e736ef30de0dea5c9c6ce44f61b3f8547"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/skill-binding-http-tests-a97dd0e7ce5a42da8cfdcfc55a2badcd/race-final.exit.txt",
+      "sha256": "13bf7b3039c63bf5a50491fa3cfd8eb4e699d1ba1436315aef9cbe5711530354"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/skill-binding-http-tests-a97dd0e7ce5a42da8cfdcfc55a2badcd/race-final.stdout.ndjson",
+      "sha256": "d32d0f96e3e108618e5ed21016f3bd1438db0b0f115748fe83474a769496db44"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/skill-binding-http-tests-a97dd0e7ce5a42da8cfdcfc55a2badcd/runtime/http-wire.ndjson",
+      "sha256": "cf696d2d7a08fe98486400798bbddf7e3ba40ac9ca9616da7b25fba8b9a4b5f4"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/skill-binding-http-tests-a97dd0e7ce5a42da8cfdcfc55a2badcd/skill-binding-evidence.json",
+      "sha256": "6053fb8d9d4d8dd4d5995ce1e2706d4d938520466bcfde22b7b110c60c168b05"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/skill-binding-http-tests-a97dd0e7ce5a42da8cfdcfc55a2badcd/source-hashes.json",
+      "sha256": "599cfb3fc370afb65b47c51af8f3f481982efb1742b5f8614bbeb0810577b22f"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/skill-binding-http-tests-a97dd0e7ce5a42da8cfdcfc55a2badcd/vet-final.exit.txt",
+      "sha256": "13bf7b3039c63bf5a50491fa3cfd8eb4e699d1ba1436315aef9cbe5711530354"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/skill-binding-ui-87287ccf3a4c4d0a8e13202a6a72fe7c/cleanup-manifest.json",
+      "sha256": "2d43e66baf57c754fa314b7ea4cce38e224a6901701ff1672fc6c29a6db96486"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/skill-binding-ui-87287ccf3a4c4d0a8e13202a6a72fe7c/cleanup.json",
+      "sha256": "7b714c4874ff5b6362c3b3fc1ab6511f07c1ef86732786a53034240f6e2dc48b"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/skill-binding-ui-87287ccf3a4c4d0a8e13202a6a72fe7c/cross-audit.json",
+      "sha256": "6f1879ab5825b986abe53c6af397d5a89ab5024e98ddb70d6a0a7535a3fc4291"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/skill-binding-ui-87287ccf3a4c4d0a8e13202a6a72fe7c/final-audit.json",
+      "sha256": "e625c423edb0c8cefc6eb505ea459e835c01585ef8233a2ac9201daa99d2bf14"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/skill-binding-ui-87287ccf3a4c4d0a8e13202a6a72fe7c/sfc-validation.json",
+      "sha256": "3f6749540b10c15a96b2270b4abc8dd7f83ee27ed25e7b6273435025f59038b2"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/skill-binding-ui-87287ccf3a4c4d0a8e13202a6a72fe7c/skill-binding-validation.mjs",
+      "sha256": "3c920b5f9175742179df725c6381b34c33002e91ba35ec3af241fbdc7fa5f78c"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/skill-binding-ui-87287ccf3a4c4d0a8e13202a6a72fe7c/source-hashes.json",
+      "sha256": "f6306cae0c5bdae51a2a54109053c93f532fcc013aeb8237aa90927dd0a864ab"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/skill-binding-ui-87287ccf3a4c4d0a8e13202a6a72fe7c/validation.json",
+      "sha256": "f854bb48849161dd32f5e571a039edd0138d3dcd68d9b39f32043129a5f94e46"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/skill-selection-887ec23130ac41a0a483d0077a3d1518/cleanup-manifest.json",
+      "sha256": "1774ac7d7f32738f3c413650b068fa0f544eb275a40e023e70192a7f32becebf"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/skill-selection-887ec23130ac41a0a483d0077a3d1518/cleanup.json",
+      "sha256": "86ed45d144a9f7f5fc11f413cb49c7b60eb7e36daaa3af02ea1fc029fdb6968d"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/skill-selection-887ec23130ac41a0a483d0077a3d1518/final-audit.json",
+      "sha256": "c54f4d5ce945bd0a8e17e9cfcc869d9ff6a804d9d08e47de180b94e70ed3bcec"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/skill-selection-887ec23130ac41a0a483d0077a3d1518/normal-final.jsonl",
+      "sha256": "4adf3eb3b02b74f68a3e0e2f5a4f49d480fc51643042f024e1398e2cb888b7c3"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/skill-selection-887ec23130ac41a0a483d0077a3d1518/normal.jsonl",
+      "sha256": "4a5b18a7bfb1cec91e36faabbd2e9e32373cea57038d4c933b1b3b836b2e8592"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/skill-selection-887ec23130ac41a0a483d0077a3d1518/race.jsonl",
+      "sha256": "f4c1b05918deca3d011c8a0456f6e3f2119e516489bd791758d2189c11ddaf14"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/skill-selection-887ec23130ac41a0a483d0077a3d1518/review.json",
+      "sha256": "07cb89011c4530ccb4335348a5b6d68d7643e6221c70c92294dac2389c545d6a"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/skill-selection-887ec23130ac41a0a483d0077a3d1518/source-hashes.json",
+      "sha256": "8737612f7cda3ec801f2ab977271776ab441821e0296cc285015d89dda890c72"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/skill-selection-887ec23130ac41a0a483d0077a3d1518/validation.json",
+      "sha256": "cdd4d3b4c672b10f7f717b78c42f3743e55f2bef94bee0ac3193eb9d50bae71c"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/skill-selection-887ec23130ac41a0a483d0077a3d1518/vet.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/skills-root-a3b7f3944af54ded96d796c9e2c0b01a/audit.py",
+      "sha256": "4ecc69c4c1aba5050481eeeb2228032e8050ea355929bf710e80180131a28901"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/skills-root-a3b7f3944af54ded96d796c9e2c0b01a/cleanup-manifest.json",
+      "sha256": "cd5d20c9de887fc7ee603205ec1a03528f5339c7febd58f55184cb0910960fc1"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/skills-root-a3b7f3944af54ded96d796c9e2c0b01a/cleanup.json",
+      "sha256": "63b25110f86c097f77fcc4940fab48024c7d6a8de562d9a22d862c37ef5a9f5c"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/skills-root-a3b7f3944af54ded96d796c9e2c0b01a/finalize.py",
+      "sha256": "615ec3ec7cf36e64d0d796386b4f6cc52735ecacd6a4d26ec0546ec24d39b2d3"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/skills-root-a3b7f3944af54ded96d796c9e2c0b01a/formatting-audit.json",
+      "sha256": "9ecf0281e3e6121512a786d939a8bf95696c69358dd9ed267c7a69c4d41fa1c5"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/skills-root-a3b7f3944af54ded96d796c9e2c0b01a/frontend-build-command.json",
+      "sha256": "318282217cd29bb2a1cf74e43a1e78a79d8c69696088a2b44a37ab31dfb050f9"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/skills-root-a3b7f3944af54ded96d796c9e2c0b01a/frontend-build-stderr.log",
+      "sha256": "769ca5ce68f677b545fc7cc701049b1a70c2588034a567d77385b9931102d03d"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/skills-root-a3b7f3944af54ded96d796c9e2c0b01a/frontend-build-stdout.log",
+      "sha256": "04989e509c843a0d7901b35ff3c6c4a75f55a3ef298696e9eee3ec5ff03f5dfb"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/skills-root-a3b7f3944af54ded96d796c9e2c0b01a/frontend-output.json",
+      "sha256": "b2fbaa7358332f18dc3fd59f9a4f6d1207ac49fffbd34e1c7878578f0181d1f8"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/skills-root-a3b7f3944af54ded96d796c9e2c0b01a/frontend-source-after.json",
+      "sha256": "d0a5641970db05195d87af551e23a2967e57cd9df52e5340bfcb14400f15e0f7"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/skills-root-a3b7f3944af54ded96d796c9e2c0b01a/frontend-source-before.json",
+      "sha256": "d0a5641970db05195d87af551e23a2967e57cd9df52e5340bfcb14400f15e0f7"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/skills-root-a3b7f3944af54ded96d796c9e2c0b01a/frontend-validation.json",
+      "sha256": "31db79da7d8cbb82c3f2fb749b2086e60c5417bb305423b722b75960ab11bc84"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/skills-root-a3b7f3944af54ded96d796c9e2c0b01a/host-build-command.json",
+      "sha256": "6b21400f853cd8ab1597c6c9d032620510fe05ce5d623a6d25a531cc82a1fb1e"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/skills-root-a3b7f3944af54ded96d796c9e2c0b01a/host-build-stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/skills-root-a3b7f3944af54ded96d796c9e2c0b01a/host-build-stdout.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/skills-root-a3b7f3944af54ded96d796c9e2c0b01a/host-dependencies-command.json",
+      "sha256": "d3cb04c617914d23b7ccb5f7f1acdcd310b0fd9fdcdc58209469cfe68951425b"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/skills-root-a3b7f3944af54ded96d796c9e2c0b01a/host-dependencies-stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/skills-root-a3b7f3944af54ded96d796c9e2c0b01a/host-dependencies-stdout.log",
+      "sha256": "90b292f12ba1f332e5011f8ffa1e4d1efe615a3f995279cc89da41a75842afda"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/skills-root-a3b7f3944af54ded96d796c9e2c0b01a/host-source-after.json",
+      "sha256": "8279f2543f6fce5384540d1a9cca6a70e834f0c016bca53ac247037db23afd15"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/skills-root-a3b7f3944af54ded96d796c9e2c0b01a/host-source-before.json",
+      "sha256": "8279f2543f6fce5384540d1a9cca6a70e834f0c016bca53ac247037db23afd15"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/skills-root-a3b7f3944af54ded96d796c9e2c0b01a/host-validation.json",
+      "sha256": "1f1d378a2fbf8d711f27edf42fffd1af1dfbab28048caf2e2d0bc074b5893fee"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/skills-root-a3b7f3944af54ded96d796c9e2c0b01a/host-version-command.json",
+      "sha256": "a2a03321331c66cf8e896fcacbd5610b52ccbcea023a8a98e33ea15c6972c075"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/skills-root-a3b7f3944af54ded96d796c9e2c0b01a/host-version-stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/skills-root-a3b7f3944af54ded96d796c9e2c0b01a/host-version-stdout.log",
+      "sha256": "e37270413fda49039b4f31dd90726df0e94c163cf9bca2f62fd40a47d12b5db1"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/skills-root-a3b7f3944af54ded96d796c9e2c0b01a/host-vet-command.json",
+      "sha256": "ac683346e7f7be4f26def816c1f1614c4f9716274210471380ed781ea40d7325"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/skills-root-a3b7f3944af54ded96d796c9e2c0b01a/host-vet-stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/skills-root-a3b7f3944af54ded96d796c9e2c0b01a/host-vet-stdout.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/skills-root-a3b7f3944af54ded96d796c9e2c0b01a/postbuild-source-audit.json",
+      "sha256": "11bccd98b42f43d5994483d5d2edf519dc6a84d7681ba45c46c372a92b05a2a2"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/skills-root-a3b7f3944af54ded96d796c9e2c0b01a/protected-audit.json",
+      "sha256": "883b9b174c7b1ebdbb108041cb349ddcf25af5db6a332f1bc3e942d2bde93317"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/skills-root-a3b7f3944af54ded96d796c9e2c0b01a/source-final-audit.json",
+      "sha256": "cfe26e593fb6a25eb36097e3e3b1df7e23c7d51a3e4dcd6247474d4a63c48e23"
+    }
+  ]
+}

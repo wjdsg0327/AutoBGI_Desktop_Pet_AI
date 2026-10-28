@@ -1,0 +1,156 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-28",
+  "version": "0.2.12",
+  "result": "passed-controlled-validation-with-host-cleanup-blocked",
+  "completeSpecificationAchieved": false,
+  "pureState": {
+    "actualSources": [
+      "internal/desktop/monitor_state.go",
+      "internal/desktop/geometry.go"
+    ],
+    "toolchain": "go1.26.10 windows/amd64",
+    "raceRounds": 3,
+    "uniqueTopLevel": 7,
+    "uniqueNamed": 61,
+    "uniqueLeaf": 54,
+    "namedPasses": 183,
+    "leafPasses": 162,
+    "failures": 0,
+    "raceReports": 0,
+    "evidence": ".validation/monitor-layout-independent-48fe9d0646674b239290e23c55746aa2/validation.json",
+    "evidenceSha256": "d384f71ae13474f3fbc5b47a5f5a43b8f626c89a2e29bd76397c4f36dd360dbf",
+    "logSha256": "88a7f14e952a9874d0eda68c821525e94a4e14c02d75d48fb8ec2840a075b6d2",
+    "newTestAndOverlayDeletedOnce": true
+  },
+  "hostControlFlow": {
+    "actualMethodCount": 13,
+    "attachPrefixReadOnce": true,
+    "toolchain": "go1.26.10 windows/amd64",
+    "raceRounds": 3,
+    "uniqueTopLevel": 6,
+    "uniqueNamed": 25,
+    "uniqueLeaf": 21,
+    "namedPasses": 75,
+    "leafPasses": 63,
+    "failures": 0,
+    "raceReports": 0,
+    "syntheticConcurrentCallers": 32,
+    "dragFramesWithoutPerFrameDiskSync": 120,
+    "evidence": ".validation/monitor-layout-domain-27fa70d9acb0472da454ee4b212d9a11/validation.json",
+    "evidenceSha256": "5f208cebab2c85da2b7774cb81a70aae7ca6ae832e743b74532b1880cfdc963c",
+    "independentSourceAndLogAudit": ".validation/monitor-layout-20261028/independent-host-validation-audit.json",
+    "independentSourceAndLogAuditSha256": "f998474fa3435ef9450646a562e3173f223b6c52c2ad5e584da3c62f40c2004b",
+    "syntheticDependencies": {
+      "DesktopService": "Minimal synthetic type containing only fields used by extracted methods; complete real host type initialization is outside this behavior test.",
+      "WindowAndScreen": "Synthetic Position, Size, SetPosition, GetAll, bubble hooks; TryLock assertions verify exercised calls occur outside host mutex.",
+      "PreferencesGate": "petDragAllowed replaced by allowed && !stopped; real preferences, quiet-hour and sleeping gates are not validated by this test.",
+      "Stopped": "Synthetic done-channel stopped check has same structure as real helper.",
+      "Dispatcher": "InvokeSync and InvokeSyncWithResult are inline synthetic functions. Concurrent case uses external gate; does not verify Wails UI ordering or Windows messages.",
+      "Persistence": "Synthetic load/save only in-memory counters and savedPosition values. No user configuration path or actual position file is opened."
+    },
+    "independentAuditParserDeletedOnce": true
+  },
+  "integrationReview": {
+    "evidence": ".validation/monitor-layout-20261028/independent-host-review.json",
+    "sha256": "10c27256b2ad3d3a9fdc97fa1e17f50573dd60c36042bdfdfb5d4d89d56d2332",
+    "staticAssertions": 22,
+    "manualPaths": 7,
+    "localWailsSourceReferences": 13,
+    "stableInputs": 17,
+    "nativeExecution": false
+  },
+  "validatedSourceInputs": [
+    {
+      "path": "internal/desktop/desktop.go",
+      "sha256": "8666968a6bee817c7b8af6728fd2d26126f288b52552a667a2f77c06a5c893ca",
+      "scope": "13 actual methods and Attach prefix under synthetic host dependencies; native UI and persistence are not executed"
+    },
+    {
+      "path": "internal/desktop/geometry.go",
+      "sha256": "e34e51a75c87c0fc1886cc9027a0762ba6003f95d044ade34e70853b8bf69c42",
+      "scope": "Actual production pure screen geometry"
+    },
+    {
+      "path": "internal/desktop/monitor_state.go",
+      "sha256": "7d02bab89c2b500ffc49fadfe0626bc4c40d744b0dde610e4beb745872d0963c",
+      "scope": "Actual production pure monitor state and layout signature"
+    },
+    {
+      "path": "internal/desktop/position.go",
+      "sha256": "108b94f6df3f53c8d7e72c3251ad50ae43c47b3c7b09b35b6ffbc3a6828c812e",
+      "scope": "savedPosition type and tags extracted only; load/save replaced with in-memory fixtures"
+    }
+  ],
+  "build": {
+    "result": "pass",
+    "go": "go1.26.10 windows/amd64",
+    "goVet": "go vet ./... passed",
+    "goBuild": "go build ./... passed",
+    "sourceInputs": 124,
+    "sourceInputsStable": true,
+    "generatedInputs": 16,
+    "wails": "3.0.0",
+    "runtime": "3.0.0",
+    "methods": 46,
+    "models": 48,
+    "viteModules": 92,
+    "typescript": "pass",
+    "fileVersion": "0.2.12.0",
+    "productVersion": "0.2.12",
+    "executableSha256": "ac3a494c745b9bea855dd5ce910069718aaea9377ec09f44dd31ccea43693a6c",
+    "executableBytes": 12632576,
+    "logSha256": "5935fc85df57669ce307220c2deb5978d8bb9f7739a1324b35b223a8abac8cb1"
+  },
+  "cleanup": {
+    "protectedTargetsRetried": false,
+    "hostDeletionRejectedBeforeExecution": true,
+    "hostTemporaryFilesRetained": [
+      {
+        "path": ".validation/monitor-layout-domain-27fa70d9acb0472da454ee4b212d9a11/host_actual.go",
+        "sha256": "b4a1f31455d105fe85f47e9f31abceba1011ea9bba300e0ea99b6ce4b3ea4a96",
+        "attempts": 1,
+        "deleted": false,
+        "reason": "blocked by policy",
+        "retryPerformed": false
+      },
+      {
+        "path": ".validation/monitor-layout-domain-27fa70d9acb0472da454ee4b212d9a11/host_layout_validation_test.go",
+        "sha256": "1781ecf6724dddbed7b8d86cf42171cc644760d694d0d685fac9532d290d8f87",
+        "attempts": 1,
+        "deleted": false,
+        "reason": "blocked by policy",
+        "retryPerformed": false
+      },
+      {
+        "path": ".validation/monitor-layout-domain-27fa70d9acb0472da454ee4b212d9a11/overlay.json",
+        "sha256": "fd40191c422222588f3b852f2dfb9b18d0e492af006a033eee1e63465190abc9",
+        "attempts": 1,
+        "deleted": false,
+        "reason": "blocked by policy",
+        "retryPerformed": false
+      }
+    ],
+    "retainedFilesExcludedFromNormalBuild": true,
+    "retainedFilesExcludedFromPortable": true,
+    "normalGoFlags": "",
+    "normalPackageCount": 11
+  },
+  "compatibility": {
+    "positionFileVersion": 1,
+    "logicalOffsetIsIntegerPixels": true,
+    "offsetIsNormalizedRatio": false,
+    "monitorIDIsRuntimeHMONITOR": true,
+    "hardwareStableIdentityAcrossRestartsGuaranteed": false
+  },
+  "boundaries": [
+    "Synthetic screens and in-memory persistence only; no real position file, credentials, account caches, production AutoBGI, BetterGI or game executed.",
+    "Host methods are extracted from final actual source. Only InvokeSync/InvokeSyncWithResult identifiers change; minimal host/window/screen/prefs gate and persistence are synthetic.",
+    "Synthetic concurrent calls use an external serial gate and do not prove Wails queue or Windows message ordering.",
+    "Native hotplug, mixed DPI, taskbar changes, OS auto-movement and sleep/wake require real-device validation.",
+    "The frontend drag protocol has no layout epoch; queued absolute targets across a layout change cannot be fully distinguished from new user intent.",
+    "The 250 MB memory target remains unpassed. Reliable game completion, real account switching, trusted inventory and production cultivation configuration commit remain incomplete."
+  ],
+  "nativeOrProductionValidationPerformed": false,
+  "memory250MBTargetPassed": false
+}

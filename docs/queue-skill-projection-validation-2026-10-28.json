@@ -1,0 +1,3910 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-28",
+  "recordedAt": "2026-10-28T07:00:44.625543+08:00",
+  "stage": "desktop saved skill target projection with explicit queue schema2",
+  "sourceAndBuildValidationPassed": true,
+  "goalComplete": false,
+  "productionExecutionEnabled": false,
+  "contract": {
+    "baseFeature": "cultivationQueue",
+    "optionalFeature": "cultivationQueueSkillTargets",
+    "defaultSchemaVersion": 1,
+    "explicitSchemaVersion": 2,
+    "legacyFieldSetPreserved": true,
+    "requiredNullableTargetSkills": true,
+    "frozenExpectedSchema": true,
+    "automaticFallback": false,
+    "oneFrozenHostView": true,
+    "additionalPollingLoops": 0,
+    "additionalWailsMethods": 0,
+    "executionAvailable": false,
+    "completionEventsAvailable": false,
+    "inventoryVerified": false
+  },
+  "tests": {
+    "goCounts": {
+      "hostNormal": {
+        "topLevel": 6,
+        "subtests": 19,
+        "passEvents": 25,
+        "failures": [],
+        "namedSkips": [],
+        "packageSkips": [
+          "auto-bgi/TalentPlanService",
+          "auto-bgi/bgiStatus",
+          "auto-bgi/desktopPet"
+        ]
+      },
+      "hostRace": {
+        "topLevel": 6,
+        "subtests": 19,
+        "passEvents": 25,
+        "failures": [],
+        "namedSkips": [],
+        "packageSkips": [
+          "auto-bgi/TalentPlanService",
+          "auto-bgi/bgiStatus",
+          "auto-bgi/desktopPet"
+        ]
+      },
+      "protocolNormal": {
+        "topLevel": 7,
+        "subtests": 71,
+        "passEvents": 78,
+        "failures": [],
+        "namedSkips": [],
+        "packageSkips": [
+          "auto-bgi/config"
+        ]
+      },
+      "protocolRace": {
+        "topLevel": 7,
+        "subtests": 71,
+        "passEvents": 78,
+        "failures": [],
+        "namedSkips": [],
+        "packageSkips": [
+          "auto-bgi/config"
+        ]
+      },
+      "clientNormal": {
+        "topLevel": 7,
+        "subtests": 66,
+        "passEvents": 73,
+        "failures": [],
+        "namedSkips": [],
+        "packageSkips": []
+      },
+      "clientRace": {
+        "topLevel": 7,
+        "subtests": 66,
+        "passEvents": 73,
+        "failures": [],
+        "namedSkips": [],
+        "packageSkips": []
+      },
+      "integrationNormal": {
+        "topLevel": 2,
+        "subtests": 4,
+        "passEvents": 6,
+        "failures": [],
+        "namedSkips": [],
+        "packageSkips": []
+      },
+      "integrationRace": {
+        "topLevel": 2,
+        "subtests": 4,
+        "passEvents": 6,
+        "failures": [],
+        "namedSkips": [],
+        "packageSkips": []
+      }
+    },
+    "normalNamedPassEvents": 182,
+    "raceNamedPassEvents": 182,
+    "uiScenarios": 51,
+    "uiAssertions": 468,
+    "schemaCases": 21,
+    "namedFailures": 0,
+    "namedSkips": 0,
+    "hostPackageLevelNoTestSkips": 3,
+    "rootMapperBoundary": "Actual two whole-file mappings and DTO declarations; inert reader, provider and lock facades.",
+    "actualHTTPBoundary": "Actual desktopPet.New/RegisterRoutes/auth/JSON with actual PetV1Adapter and synthetic provider only."
+  },
+  "builds": {
+    "host": {
+      "goVersion": "go version go1.27.1 windows/amd64",
+      "vetExit": 0,
+      "buildExit": 0,
+      "sourceInputs": 663,
+      "sourceStable": true,
+      "executable": "AutoBGI_Desktop_Pet_AI/.validation/queue-skill-projection-root-0bc011114b344e45b1fea26123ca6bbc/AutoBGI-queue-skill-compile.exe",
+      "executableSHA256": "a1f1302f7a42dadb62a9edaf4e5f2ecd91edf351a0fca6b0c3b10795277a1262",
+      "executableRun": false,
+      "productionInitialized": false
+    },
+    "pet": {
+      "goVersion": "go version go1.26.10 windows/amd64",
+      "vetExit": 0,
+      "buildExit": 0,
+      "sourceInputs": 92,
+      "sourceStable": true,
+      "executable": "AutoBGI_Desktop_Pet_AI/.validation/queue-skill-projection-root-0bc011114b344e45b1fea26123ca6bbc/AutoBGI-Pet-queue-skill-compile.exe",
+      "executableSHA256": "5d7c39b645effe4e8a1406452bfeaddfb16730e6c7b3c40ef349970f887a786e",
+      "executableRun": false,
+      "productionInitialized": false
+    },
+    "frontend": {
+      "sourceInputs": 45,
+      "sourceStable": true,
+      "outputFiles": 15,
+      "buildExit": 0
+    }
+  },
+  "bindings": {
+    "wails": "3.0.0",
+    "packages": 259,
+    "services": 2,
+    "methods": 47,
+    "models": 54,
+    "concreteDisplayDTOs": true,
+    "manualTypeScriptProtocolCopy": false,
+    "initialMarshalJSONAnyRegressionFixed": true
+  },
+  "audit": {
+    "preCleanupSourceBindings": 856,
+    "preCleanupMatches": 856,
+    "postwriteActualCopies": 78,
+    "formattedChangedGoFiles": 12,
+    "all15FrontendOutputsEmbedded": true,
+    "frozenAndHistoricalHashes": 15,
+    "crossReviewFindings": []
+  },
+  "cleanup": {
+    "attemptGroups": 4,
+    "exactAttemptsPerGroup": 1,
+    "requestedFiles": 5429,
+    "removedFiles": 232,
+    "remainingFiles": 5197,
+    "allTestFilesRemoved": false,
+    "root": {
+      "status": "completed",
+      "attempts": 1,
+      "commandExecuted": true,
+      "requestedFiles": 232,
+      "removedFiles": 232,
+      "remainingFiles": 0,
+      "recursiveDirectoryDeletion": false,
+      "retries": 0,
+      "alternativeMutation": 0,
+      "protectedOtherDirectoriesTouched": false
+    },
+    "protocol": {
+      "attempts": 1,
+      "status": "rejected_by_automatic_approval_review",
+      "executed": false,
+      "reason": "blocked by policy",
+      "manifestSha256": "C3DCCC0B3C6547517B3B14C83B6D1C5257B4410C31BF74FBDBEE85685506FD12",
+      "plannedFiles": 5193,
+      "removed": 0,
+      "remaining": 5193,
+      "retries": 0,
+      "alternativeMethods": 0,
+      "directoriesRemoved": 0,
+      "root": "D:\\Documents\\go\\autobgi\\AutoBGI_Desktop_Pet_AI\\.validation\\queue-v2-protocol-bca3bd661aeb491cab385705bf514fe6"
+    },
+    "client": {
+      "status": "automatic-approval-rejected-before-execution",
+      "reason": "blocked by policy",
+      "attempts": 1,
+      "commandExecuted": false,
+      "requestedFiles": 3,
+      "removedFiles": 0,
+      "remainingFiles": 3,
+      "retries": 0,
+      "alternativeDeletion": 0,
+      "renameMoveOverwrite": 0,
+      "ancestorDeletion": 0,
+      "recursiveDeletion": false,
+      "protectedResiduals": [
+        {
+          "path": "D:\\Documents\\go\\autobgi\\AutoBGI_Desktop_Pet_AI\\.validation\\queue-skill-client-465c178173034780a64885830ea13e3f\\harness\\internal\\autobgi\\queue_skill_validation_test.go",
+          "expected": "1d4b862a26ad9537d627cfb4013f6e57acc8968ad05039691bc23fe7f49bacc6",
+          "actual": "1d4b862a26ad9537d627cfb4013f6e57acc8968ad05039691bc23fe7f49bacc6",
+          "matched": true
+        },
+        {
+          "path": "D:\\Documents\\go\\autobgi\\AutoBGI_Desktop_Pet_AI\\.validation\\queue-skill-client-465c178173034780a64885830ea13e3f\\harness\\internal\\service\\queue_skill_validation_test.go",
+          "expected": "d01acd34d07bdd412c21e93af51039dd1634283442838acb5ad0959dd0458d6d",
+          "actual": "d01acd34d07bdd412c21e93af51039dd1634283442838acb5ad0959dd0458d6d",
+          "matched": true
+        },
+        {
+          "path": "D:\\Documents\\go\\autobgi\\AutoBGI_Desktop_Pet_AI\\.validation\\queue-skill-client-465c178173034780a64885830ea13e3f\\integration-harness\\internal\\autobgi\\actual_skill_protocol_validation_test.go",
+          "expected": "fa722422ab8efd4e6a64f1bc4506e53ebfc8d9ad2edf3e7f52c1e8b039ad448e",
+          "actual": "fa722422ab8efd4e6a64f1bc4506e53ebfc8d9ad2edf3e7f52c1e8b039ad448e",
+          "matched": true
+        }
+      ]
+    },
+    "ui": {
+      "schemaVersion": 1,
+      "status": "rejected-before-execution",
+      "attemptCount": 1,
+      "attemptedOperation": "One native PowerShell Remove-Item call with a single exact test file path; no recursive option",
+      "autoReviewReason": "blocked by policy",
+      "removedFiles": 0,
+      "remainingFiles": 1,
+      "remainingTestFiles": 1,
+      "remainingTarget": {
+        "path": "D:\\Documents\\go\\autobgi\\AutoBGI_Desktop_Pet_AI\\.validation\\pet-queue-skill-ui-881c13f3411c478dad19c2732d1c57bd\\cultivation-queue-skills.test.cjs",
+        "sha256": "25e7126f7c8732fba5db3b0e75c83e043e7eefe8365f7f1200f70ac6f3d9d47a",
+        "bytes": 23186,
+        "readOnlyHashVerifiedUnchanged": true
+      },
+      "followUp": "The delete command was rejected at CreateProcess before execution. Only read-only evidence checks followed. No retry, alternative deletion tool, overwrite, move, rename or ancestor deletion was attempted.",
+      "previousProtectedPathsTouched": false
+    },
+    "retries": 0,
+    "alternativeDeletionOrOverwriteMoveRename": 0,
+    "ancestorDeletion": 0,
+    "historicalProtectedTargetsTouched": false
+  },
+  "limitations": [
+    "No production AutoBGI, BGI, game or native desktop started; no real account, credential, cache or production DB access.",
+    "Synthetic SFC mounting and CSS assertions do not prove browser layout, native window, multi-monitor, DPI, focus, performance or endurance.",
+    "Trusted base panel, inventory, configuration consumption handshake and production cultivation execution remain unavailable.",
+    "Frozen release executables and ZIPs were not rebuilt or overwritten; the two temporary compilation EXEs were deleted.",
+    "Protocol/client/UI exact cleanup attempts were rejected before execution with blocked by policy; protected residuals remain.",
+    "This stage does not complete the full development specification or the persistent goal."
+  ],
+  "sourceAndDocumentBindings": [
+    {
+      "path": "AbgiBot/FeiShuBot.go",
+      "sha256": "94823bdc7b8aaffb113a9c69b806607022e002d09af96a065c4b5e5b0aa699de"
+    },
+    {
+      "path": "AbgiBot/QQBot.go",
+      "sha256": "69ba032447350af0e670063f9ae957d1053e2ebcab44f46eb4525ae12f975146"
+    },
+    {
+      "path": "AbgiBot/TGBOT.go",
+      "sha256": "10099ffa7e3e82114e46936022bdd26cc9c5b15c12a899983977dda808e224ef"
+    },
+    {
+      "path": "AbgiBot/delayed_command.go",
+      "sha256": "7af27be65afd93d476fb8e35c10c7a0430901158c8752f3d0b9879599a15f0d9"
+    },
+    {
+      "path": "AbundantOre/Ore.go",
+      "sha256": "bcad641162975e2b513640f2a07cdfbeb21933312ccbd8f097399563eb2a9ce7"
+    },
+    {
+      "path": "ArtifactsBulkSupply/dogFood.go",
+      "sha256": "084bc40be14c56940f54d46a2b9ee2f78df068a43546f8daa2b9f00f23b3f8c2"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/README.md",
+      "sha256": "83407bcbfe2cfbf376166dff15ef7ade013c30a3e93d860bcc6f5c73ee521202"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/assets/icon.ico",
+      "sha256": "9eb4c792befa2d76074ba85964587c845a0ce4ded38cfda45afbee40b474068e"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/autobgi_pet_windows_amd64.syso",
+      "sha256": "ceaaf5e4f53cb80f9ca8ecdd733c72e9a98d0d721c2cf4f7e90e462695fe176f"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/docs/API_V1.md",
+      "sha256": "17c89be7e5a5e79782911605c9ae32f44580e26f803b87be4e499959aaf0e979"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/docs/acceptance.md",
+      "sha256": "12585cdd53754c8df16f6d20ebf6593e43d46f12de8e416197c0c7e4d509e65e"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/docs/api-v1.openapi.yaml",
+      "sha256": "91d99d70713d4aab802f678fb6d1309d42d5ff1f4be882dafd8bc44302d8c603"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/docs/contracts/cultivation-queue-v2.example.json",
+      "sha256": "1727b23dcf101270ee92614709ad6de6d103dbb6aa466ec8ffb33b257ca1d103"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/docs/contracts/cultivation-queue-v2.schema.json",
+      "sha256": "cf4d54f4ea0d237443607878b831cd4cfadb3c3aaa1fbae2fa346585c0099151"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/docs/contracts/cultivation-queue.example.json",
+      "sha256": "f2d4f53464bc50327543e0ed84c4667cdc236259817ec7a23560cc4929fc0036"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/docs/contracts/cultivation-queue.schema.json",
+      "sha256": "51795fb04ef0588d0b7a731a625c533c21e41c0fae96e0058d470718284d5c15"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/docs/cultivation-queue.md",
+      "sha256": "3787c9b90f0d127056792cbdb114c8531c60f7666e20652b5d738ba5b536ad77"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/docs/queue-skill-projection-2026-10-28.md",
+      "sha256": "7de9ba107917476d77b29ae90dc753d58c25e010a3be8e062a0f825fc6189fe5"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/frontend/bindings/autobgi-pet/internal/autobgi/index.ts",
+      "sha256": "91cc3599242973f453dfdb6a21c60eb77dd05741a0dd456a014b542fc38d7742"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/frontend/bindings/autobgi-pet/internal/autobgi/models.ts",
+      "sha256": "beb4963dffeb83e557b5c08b2147c419298d111673cb9570b2aebc3882aa0361"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/frontend/bindings/autobgi-pet/internal/desktop/desktopservice.ts",
+      "sha256": "2324cc42a9c6ad3ebac972a3c40fad198a726d037e6cb242d4a08bf0c92907d0"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/frontend/bindings/autobgi-pet/internal/desktop/index.ts",
+      "sha256": "706e1830b8ed161b7610f7b77e8746625e11d4a6a65aafe04f1149a59bd3c70f"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/frontend/bindings/autobgi-pet/internal/desktop/models.ts",
+      "sha256": "0bfb128b8a64fce2636d157fb6bdcd38f4a781a54c22e60aa3c24af7bff6cdc8"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/frontend/bindings/autobgi-pet/internal/profile/index.ts",
+      "sha256": "5030714fcadea4aa1627db62a2af0a8450d91056a42ac3bcdea2063c45a5882c"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/frontend/bindings/autobgi-pet/internal/profile/models.ts",
+      "sha256": "617bf35906573c0be054ec8e02c88b493fdead6a43b0ab9993fe2ea37b3e2ba7"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/frontend/bindings/autobgi-pet/internal/service/index.ts",
+      "sha256": "46086e273be549e8dd159246d37a910c81d4597b75dd8ea1ff78f7fff6af67d5"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/frontend/bindings/autobgi-pet/internal/service/models.ts",
+      "sha256": "96600640597e6d9fc312e817ee3be305187a9529feb28afadefe3a2da7be79c5"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/frontend/bindings/autobgi-pet/internal/service/service.ts",
+      "sha256": "cb7741c39912560acac05bc8775090591443f216f2d7e99ea8b95a454e513e4b"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/frontend/bindings/autobgi-pet/internal/skin/index.ts",
+      "sha256": "9365ef38e215bb495a97c1141c1d0b2a9cec36e141202b129d6aabab50ac48fb"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/frontend/bindings/autobgi-pet/internal/skin/models.ts",
+      "sha256": "afd7343ae58df4116d1d4e88c66b8dca9bbedb0f1566069841b4a204f909c5b1"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/frontend/bindings/events/index.ts",
+      "sha256": "b103683f94ec8779e49311845e4246fda26504184b133b850cdff8969ab5d068"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/frontend/bindings/github.com/wailsapp/wails/v3/internal/eventcreate.ts",
+      "sha256": "6eaeafcf797a1670e8ae925e7d125ef4eff930171874462e37e767b1c52cf7ed"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/frontend/bindings/github.com/wailsapp/wails/v3/internal/eventdata.d.ts",
+      "sha256": "1d7b9f4209d8cb01d7f848c848b53dc582b8dd4df44b09ff3a001c2cef455858"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/frontend/dist/assets/AppIcon.vue_vue_type_script_setup_true_lang-BGyyt1fA.js",
+      "sha256": "6624d349f1db0bc0f861b0c5f4c6af3283ff0d96f39f6bc6eecdfeca39b9556c"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/frontend/dist/assets/BubbleView-tiZX8LlR.js",
+      "sha256": "2db757ace5958040b1638aa9eb5978bd70f1e2a77856868dced8fbfae20cddc2"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/frontend/dist/assets/PanelView-DIv0LsLy.js",
+      "sha256": "9355356946fa6fda4f2f7aba1a8530f2ca467d235799468659de079bb93eab02"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/frontend/dist/assets/PanelView-lglY_r_X.css",
+      "sha256": "616766b5d877ec06748ad2a5e4e836963588259c9c745ea916c8cc33802498da"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/frontend/dist/assets/PetCanvas-CW76s9Lp.css",
+      "sha256": "255339b154810059e9f2d06267c31dcef42af4688679803454cd3139ead9002d"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/frontend/dist/assets/PetCanvas-DRtv-k4C.js",
+      "sha256": "950145df2dcd0b44d4e24b58de7c127f6446cd504bfc917892cf766e664bb933"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/frontend/dist/assets/PetView-DEIVPpen.js",
+      "sha256": "0f88111b45e81903c2981b48316ef656b1ee9fbdb0955a7b0868fa9124a9a2da"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/frontend/dist/assets/desktopservice-Yz-tSBWc.js",
+      "sha256": "072aae80f52950363dbcee8f9becbfb45665e7a97a97bffd11f92f09c7a3d90b"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/frontend/dist/assets/index-DHZftj8J.js",
+      "sha256": "b5a0a966bf3675239a91b005d0579225b92ba825b374c3236aa090f8b34c0d29"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/frontend/dist/assets/index-DoEijhgk.js",
+      "sha256": "d82ad5677d87eac347829b334118259042f08445b93d39ba8c67da766accd046"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/frontend/dist/assets/index-X_gtv9rT.css",
+      "sha256": "8fbd6a0acc3571bb2e58163150261dcfe9815c3935fcd287f6a2acd8575ce731"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/frontend/dist/assets/service-BZWoC0L8.js",
+      "sha256": "68b9d80d28ad21b68d936d64a572dd3db76c0b7cc84cab6e2031e86fc3274327"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/frontend/dist/index.html",
+      "sha256": "fc7d3a2d342b4fd70acac080700ff37767f051b191b8feab0086f12830952bc1"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/frontend/dist/pets/default/atlas.png",
+      "sha256": "265ff13a0be3e9d40fe7f2c306ba250eafb33958132c570ee709d201137e2965"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/frontend/dist/pets/default/manifest.json",
+      "sha256": "0fa806979141ee10ef207368f58aa08da13167280510fa911d3116fe12c28916"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/frontend/index.html",
+      "sha256": "840ebd1132faa6fa9a59027a93f25c7fec5ee0e61d055268ae998e208eca2725"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/frontend/package-lock.json",
+      "sha256": "b570c19cbe49b890ab4fa664dc100ecff9d3961148f8a394114e7d6b27535f74"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/frontend/package.json",
+      "sha256": "b83b901959f95cc95de0cc60a8b65e499867ff6f967f24453263efd249ec4de1"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/frontend/public/pets/default/atlas.png",
+      "sha256": "265ff13a0be3e9d40fe7f2c306ba250eafb33958132c570ee709d201137e2965"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/frontend/public/pets/default/manifest.json",
+      "sha256": "0fa806979141ee10ef207368f58aa08da13167280510fa911d3116fe12c28916"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/frontend/src/App.vue",
+      "sha256": "7bbb9775a3e3649e0ed8cdb004dfac86144d4502911ec1ffddd230fe4d727ea9"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/frontend/src/bridge.ts",
+      "sha256": "9668dd250903c7c2a0af7d54eddb9e9c343816df08064236a28f327d9c82d76b"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/frontend/src/components/AppIcon.vue",
+      "sha256": "5e72b022bf73ed6cedbc58b455083fbc3428db35aaf489a57c0074cb23b7c92e"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/frontend/src/components/CommandPanel.vue",
+      "sha256": "93a311d69b879f7de041bd20c9a195a41b569d2a4d0466e77f66f626b4beb725"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/frontend/src/components/CultivationQueue.vue",
+      "sha256": "b870876847ee01df0bed65526842818feec7f0db6f8ef4b519e27a9176e7bd5b"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/frontend/src/components/DomainSummary.vue",
+      "sha256": "524569f148e6ad4aa73fdf33422aaf7f45365a709470769671c9825c9b5e5899"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/frontend/src/components/MaterialEventHistory.vue",
+      "sha256": "0f4d5aa8bb599c5fa6a8e43c2f02c3aa0011609c6e267c12d3064857f5749cc3"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/frontend/src/components/NotificationHistory.vue",
+      "sha256": "7130eeb09a038cbb4edfe5b595d20eb7d44d9f216364221f7ad3bc39b9dc18a6"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/frontend/src/components/PetCanvas.vue",
+      "sha256": "69303b7fa33494eecb96571cdc1d6f5a10d18bd6e432bf47deff0cd2ad5a81d1"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/frontend/src/components/ProfileTransfer.vue",
+      "sha256": "edf865fe6696a8c8d8461fe89867f8032f69b5dee1ca0cdfd344dca8ef73099d"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/frontend/src/components/SkinSettings.vue",
+      "sha256": "675828ec9f2293729bbab135855dba19c52f1b143a892ab3122aa4c0206c7367"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/frontend/src/components/TargetEventHistory.vue",
+      "sha256": "51cf3da5c68bb1b39fada755a246ea8dcbd171d33806a6f84c92aa33eb9c342d"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/frontend/src/main.ts",
+      "sha256": "f898174bdafe8086a40ba54233d285a9dd8e93fbf410d3de8078a8aa274cc1aa"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/frontend/src/nativeRuntime.ts",
+      "sha256": "50f3f0d73332dd8908fbc8e482d11d0aff4fc251cb56deabf4c63c9626b41378"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/frontend/src/pet/actionTime.ts",
+      "sha256": "a2a4475a4b3b1b5e29b3982809ccc6f541f10a6b3bbfd221dda57ff40f9d4905"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/frontend/src/pet/actions.ts",
+      "sha256": "c71a680cbf04a0ebf8c67ed665fd4312773e48b937e0f47a34848ca7efdb6f89"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/frontend/src/pet/drag.ts",
+      "sha256": "02a35ab3b6e74840c3159d2f79136133ee964546a2e8106ee262293a96d881bc"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/frontend/src/pet/renderer.ts",
+      "sha256": "90a41f9b1ca815cb40db26b61c9d89fdc299587b37fa9ea913d3267f9aae9f23"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/frontend/src/stores/app.ts",
+      "sha256": "7e738b28ca89c45aa40712fd55e103ee2ff8837ab0ba6f1825c9abacf0687c1f"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/frontend/src/style.css",
+      "sha256": "8c7dd286e685e36619d8319c460db58b9d683eb8f09cf9bd7abf59e85a5754bc"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/frontend/src/views/BubbleView.vue",
+      "sha256": "b5491227faf09b34dea300f99d4afa30bdad7ef05a800a145295a71853241153"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/frontend/src/views/PanelView.vue",
+      "sha256": "03808cb17bce568bc9bcb4c01adf8682f8118a51afa997f15539f7aeca80a905"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/frontend/src/views/PetView.vue",
+      "sha256": "832740d886fdb3135329d0146d7c8f616525d793c1577c672e5d5cc9ddfc8f9f"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/frontend/tsconfig.json",
+      "sha256": "f2532f0af44f4c287136b64c3aacb21bc96a221a12af0137ca5ac1c660916c1d"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/frontend/vite.config.ts",
+      "sha256": "0ac9a7ac56fc4ccb16af6472debe411d825d5f42cdec3671e2b41d05cb192665"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/go.mod",
+      "sha256": "5900cde3766df7587db5aa3942eff7123090c64da128f40e451fb909c718c37b"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/go.sum",
+      "sha256": "68ec609dc2b698d763d09bbea26c77ed4326d109fd1b3ef2b176914e72f2d4f9"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/internal/autobgi/client.go",
+      "sha256": "09547f8d34cefbe83ffd3228f0a7cfd42b43b92ee75db64b5c1f24a754ac4b97"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/internal/autobgi/cultivation_queue.go",
+      "sha256": "481e9cad7dccfdda06c83276096f4b1e259adc502b64e63b077bf8382dbdec3c"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/internal/autobgi/cultivation_queue_skills.go",
+      "sha256": "031e7b5a4f5ff24ea8d7ce01e0734a8b6a1c28d888e20743da471bf44ea35e98"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/internal/autobgi/domain.go",
+      "sha256": "20c6fc742eecd5b7633c973833fd3e1f57032431624be2f8bbd97f4cfa532b92"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/internal/autobgi/domain_roles.go",
+      "sha256": "5f7c0c506b0cb60c5fc54d632954bf98b7c453efec03bea1c580e214f932ef9d"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/internal/autobgi/domain_types.go",
+      "sha256": "0d53ed82f7b995ed0e628a6e1744a223598f9a072c136ef695548796319a0e47"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/internal/autobgi/events.go",
+      "sha256": "de878b16453225928a4ef9eaea1c11a733437126d3b04fcc553c79295e5eab2c"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/internal/autobgi/legacy.go",
+      "sha256": "e34f2dd2ab6d06d8803716134bd5be9e01496da0a13a250c8325d3df727300ab"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/internal/autobgi/materials_ready.go",
+      "sha256": "585deff6aa7fc283f9696db3aabfa45f97dc762440371bd3c772ddcffad45602"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/internal/autobgi/petv1.go",
+      "sha256": "2f23445e7563654ded41abfa4022c58a96f41e3edf98b6fc24a6e80e687fcb83"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/internal/autobgi/targets_met.go",
+      "sha256": "33e6363641f9caf277bffb13dd30b1fb68766185b468600ab601cbbbf9de9a32"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/internal/autobgi/types.go",
+      "sha256": "f4ead22264c0e3054a50ef0f284d4ff0021fa6cb6c2cc7debce0fee1fe26f627"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/internal/credential/store.go",
+      "sha256": "dfa89a734ea97692df5f10115ee191754746a514278ddcd1b46c05aa968394b4"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/internal/credential/store_windows.go",
+      "sha256": "4af018bdebd312e12d07c9b82f2d1ebfe78803db882c5a7fe250e1f746b27c22"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/internal/desktop/activation_windows.go",
+      "sha256": "fb548830dfe9ef90355a03c27d24a423205b0dfd2c73dfd77d5bcb3dc67ec1d6"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/internal/desktop/bubble_state.go",
+      "sha256": "54f375e30e348114556230da89930ca72c0ec37ad8db3d650d433ee3c577163b"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/internal/desktop/click_summary.go",
+      "sha256": "8359d3016a889db262f95dbe4c343b48e92df3d26335a00ac896014fc51680e7"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/internal/desktop/desktop.go",
+      "sha256": "3c087450626b631a11e597ef844f15b0692e0bc8e20691c4c8d3c3f0192fccfc"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/internal/desktop/drag_state.go",
+      "sha256": "c14bf3bc9d4b95f98bdae5b6cab1840355b7d307562bf4b8a6a99eb4c08d3aa0"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/internal/desktop/drag_windows.go",
+      "sha256": "2704bd85bbe08cc47570aff2c331d2f0d84fe761c263973e34a63b674171e854"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/internal/desktop/geometry.go",
+      "sha256": "e34e51a75c87c0fc1886cc9027a0762ba6003f95d044ade34e70853b8bf69c42"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/internal/desktop/monitor_state.go",
+      "sha256": "12968b3df658e40696b7664f23826d3b0684a6098a6772a340a5dc108933931d"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/internal/desktop/network.go",
+      "sha256": "1758f8dfb5cd95d404c7920b3bb8bc45cd53df1695bf77e8fc9f61895452587f"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/internal/desktop/network_windows.go",
+      "sha256": "a58af2f325c7e0334e42a0fc6f997197abb3b23d657c00855c2f5fc18f825026"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/internal/desktop/panel.go",
+      "sha256": "5c7e0112a7648cf0e6e5846a558a05ba3a7c4c5e47adcb1a07f4648508df2c9c"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/internal/desktop/panel_lifecycle.go",
+      "sha256": "179850ed7a8f3c5fdabe6c5b741331af824b89cdbabcc183aeb252914a7d2878"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/internal/desktop/panel_navigation.go",
+      "sha256": "06649b320ad3244a0028ec0f3d5bf610f791f284efab20cd1224c86e0b1200c9"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/internal/desktop/permissions.go",
+      "sha256": "5e922fc9e6b8ae7ba662987ba9354f07f6750e10dba83866704e78268b13decf"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/internal/desktop/position.go",
+      "sha256": "108b94f6df3f53c8d7e72c3251ad50ae43c47b3c7b09b35b6ffbc3a6828c812e"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/internal/desktop/position_windows.go",
+      "sha256": "0569ae595d2f2dfe8654e4a9683a88aa6cd127f1003c1a48d77e9dc5705160e7"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/internal/desktop/power.go",
+      "sha256": "ce58807155afddb9283c9c176fd192dc64e340c78521544fc1851c58e2ca083b"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/internal/desktop/power_windows.go",
+      "sha256": "4e51f5e839191711cbff7d6bd586a792f3461907b89a5a3f8bfe49ce80f0bdff"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/internal/desktop/profile_transfer.go",
+      "sha256": "98fc6bba906fd7b557974fd7013e4ca9fc2731f2a363bd72aaa8ecbcf24aeadc"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/internal/desktop/recovery_shortcut.go",
+      "sha256": "dc8acf4f08d0b6bc75d31bec89ac2f742c43cbe43700b734b272114e7c2900f3"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/internal/desktop/skins.go",
+      "sha256": "d0a6e904568d54707f17ddcafa08b86380cf73a8c6c02d317ce6d952319703e1"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/internal/desktop/style_windows.go",
+      "sha256": "4a910e80adf275f946ae59be4d1b6182a2880b5c56816061a5ec8101b7421ce9"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/internal/notification/center.go",
+      "sha256": "7c44b0c6ea79666b76029195d27f5ed62fdf9a551b1c300500142fa9d3b7fa75"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/internal/platform/startup_windows.go",
+      "sha256": "08be4eddc231b77582759de177cffd2de77efc129481fed33e10146e90dfcf0e"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/internal/profile/types.go",
+      "sha256": "886d970c6d8a69221e2e9cceebfb18f77bab4dbe62b754a08f458a511717aa1c"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/internal/service/cache.go",
+      "sha256": "74652dc3b1f3d87fb05e90a0a10c13550448073826ba81602cdfa049f51f825f"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/internal/service/commands.go",
+      "sha256": "7bca2f5e9fe20395bebfdea39ef7a8cda57942c9ac07b453147ffd36d218bd0b"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/internal/service/cultivation_queue.go",
+      "sha256": "0c865ec37a91a1136a506791fddb0a9bf390a6b97e68e9596a347f91ff086fff"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/internal/service/cultivation_queue_display.go",
+      "sha256": "f34601d2e9857ac0c0825d4cb882de932d90081ca3d2ca5a94cb5090e8aca7c0"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/internal/service/domain.go",
+      "sha256": "8a46c22a0cd9198fd5eede837d396121843001f9792ad1588948c781e673a0b0"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/internal/service/drag_policy.go",
+      "sha256": "59df8bf4f5bee333ae6c060254f298ba1a7884d5c2c45bb9be3714b65ae6b1e3"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/internal/service/events.go",
+      "sha256": "ca32e33c612af473b9d9df0a248f90ac6b5f903346957d29fc6eba89e6b4504b"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/internal/service/materials_ready.go",
+      "sha256": "8b10c0d5eecf5fe630be4c5e70ca22f9b2d52bdf73f13139d26fd1b11f3d455e"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/internal/service/notification_errors.go",
+      "sha256": "39cfb2c019df5382aac543f2292128864849ed685e5b3468183ec9237de05394"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/internal/service/notifications.go",
+      "sha256": "c89b725d47c25f9496fc9b26ea05b8b918eec4807110048178d136fe8a88f7fa"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/internal/service/pause.go",
+      "sha256": "e23288441bd1fed25e9ed3fa26a3b90b3fa6f12ac1062623acf7e82feb981f6d"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/internal/service/poll.go",
+      "sha256": "e11cfe8dee5b37b0925bd0c90e95af6b82a4b14a19041956895db654e74ff4ce"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/internal/service/profiles_import.go",
+      "sha256": "c4b835d64e8c3bc78ebdc428597dd0dbe510820663e0be958c736a3ec0aa1c85"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/internal/service/rules.go",
+      "sha256": "c8e5c1d0d542f4dc90fe946b0cd97a64de9bb49eb46757cdc394fd2beecf82b7"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/internal/service/service.go",
+      "sha256": "952ce88164e98dc7a7e4322d75810bc7d5b71407b6dcd48dd42d940edf93f0e8"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/internal/service/skins.go",
+      "sha256": "b10145ad86f9fe891afcb2214ea13c47fae923c0b82191b58c09393fe34c8730"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/internal/service/snapshotgate.go",
+      "sha256": "0b72a88c1511ca5e44263a4f80ea852a51ad93028441d8550538a96366983f4d"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/internal/service/targets_met.go",
+      "sha256": "375bf27c0afb337b80c393dde044b953a09eba29a7805f2b3a9f9d100f4d9135"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/internal/service/types.go",
+      "sha256": "5bc228cd2fe742cec03766da62ab33d0a4f3eaf9dc5b3aa5202cca5dadaf8605"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/internal/skin/archive.go",
+      "sha256": "0ab25524ed2805fcadb0b2fa10eeab5c4ea31d4eb9f2044f6428c50ca779d72b"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/internal/skin/http.go",
+      "sha256": "d7b23eebd2b8d2b95e81bd18483f96cfa09c44ca8f056fe87fb36f1e0fc3c940"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/internal/skin/manager.go",
+      "sha256": "5e71dc874af98da9dd8a0c873370932cb7cdf89d734b773b3bfdd26551cda54b"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/internal/skin/manifest.go",
+      "sha256": "aa5e618d4033dc84d7a630ec142e38e02082493ee9d54918e3f89aa08f1fc18c"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/internal/skin/validation_cache.go",
+      "sha256": "7c195192de3a4f7d1a97749ea94cd0ca39fc0a0c686e4a031c5400465f013648"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/internal/storage/cache.go",
+      "sha256": "28d5565ba4abb66a625aed69839686245a6f2ab553e08c082c9861c7f3e0b3a7"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/internal/storage/config.go",
+      "sha256": "2e348686f04ce637e53816cdddc975e438fa4d4d4ced7275777fd89347f073bf"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/internal/storage/journal.go",
+      "sha256": "bcbbb1895f038898fe5ae2e42f09206c7a0340e97629dd854fe5f83c5dd9f747"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/internal/storage/materials_ready.go",
+      "sha256": "f97c91877d057f618c0beeabc51556e7f64ad2247611e63f0000688ebef4e883"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/internal/storage/notification_json.go",
+      "sha256": "e2c239b7094c3adf4da2b355d1e7c52a89b10b4827b7e1c8b05b154fa74e49a3"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/internal/storage/notifications.go",
+      "sha256": "2d698e5736466307b8cc099b2d6b622044a3043b61f1737d0730f87919c64a24"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/internal/storage/replace_windows.go",
+      "sha256": "de68d7a9a730bac17177aac70b8d7c3d062df31fc9d9481613b68b649e2ccc06"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/internal/storage/targets_json.go",
+      "sha256": "e301c7375b5811cce5d0386aa933246cc46001965459d278c3e512d2bfbada17"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/internal/storage/targets_met.go",
+      "sha256": "91692a4f0004a5d7b2556e90bb57a3d275ddba4539e1e5589a1b71a8c0545506"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/main.go",
+      "sha256": "746816de884054ff447e7810f500a19d5ec319ee15ae1e2a8daaef4238c11b9a"
+    },
+    {
+      "path": "AutoFightStrategyService/service.go",
+      "sha256": "c0c11a035e1e9ac898562f716b96dac639440c2d010d00b8274dc35c02229cbe"
+    },
+    {
+      "path": "AutoFightStrategyService/validator.go",
+      "sha256": "c650d744f68fc5fdfec10c25886e79ac5341274e979726c6d63cd2af4ccdebde"
+    },
+    {
+      "path": "BackpackStatistics/BackpackStatistics.go",
+      "sha256": "748b64c0b4a944efe20747a80a90d46240c5c795bf29a2a68473ba0231f373fe"
+    },
+    {
+      "path": "BackpackStatistics/BagCategory.go",
+      "sha256": "33d71ee6d145e3fe872ae20668e891296214259cc5943f0e2da3199532a55ebf"
+    },
+    {
+      "path": "BackpackStatistics/Preference.go",
+      "sha256": "e02693b0582e2984a20b3373333beb629da073dfdc5597ead2a7731a4e0a9c2e"
+    },
+    {
+      "path": "BackpackStatistics/Service.go",
+      "sha256": "da7a8e88a47474fe56992324873873d7b300eaa378cf751ac8de4af26763d02e"
+    },
+    {
+      "path": "CDAwareAutoGather/CDAwareAutoGather.go",
+      "sha256": "e55a788cc1b07f819a2c917e0f1a176f2461cb6319c32e659b33fe08aff57f4c"
+    },
+    {
+      "path": "CDCollectionManagement/BackpackMaterial.go",
+      "sha256": "7f8ff17e478cc780d299cd4d0fb083fed002540bc348fadcf58f65c5129c135d"
+    },
+    {
+      "path": "CDCollectionManagement/Blacklist.go",
+      "sha256": "bdd3d14efd134baae773149e44e9af4fccace532ee8556d618d3b6cf38e453de"
+    },
+    {
+      "path": "CDCollectionManagement/BlacklistService.go",
+      "sha256": "d8515eb93b5d905f9226890ff73e1f2ed418c5c69939f226f324b39945e42b62"
+    },
+    {
+      "path": "CDCollectionManagement/CDCollectionManagement.go",
+      "sha256": "3385762586cfca4c9b6724738b4bac3b6a2cc6f7a48944fed7e3324fe9047998"
+    },
+    {
+      "path": "CDCollectionManagement/CDCollectionService.go",
+      "sha256": "bf461828195aa4c97a1ff637845aa704315d79f57f229f15b73bc6413e9623d0"
+    },
+    {
+      "path": "CDCollectionManagement/CDDate.go",
+      "sha256": "d3e4de842a14047568d5a754e4721660f85b073327242ec8f7b8f1e8aae491f5"
+    },
+    {
+      "path": "CDCollectionManagement/CookingRecipe.go",
+      "sha256": "58ee157e8ea13f44c1fb80d9f94fcfb521918647f9a45a803e963b3b8cf44e83"
+    },
+    {
+      "path": "CDCollectionManagement/CookingRoute.go",
+      "sha256": "e7655f79c8d0fd8c7b2d5bb1f941330663e45ca49a76fd7aba6bff763e771fd2"
+    },
+    {
+      "path": "CDCollectionManagement/RouteCooldown.go",
+      "sha256": "1f4f25f253a842a3816ff1d93e812cc420cc0f1d702d6375cab03a80361903b0"
+    },
+    {
+      "path": "CDCollectionManagement/RouteDelete.go",
+      "sha256": "84e83d013b88160a794df1b1fbd480f9480f3d657ddbd74c9df990cd42633a51"
+    },
+    {
+      "path": "CDCollectionManagement/RoutePackage.go",
+      "sha256": "e2fa06d7b046c45681622905cf89ef4eed7b63380d5e94739b3d0d4ea254fb4f"
+    },
+    {
+      "path": "CDCollectionManagement/RouteToggle.go",
+      "sha256": "70549406ed3a49196c72fe653013d68580629dbeb05228c0323560aa1e237e3b"
+    },
+    {
+      "path": "CharacterPlanService/CalculatorRemote.go",
+      "sha256": "917dcb561dbc3392c9fd51c9b4aec4af123fed2acb482b579204ce688abbc1c7"
+    },
+    {
+      "path": "CharacterPlanService/CharacterInformation.go",
+      "sha256": "d45256784bdb432acc42150e11ccc4de92a037fb60c47a2cb0fa011f1113233f"
+    },
+    {
+      "path": "CharacterPlanService/ReadOnly.go",
+      "sha256": "5032ae8a4533ae976676377b7b87970cb135b754ed060881d4d373bf2757bb78"
+    },
+    {
+      "path": "CharacterPlanService/Service.go",
+      "sha256": "34eab927546175a3fdf10b8603fbb26966c774498498809cd6b11b37073ca4cf"
+    },
+    {
+      "path": "CharacterPlanService/SkillSelection.go",
+      "sha256": "850013b77f71a90a3aae0c7420a1bf4b9f199d52bf5c1bb0dceb71c015a9a756"
+    },
+    {
+      "path": "CharacterPlanService/Targeted.go",
+      "sha256": "960b4c729ef3a4af481918bfc87559a9fbf57c8359c4c5820c0a4853e98de6b7"
+    },
+    {
+      "path": "GachaLog/client.go",
+      "sha256": "1737f2c8359abac2056dcce5062c61bf7261c8e66204a39717a48f3dd2d8b454"
+    },
+    {
+      "path": "GachaLog/errors.go",
+      "sha256": "f7cd0cfbb492d8d3a9a469555ee6ed5a89fb762f200cc4447c5f5e47af687ed0"
+    },
+    {
+      "path": "GachaLog/extractor.go",
+      "sha256": "74c42b827b10304a38ac810aa72a45d5e97f71bb08f4e82f79b08698c3057419"
+    },
+    {
+      "path": "GachaLog/handler.go",
+      "sha256": "b65537111e25238237a6e1900420cc6f8d1a9bd263439b6e74aff0d11fb2bf44"
+    },
+    {
+      "path": "GachaLog/install_path.go",
+      "sha256": "2e5d8753e111e6113b4da34e6a931db531ee19b67689a48cdab834661a3328cc"
+    },
+    {
+      "path": "GachaLog/install_path_windows.go",
+      "sha256": "60621703e416610f33b757510a0d6868680f6019f05737448e5b0146179c6710"
+    },
+    {
+      "path": "GachaLog/service.go",
+      "sha256": "7d8fbe6c5087463824f3f97ef8a03fa361c9bb0d122c73e9c8ca72b20f733a1b"
+    },
+    {
+      "path": "GachaLog/summary.go",
+      "sha256": "bf303869002979235d49f048ed810dcb37792c62a2d1d7d2785dc4711c1d932f"
+    },
+    {
+      "path": "GachaLog/types.go",
+      "sha256": "496f7a548886aceba4b1bc5d05da99e329f48b7a4fc02ffdeff61e2eee494aac"
+    },
+    {
+      "path": "JsAPI/JSHistoryVersion.go",
+      "sha256": "038ea8e89c769800e03d51c7d85061ff29a6d8af7dfe9ff183acbd8d8d4b86b2"
+    },
+    {
+      "path": "JsAPI/JsAPI.go",
+      "sha256": "baa3b9df16f61bc944f7967157bab955ed6ec4d45ff52d61298d8990f797df22"
+    },
+    {
+      "path": "JsAPI/service.go",
+      "sha256": "5fcb6a113a4a8b36fd4bf490f1eafa2a47dedf44343399fe8b690cbac2375feb"
+    },
+    {
+      "path": "JsScript/ArtifactExpCount/artifact_exp_count.go",
+      "sha256": "2f219e15c46057d2630557a5d7669692b4dc5192cc1cc778289f1ad13b78212f"
+    },
+    {
+      "path": "JsScript/AutoFishingTeyvat/dashboard.go",
+      "sha256": "88246ffaeed6cba1709aeaffbd0c966c097c59d766924bea94203dc631382ccf"
+    },
+    {
+      "path": "JsScript/AutoFishingTeyvat/handler.go",
+      "sha256": "4831e0d763102b693191f23125181ffce989b64f1485e60f32ab84d6f899ed9d"
+    },
+    {
+      "path": "JsScript/AutoFishingTeyvat/literals.go",
+      "sha256": "0f308c604939b50c322597abec321aad7c84a27dc816f944be3fdbe538498815"
+    },
+    {
+      "path": "JsScript/AutoFishingTeyvat/settings.go",
+      "sha256": "17270d9c7bc830fd38c31f626cfdee87df6a4a87d7a340ff441c0165eb1d2f26"
+    },
+    {
+      "path": "JsScript/AutoFishingTeyvat/settings_replace_windows.go",
+      "sha256": "7b1916e11882c381d20b6979c12ae958c272b537ab4664d40ba10c62ba563f9e"
+    },
+    {
+      "path": "JsScript/AutoHoeingOneDragon/dashboard.go",
+      "sha256": "923a83b134340c4ed5ec160724dda7740c06045c824eb3d4f0ddd7ddc45066af"
+    },
+    {
+      "path": "JsScript/AutoHoeingOneDragon/generator.go",
+      "sha256": "1612ec068042a318d9286548897f80bc9e05d72d80e3d8af94e16833df331279"
+    },
+    {
+      "path": "JsScript/AutoHoeingOneDragon/handler.go",
+      "sha256": "07f8140044f28479b6ebc90e85089220da52fae4cef1fc31f6f2f18df94eed9c"
+    },
+    {
+      "path": "JsScript/AutoHoeingOneDragon/management.go",
+      "sha256": "e2c90cfa9869125307b025ce07d3a1969d14c9149852a338b4139628c7354577"
+    },
+    {
+      "path": "JsScript/AutoMonday/handler.go",
+      "sha256": "007bcb2309a60caf7b5aa811d44b7b832a3e46e56d8dc0d4a0150bcaf79f6dba"
+    },
+    {
+      "path": "JsScript/AutoMonday/records.go",
+      "sha256": "e30608471e5c3622c2cc8b66134cd89daa269c17a21ea2a29dd4e578b622a8b5"
+    },
+    {
+      "path": "JsScript/BagScan/accounts.go",
+      "sha256": "b8214a3b20870ef69ae7e2e8a94b0fc2d67854438d382e0492a0a4a0a583ce9e"
+    },
+    {
+      "path": "JsScript/BagScan/bag_scan.go",
+      "sha256": "26f519b0ba5857956b36edc5046dcd5b589f951157bbb1d656a52a8bf4a13a4c"
+    },
+    {
+      "path": "JsScript/BagScan/latest.go",
+      "sha256": "ed6b670078bfdb04105c54a8ba3a744834b8bc93fb336e722b7792b368139603"
+    },
+    {
+      "path": "JsScript/BagScan/snapshot.go",
+      "sha256": "33dc31779eaf9ff0570c0e86e1a7d9fce694da5190b9615d255d5d6f827a2427"
+    },
+    {
+      "path": "JsScript/TeyvatNotebook/teyvat_notebook.go",
+      "sha256": "fb673576d94c010355a85a6385055a887e3daabe25ed76d6bffd77081ddb2e7d"
+    },
+    {
+      "path": "LogKeyword/LogKeywordService.go",
+      "sha256": "5c91543c80cb6d165e12f6a0b83f43563988045707bc1af60d07d5bcd304cd21"
+    },
+    {
+      "path": "LogKeyword/keyboard_operation.go",
+      "sha256": "a8af86e495b333d6f339a7d2ab550ee3b48901d7e23ae51de363534e5b363e85"
+    },
+    {
+      "path": "LogKeyword/obs_actions.go",
+      "sha256": "9abc8b0af1e0f39f06160b13e6306f2d71914d5a2b0f55798f8c9876c73d8726"
+    },
+    {
+      "path": "MCP/character_build.go",
+      "sha256": "9265e2b680474ce189c0b329c101d094001fd138a93dac807575230c747fdf83"
+    },
+    {
+      "path": "MCP/screenshot.go",
+      "sha256": "9a22cc683679daff33685ccfec92fa4a253e3f554df701f281a926941542f8ef"
+    },
+    {
+      "path": "MCP/server.go",
+      "sha256": "ccdb915b5966b56c877babfe27a5f4799c4d96a47e8aeef441b9cb93e27cd25b"
+    },
+    {
+      "path": "MCP/service.go",
+      "sha256": "dd25b752e7c0ba347f80b859d247292ccd7a358dfc581609685fa5adcccfc4aa"
+    },
+    {
+      "path": "MaaRuntime/extended_api.go",
+      "sha256": "aa2e00e6370a1b9aa7556569c64693a3765b25cf1e6e19a8b9fc60833a3f2bf2"
+    },
+    {
+      "path": "MaaRuntime/focused_click_action.go",
+      "sha256": "1e04a3102d5824c71cc68c3415ef03b686762bde102bdd9f9be15dcdabdad4ec"
+    },
+    {
+      "path": "MaaRuntime/hotkey_action.go",
+      "sha256": "b32e685a1c6926d30a5ba63c1cd1a57a6d112471c175154bd5e20719e72760ea"
+    },
+    {
+      "path": "MaaRuntime/pipeline_requirements.go",
+      "sha256": "fcb2e2c5d3f7840ac844228eb81ecc41ef5ec22539257489c334a9efa0646cbd"
+    },
+    {
+      "path": "MaaRuntime/preview.go",
+      "sha256": "a1daf721a1b39b45a069800e522a8ed4205a0613f72cbf1e61e0dc451035dbef"
+    },
+    {
+      "path": "MaaRuntime/process_action.go",
+      "sha256": "b04302b3f9d7e15540c4ca9b79ae487b0026e3d64d0e8f91e2caa653b7039f60"
+    },
+    {
+      "path": "MaaRuntime/service.go",
+      "sha256": "4c1669aebafdcf0e34b3d7cc7dbf0a3f05397a940de93f5584a857f7e62c69d3"
+    },
+    {
+      "path": "MaaRuntime/window_action.go",
+      "sha256": "9fa7a6f4db9d2f421e3f25df0c771b1584238a5d29f23b780b1d01ebc9c6f2de"
+    },
+    {
+      "path": "Mihoyo/Mihoyo.go",
+      "sha256": "6708db96408b032909f3ac9bd576e650b665546f9574cb41dffe841ff258d81c"
+    },
+    {
+      "path": "Mihoyo/MysLogin.go",
+      "sha256": "f264b990da1b12183620d288871c71ede7595999773a6d9edf06bf55ce41c0ea"
+    },
+    {
+      "path": "Mihoyo/artifact_miao_data.go",
+      "sha256": "82e8919b58710a94536af5738dc1fee14360e5cbf2bb2c14cdd4c0ba18c212a0"
+    },
+    {
+      "path": "Mihoyo/artifact_miao_rules.go",
+      "sha256": "5026b6b2ac8b9952ddade4f174f24f2e785df42783630d046b0c709703191573"
+    },
+    {
+      "path": "Mihoyo/artifact_score.go",
+      "sha256": "02cf41d3f14d31a239572c8dd48e64d930bfa6b08d5c7e3d336c3f7f580a9958"
+    },
+    {
+      "path": "Mihoyo/artifact_weights.go",
+      "sha256": "d80544c2517e96d99dcc7818f8768a481011e1b3abeca13da1e2f46c055e5fd6"
+    },
+    {
+      "path": "Mihoyo/character_damage.go",
+      "sha256": "6fcfdec4a7ddeda8624e19167de04c624dd8d7a6350bf005fb343b5f5b5772e8"
+    },
+    {
+      "path": "Mihoyo/character_info.go",
+      "sha256": "6d0bdc0bdc545636e846eecdff8a13d082072bd7fb998445ec706f8babef3cd6"
+    },
+    {
+      "path": "Mihoyo/character_stats.go",
+      "sha256": "60888150a74e2976ebf162be126a56c45e631d1a032f39d7324ff4139c6db77f"
+    },
+    {
+      "path": "Mihoyo/config_fill.go",
+      "sha256": "038ae0d99f70ab3181a7373ee51f52a978b125ec3a5db13bb66f5b47aa9c6cfc"
+    },
+    {
+      "path": "Mihoyo/credentials.go",
+      "sha256": "d997e3d0f891fe4631dd83c5634a960fa9a9bbee04c674d0360f13438bcd050b"
+    },
+    {
+      "path": "Mihoyo/service.go",
+      "sha256": "ca54b575bf0bb694704e88fe86f87794f2f19452a3b4550c9ceaf665cacf0159"
+    },
+    {
+      "path": "Mihoyo/weapon_miao_data.go",
+      "sha256": "c147156d685486cd78c69b1205b69ca8a4130a76553757a779393d46ca59c8d6"
+    },
+    {
+      "path": "Mihoyo/weapon_miao_data.json",
+      "sha256": "3522aad589b6b3d640971434e0af1c679d0aba120eb152ae862a2b2c9e6b35df"
+    },
+    {
+      "path": "MysSignIn/accounts.go",
+      "sha256": "fb165cc3a4df7abfad8982fb3770391e508089477695b6c1e6d01ff5c75a9d6b"
+    },
+    {
+      "path": "MysSignIn/handlers.go",
+      "sha256": "3f53b12efa6b525fc5c117aeed01ec34a8126c7dd5bd40f11347416cbf884b06"
+    },
+    {
+      "path": "MysSignIn/manager.go",
+      "sha256": "c69edd9e7e35f30e10945af6dff804724c3600a661213d81bd4ea53af4a204de"
+    },
+    {
+      "path": "MysSignIn/mihoyo_account_runner.py",
+      "sha256": "818dbabc6d19a5fb0ba801b784530bff0e7442f1a9273438b31c286cbaa78f79"
+    },
+    {
+      "path": "MysSignIn/runner.go",
+      "sha256": "d047e6bf183139f6b5fbcaf1331622a6ab5739e8d3daef2047eaaa9439164765"
+    },
+    {
+      "path": "MysSignIn/types.go",
+      "sha256": "f993f1e7513d27bae9dc3bde0d9b61d8171f90738097487811703f8e574cc153"
+    },
+    {
+      "path": "Notice/DingTalk.go",
+      "sha256": "82b5a3396b5ae7a2846cf63646dfd39b6980b9513669b95ca9e8d751b12117d4"
+    },
+    {
+      "path": "Notice/FeiShu.go",
+      "sha256": "23c6ae0175a091924bc75a805ab790ba0e2cd95c5b4d3135a76b2b4db652390f"
+    },
+    {
+      "path": "Notice/Notice.go",
+      "sha256": "da84b605ba3b941bd2f9d772ebba9b573713a937a0b1dd09a84537428892bc56"
+    },
+    {
+      "path": "Notice/OneBot.go",
+      "sha256": "ca21bc0be1e05761d4abc3cb91c936f5a6b1e3f7ec735789fe2335e5613c0c7e"
+    },
+    {
+      "path": "Notice/QQBot.go",
+      "sha256": "c5cee1e1a4eed97184adbd2d65f522f358da54bf461482bdb48275be82dbe0e0"
+    },
+    {
+      "path": "Notice/TGNotice.go",
+      "sha256": "7f3f9433dc9bf4a7ed90e0a88da2488d8c1aef36f6a271caf4c2fcad1401ab6c"
+    },
+    {
+      "path": "Notice/WeChatNoice.go",
+      "sha256": "72d17182683786fee5d569a1c324d7232643cda0987f16e6678859977417b961"
+    },
+    {
+      "path": "Notice/YunzaiWS.go",
+      "sha256": "a4018b190ff0566d0ecc1d882abd31dca5b9ca917ab606e70427bd62f85af766"
+    },
+    {
+      "path": "Notice/notice_template.go",
+      "sha256": "daed1d571694322c19201b0438226f7b1395d8ef5d3a02dcd9fb5be688d0c788"
+    },
+    {
+      "path": "Notice/notice_template_http.go",
+      "sha256": "193148ea44d55c557dfc3e772a0b16b183f8c4b1f1dd475dd7fbf6d90bbe3240"
+    },
+    {
+      "path": "Notice/notice_template_limits.go",
+      "sha256": "83a911de9214b1dd594449a4521f61d48abc21dd8b0fbf3f5cc68afe45031971"
+    },
+    {
+      "path": "Notice/screen_change.go",
+      "sha256": "4e6c26ae0977d71c399650c2811b3b4786594eee05010abc8d8925bf745026f9"
+    },
+    {
+      "path": "Ocr/AutoBattle.go",
+      "sha256": "b264481f11dae636c923dca330ded90e05fd1eaa5c7fe6c745243292abeb5f63"
+    },
+    {
+      "path": "Ocr/BaiDu.go",
+      "sha256": "8eeeb5144ef82f6439efb354b081f5e9d2d2c4ab9295cdb9ee6dfd4865415bb4"
+    },
+    {
+      "path": "Ocr/PaddleOCR.go",
+      "sha256": "4d1b2cec7330cbac22e1fc558c133662fb25fcc070cb94502c2b410f1a59c04f"
+    },
+    {
+      "path": "Ocr/dict.go",
+      "sha256": "9480b4fcbbec914519fb23fa921a3e54a3253e1e6230c6c992c28421f47a38f4"
+    },
+    {
+      "path": "OneLong/ChaBaoOneDragon.go",
+      "sha256": "e685e1f4a4dfee789d69208f46b463617ded6be695e3c60c1e4e6d237a40b96e"
+    },
+    {
+      "path": "OneLong/OneDragon.go",
+      "sha256": "c80ad5be61fe9316d359b208c084ccc85a604702591b043679fef4c712c7339c"
+    },
+    {
+      "path": "OneLong/OneLongTask.go",
+      "sha256": "4b909a97c55b84ba6f1e4012cc340da3b37b0ddfe8f247dd967c6d5acb34e017"
+    },
+    {
+      "path": "OneLong/oneLong.go",
+      "sha256": "622119b52a8844ae37735309485c18f3ba2ebb52ba901ef3ed1edddd696365e2"
+    },
+    {
+      "path": "OneRemote/Function.go",
+      "sha256": "d52ef140c7371795472ee6003d926b259688641cda58874f83c29a29f2a961a6"
+    },
+    {
+      "path": "OneRemote/concurrent_sessions_windows.go",
+      "sha256": "5fb4b0f6e52ae1d7096caa7a1d43195bcb12bfc2da14aa309f3081d092fc2dae"
+    },
+    {
+      "path": "OneRemote/credentials_windows.go",
+      "sha256": "a81b9f32ae713a108093d0618918dfc0e0abd36c3940adbbcef79162170339ff"
+    },
+    {
+      "path": "OneRemote/desktop_hub.go",
+      "sha256": "d592a2627d77e4eb20511a18decd1334b48060c4912c3cc9fcc0abbd22c07983"
+    },
+    {
+      "path": "OneRemote/desktop_service.go",
+      "sha256": "e104f0b41665432bdad39ab2ff9dcfd661646f82e387a7c52ba456ce1afff40f"
+    },
+    {
+      "path": "OneRemote/dpapi_windows.go",
+      "sha256": "184cfeda83567253be66494d8dec42a6a4e8b0e2d6e4be77194f0dae69b96cdb"
+    },
+    {
+      "path": "OneRemote/firewall_windows.go",
+      "sha256": "331f6d1ac1cf38e230f67556a9612f28aba6ef1e5c7172300f5b86cddc1ee181"
+    },
+    {
+      "path": "OneRemote/manager.go",
+      "sha256": "f0ea14cf942621b7f251e0129a7fbdade5861e944f458f2d08d5c26dc1e50dc4"
+    },
+    {
+      "path": "OneRemote/profiles.go",
+      "sha256": "c8eb41ae9a34b1dff5f402e85c4c433a96e3011aab841e726c7cac315382cd6d"
+    },
+    {
+      "path": "OneRemote/protection_windows.go",
+      "sha256": "7e30fcd1162be581a49fe62f757bb1c8f7da9b7d395708c0e52afb029c6b4d31"
+    },
+    {
+      "path": "OneRemote/rdp_h264_backend_disabled.go",
+      "sha256": "53f95530b3642fc96bb25b78583383b2e50eaa4506f75641c74086530e168c4a"
+    },
+    {
+      "path": "OneRemote/security_config.go",
+      "sha256": "285ee1d9502bb20d29e7468003a88c1762dbf42567b5572225504003fe8900ad"
+    },
+    {
+      "path": "OneRemote/service.go",
+      "sha256": "2bd81ee00f4618b15b30a15645bf73ab47867e77a8693005d3dde5588cd37000"
+    },
+    {
+      "path": "OneRemote/windows_user.go",
+      "sha256": "b43266e6d6a43ea9b00f4ceb5464511f1b56c831c5d77ff02b7dce02428086f5"
+    },
+    {
+      "path": "ScriptGroup/CreateGroup.go",
+      "sha256": "cd252ff557ccc7af0201d5d99376305afa175bb608ed70699422b61532ffac44"
+    },
+    {
+      "path": "ScriptGroup/GroupDetail.go",
+      "sha256": "21ae4834b4fd16863eb692a9e16929e5aab011d9024884ed7fbd38ba7d0302da"
+    },
+    {
+      "path": "ScriptGroup/GroupSettings.go",
+      "sha256": "8208a65739d701923f5c2e3555ab62be8dd4e20bf78bd1c92f891e3684e36b3b"
+    },
+    {
+      "path": "ScriptGroup/GroupSettingsSchema.go",
+      "sha256": "cdc317be647cca18e2ea64973c97049f4e950d65a0e8571ca1d43c7471976b0c"
+    },
+    {
+      "path": "ScriptGroup/GroupSettingsValidation.go",
+      "sha256": "b4619e2084f02ea61bce0d3db7dc41e484c8207797c5cd2b3282c5426d5635c9"
+    },
+    {
+      "path": "ScriptGroup/GroupSettings_windows.go",
+      "sha256": "332d53eee35ff2b35fae4681f20474eda2117d06765fd11251dd59a1950fb542"
+    },
+    {
+      "path": "ScriptGroup/GroupSummary.go",
+      "sha256": "0375775b52ae4f5bc1e70eb72bdbe2fb765d58363f2b7fd7f6a5cc3b73703f62"
+    },
+    {
+      "path": "ScriptGroup/JsScript.go",
+      "sha256": "d6d75c52ffbc2ab68536fd7858e4361ee208a5ad3558dc6c961d4b32839c1268"
+    },
+    {
+      "path": "ScriptGroup/LocalJsScript.go",
+      "sha256": "ca96da5f49c2a3ef2c2aa060b61dc864eeeff17582950e5084b2166017910dab"
+    },
+    {
+      "path": "ScriptGroup/LocalPathing.go",
+      "sha256": "2c8f7d3b1caba7db073badb9832f0bb25830896bbe42df28f4876e0355d96e5f"
+    },
+    {
+      "path": "ScriptGroup/Pathing.go",
+      "sha256": "8ae09be16a204733d39755ccfacf5fe82bafacf3485daeea436ea2f8a0de69c3"
+    },
+    {
+      "path": "ScriptGroup/PathingContext.go",
+      "sha256": "235a99b17e0cbf013d7d85fd5e870652fd2612bdb9ea0b1e1959746fdab07f9f"
+    },
+    {
+      "path": "ScriptGroup/ScriptGroup.go",
+      "sha256": "19de1e1c863ad4028ec25522b3be77529e6715eb6afbe7b50bf4ec33c8d9dde3"
+    },
+    {
+      "path": "ScriptGroup/Tools.go",
+      "sha256": "7e902a5acb1a73445a3a21d91847dfdcf746631509848f5e75b6317b220dd4b7"
+    },
+    {
+      "path": "ScriptManagement/http.go",
+      "sha256": "8c382ca1e4a861dd694e181771c289889e5b6c06f520591ed67385f1800cb53a"
+    },
+    {
+      "path": "ScriptManagement/launcher_windows.go",
+      "sha256": "f3ca18d59c2f5e5c2d220c65c686aba590948345b6e14bdb7fc78d0aaea9a56f"
+    },
+    {
+      "path": "ScriptManagement/service.go",
+      "sha256": "f0084d9e6effe8955759f90b665ee38e557019a37ea642c03a1d4997baa4f743"
+    },
+    {
+      "path": "ScriptRepo/ScriptRepoLog.go",
+      "sha256": "ba051c2c9753f6cf8604515740ac993b17becdd43caf1975d4e4eaa351a3a428"
+    },
+    {
+      "path": "ScriptRepo/ScriptRepoUpdater.go",
+      "sha256": "0e045cf030429d101880e94699c73f050a1ad1fce4abb9c149be9978d63f4a55"
+    },
+    {
+      "path": "SessionActions/coordinator.go",
+      "sha256": "59b9576357f1a57d0c527084c0c263150774f835e63223f15838394d70e4e4ee"
+    },
+    {
+      "path": "SessionActions/defaults.go",
+      "sha256": "f4cdc7b010c6609f232b9c2ca4894917326a1aecd95335755bc0d094ce3ebde9"
+    },
+    {
+      "path": "SessionActions/http.go",
+      "sha256": "6cfc0211cacf6f5529c4982673659f8d3e66d7dadd175340890537b1a005d393"
+    },
+    {
+      "path": "SessionActions/quote.go",
+      "sha256": "1d0606146aab922fdcd05c3ad8054ce3af4dbd8ad7bdb53828be92c30ddee70b"
+    },
+    {
+      "path": "SessionActions/runtime.go",
+      "sha256": "c05fb3dd7031c2e498569efd630ef8f17be3268ddec42fee492c9b95de815712"
+    },
+    {
+      "path": "SessionActions/scheduler_windows.go",
+      "sha256": "f978f1e481f0a5e6ce3156a3a3f2dc27f52c6359d3461152b0506a71b1f15941"
+    },
+    {
+      "path": "SessionActions/security.go",
+      "sha256": "0cfbd176e6cb97e43ca6efa8c0d61df13335e0d7124cb111fc94a7232fb5dc76"
+    },
+    {
+      "path": "SessionActions/selection.go",
+      "sha256": "12c887648ee677fc30718d610e98f191a024593bde6a172ed789f0533dadaaa0"
+    },
+    {
+      "path": "SessionActions/service.go",
+      "sha256": "fa445f81279dcc0940d3a724d346ca75c6ddb83f48361cfceec9159cc3f2945a"
+    },
+    {
+      "path": "SessionActions/sessions_windows.go",
+      "sha256": "89c9fd786d220212d6cc24b89307ab935df768f5eb8442014ba7a4e10e8ad725"
+    },
+    {
+      "path": "SessionActions/store.go",
+      "sha256": "3c517a405f830dcb292d31385f7ff7f4d9b2f35179d46f6a95e86264a4134e98"
+    },
+    {
+      "path": "SessionActions/types.go",
+      "sha256": "c4ded4f8a44d3af46440be33b02e65f02860eb5b6238aa2d1c2c42668438f2fd"
+    },
+    {
+      "path": "SessionActions/validation.go",
+      "sha256": "1ea5d163a89c0ba9a4da0ad38d7800168f29ef93616859d7985a6a709ef5ddc6"
+    },
+    {
+      "path": "TalentPlanService/catalog.go",
+      "sha256": "024dc897808fa0e001bff75a291a979c023bdd5e07cc4a6f2619c3172732b26b"
+    },
+    {
+      "path": "TalentPlanService/catalog_evidence.go",
+      "sha256": "21594df707be8e1fd1ff2b4715c2f3031a68780bc1576ba895a13cb4e33a29d5"
+    },
+    {
+      "path": "TalentPlanService/catalog_types.go",
+      "sha256": "d6fcbbad669e346470eda11020dfeb45bd4c8cc3e6b9f07cc80301206a96c964"
+    },
+    {
+      "path": "TalentPlanService/collection_codec.go",
+      "sha256": "30c3665aef1d938c16e173b6009880d6c451edff714e231f878d4aa9f2312557"
+    },
+    {
+      "path": "TalentPlanService/collection_store.go",
+      "sha256": "3ed5375660e27f1ffce54dda8bbd94e529ab62d40105cf8c8e67d71edcd1ac0a"
+    },
+    {
+      "path": "TalentPlanService/collection_types.go",
+      "sha256": "f3f5ec1f74be048245f449fee6ad983ac27ddf77eaf6e5441124d80d9f5f816b"
+    },
+    {
+      "path": "TalentPlanService/daily.go",
+      "sha256": "ab39e3acbd6c1ababcee851312125758eee4a5df383fb997a1fd757e3cc26dcc"
+    },
+    {
+      "path": "TalentPlanService/evaluate.go",
+      "sha256": "5416be48a9ccaaaad45e9d96f955797f5030270391951cdbcf7f3c88961f8185"
+    },
+    {
+      "path": "TalentPlanService/launch.go",
+      "sha256": "42d2e11e852372fbb0fd0fd851fb16c538832d586c6c9ec562d54430521127d7"
+    },
+    {
+      "path": "TalentPlanService/lifecycle.go",
+      "sha256": "8a42e2bbf643f953fba76244a62664d56c94222f5c19e4d93a54e8932ccd6af7"
+    },
+    {
+      "path": "TalentPlanService/lifecycle_types.go",
+      "sha256": "5216dd62f3063506a1855b62b1779a088fc220bc5d7e10bc85b420df6c192968"
+    },
+    {
+      "path": "TalentPlanService/material_event_store.go",
+      "sha256": "24ee72a6a8605474576fca910740617c48ca6ddb5e0ef20908a92de2e93b93e1"
+    },
+    {
+      "path": "TalentPlanService/material_event_types.go",
+      "sha256": "5b7fee3d745a81ffd829183cba9356930e46113975eea4ffa97dbf62656fff8f"
+    },
+    {
+      "path": "TalentPlanService/panel_evaluate.go",
+      "sha256": "efb3c4ed622438370ffbdb1ccc014e6aa1ad2ad23f01ea1f293324918c4cd3f0"
+    },
+    {
+      "path": "TalentPlanService/start_events.go",
+      "sha256": "cd9ce1bff14e0d78aac3a9c9bd9510e9b46abad56512f54fce0a4ba1d1688aff"
+    },
+    {
+      "path": "TalentPlanService/start_prepare.go",
+      "sha256": "5cb60690947ca662f2e938f032868f56b59a40a46bbc971ed7ceaf455bffaffd"
+    },
+    {
+      "path": "TalentPlanService/start_store.go",
+      "sha256": "91c065c45a9246e16b156276961288b911a18bda2d6796ee6cbf4483e394815d"
+    },
+    {
+      "path": "TalentPlanService/start_types.go",
+      "sha256": "6c131edbd050b67ebc3b74e5f6322fc8cb6ca5b58776ff793b6137ec212ebec7"
+    },
+    {
+      "path": "TalentPlanService/start_validate.go",
+      "sha256": "6d1d92d331a68718c997df3a6696398dc5fc269b0484a5e7392f33f17a0be39e"
+    },
+    {
+      "path": "TalentPlanService/store.go",
+      "sha256": "b4ee95aee21204921492acc9a678591e6b868b60c8814d45a0e4c8d3162d72bc"
+    },
+    {
+      "path": "TalentPlanService/target_event_store.go",
+      "sha256": "dc13b720312a4efab4de25fee127d3cfe511b4827bbaeeeb61d2da2d4f6fbcf1"
+    },
+    {
+      "path": "TalentPlanService/target_event_types.go",
+      "sha256": "6c58fe7ffe0cee21e6e2841b0ee068abbfefe605fd398c562458a48eaeb8e6a7"
+    },
+    {
+      "path": "TalentPlanService/types.go",
+      "sha256": "2bd7e80a7a9cb7373b5e57823086d8a190837bdae486c77ae399767bf6939882"
+    },
+    {
+      "path": "TaskCron/TaskCron.go",
+      "sha256": "5884af25e1dbc76328a545b9f2edb4d0de77257fce7abced3a3def4acfd7ddda"
+    },
+    {
+      "path": "TaskCron/TaskCronService.go",
+      "sha256": "86a744652fafa6946238086d0c82f49ee9cc0c87d8798fee3cb2b035ba8b575d"
+    },
+    {
+      "path": "TaskCron/TaskDb.go",
+      "sha256": "a9726ac6dd1a142bc8b17aa13c24ddc7b37396e4d6213d1d889b6effe065326e"
+    },
+    {
+      "path": "TaskCron/control_task_cron.go",
+      "sha256": "e2a119ac7b1c5a6333cca1002b9ef0feacae80ff08d51b11dc625b323c512d13"
+    },
+    {
+      "path": "TaskCron/mys_signin_task.go",
+      "sha256": "29eec692e7af7100bf938cf8ffae032514928e9f93dc04a473a11b558026eb07"
+    },
+    {
+      "path": "TaskCron/obs_tasks.go",
+      "sha256": "d1d3ab74305b78b008415ea7e75983be57efcad6824858269c3f6df53035e45d"
+    },
+    {
+      "path": "TaskCron/version_update.go",
+      "sha256": "ee469f0cb6f103bcee7d54c861b326b9062ea68362dff649001e985c480d4f9f"
+    },
+    {
+      "path": "ZenlessZoneZero-OneDragon/configuration.go",
+      "sha256": "e32fde48a590a6b3305d83bda8291049f381cd6897605a6b44fe91b06fb3be3c"
+    },
+    {
+      "path": "ZenlessZoneZero-OneDragon/http.go",
+      "sha256": "358342030b2915477cb8336367c6e733fd744f8028bb36d533f9d42e9faf2ee6"
+    },
+    {
+      "path": "ZenlessZoneZero-OneDragon/integration/abgi.go",
+      "sha256": "64e33a6ae09399a4c105e15fc9b8187de16b0175050d8ae171223eae2f8b799c"
+    },
+    {
+      "path": "ZenlessZoneZero-OneDragon/log_identity_windows.go",
+      "sha256": "d0a92d687c75ca207bf2166d4a5878ce4972ef84c3bffe11abdf1e66e542180f"
+    },
+    {
+      "path": "ZenlessZoneZero-OneDragon/log_reader.go",
+      "sha256": "16c007b33cc35bf9e91a094b2b8a99272e6d5bdc5f2d3c99f8c118d37260aec4"
+    },
+    {
+      "path": "ZenlessZoneZero-OneDragon/process_windows.go",
+      "sha256": "235bccdbfbf2083f78f82c9cf3100d3d643a5fb570237e612e9f2d9b17d55d68"
+    },
+    {
+      "path": "ZenlessZoneZero-OneDragon/service.go",
+      "sha256": "f2d56ebe4e8e341d39c2e7c86acf0bf485279fe402e7c38ef351147cb8aad585"
+    },
+    {
+      "path": "ZenlessZoneZero-OneDragon/types.go",
+      "sha256": "7307c717bb924e178dce6be03f860a5fc0aea440274b23be79da668494638b81"
+    },
+    {
+      "path": "abgiAi/AbgiAi.go",
+      "sha256": "8482e2c1a48000f6f90b76b23892ad434ae0cb0543410b51ad88dca1ea1f66ec"
+    },
+    {
+      "path": "abgiAi/AbgiAiMemory.go",
+      "sha256": "a01025c5ad6fffc5af3b6de59aa2dd11c00bca1609c429fe9f75d9f0f6b57180"
+    },
+    {
+      "path": "abgiAi/AbgiAiTools.go",
+      "sha256": "3626f34efb71887c26ed9ea7cda5fff47589ab38448250cf3e083b96202537c2"
+    },
+    {
+      "path": "abgiAi/AiToolsJs.go",
+      "sha256": "7afe196b71b5a2974b9e0817e965f944286d46b10e149ee244bf681f75897b2e"
+    },
+    {
+      "path": "abgiAi/BgiRuntimeStatus.go",
+      "sha256": "ec7c4788f4fce854287fdd8e7cc7d22709c27047cb4886202581a03c0ce1abe5"
+    },
+    {
+      "path": "abgiAi/CombatLogOptimization.go",
+      "sha256": "67606e739629461ea885fd386c1f708e267b1bf270eae0711db1f287f2386ea1"
+    },
+    {
+      "path": "abgiAi/CombatLogParser.go",
+      "sha256": "0f2cb11274700afeaa9c0dd7da16a589cef78d8cba3b3854118d9e571d85c709"
+    },
+    {
+      "path": "abgiAi/CombatLogStrategyAgent.go",
+      "sha256": "be492a3f10231f81620c6bc0160bab0dfd2f08c48b138f0a50960e7395ca62c9"
+    },
+    {
+      "path": "abgiAi/CombatStrategyAgent.go",
+      "sha256": "77d038e522c136578c83d93d27ea8fde246ef26fdaa8117256257d7238e2976b"
+    },
+    {
+      "path": "abgiAi/CombatStrategyTXT.go",
+      "sha256": "9323236056b35ee69dfff5e95c8f8990c943b7b37832463a3e2e318593bdac0a"
+    },
+    {
+      "path": "abgiAi/JsScriptAgentHandler.go",
+      "sha256": "5ca2966980f404b00a6c8519d30ab4d7da1d0d1c063bf3c69c4569834bc34bbc"
+    },
+    {
+      "path": "abgiAi/JsScriptAgentIndex.go",
+      "sha256": "c8d18f39200bcfdcf1487f9458e86282f2e629e0ab76a275e63a72491a1fa905"
+    },
+    {
+      "path": "abgiAi/JsScriptAgentSession.go",
+      "sha256": "f892f7827b187093ed9d2c6ba5b190c2ec895c5febb75554793dad3596bfeb89"
+    },
+    {
+      "path": "abgiAi/SkillService.go",
+      "sha256": "7574f73e23b0444c2019d6f39575263657bd342de728f705c60abc1cb56446cc"
+    },
+    {
+      "path": "abgiConstant/ABGIConstant.go",
+      "sha256": "29741ec7b689ebb90cf99506a1cad95cd5634717e6c1e704832d681292631259"
+    },
+    {
+      "path": "abgiConstant/YSConstant.go",
+      "sha256": "12dc5daecbfe41c01f71a6de77f3fd1340d85dab1ceb87f21e61400abaaad24e"
+    },
+    {
+      "path": "abgiFunction/abgiFunction.go",
+      "sha256": "559d1d3f793e5f69357565dc3e05f64c2644259226d2c42289c5b29c0b965ef5"
+    },
+    {
+      "path": "abgiFunction/checkAndCreateFile.go",
+      "sha256": "43ee0316db0c965d9ba0848c8cc951ee87ae280a4483131fb4d552cc4311c65b"
+    },
+    {
+      "path": "abgiImage/revive_icon.go",
+      "sha256": "b71f5f8b62fafcf0f0127ef9a3620743c9c4880f0e3eea3cc404668d638a87e9"
+    },
+    {
+      "path": "abgiObs/Obs.go",
+      "sha256": "b2b9c8f88060f642cb9fc44d2c30d674893a953fd0329f4c9d288d2c76b8fb48"
+    },
+    {
+      "path": "abgiObs/ObsVideo.go",
+      "sha256": "7a06ba353341811a2f1d529ae56b0e6762b176f125168cffdb1c760af07c2068"
+    },
+    {
+      "path": "abgiObs/adapter.go",
+      "sha256": "693c04ac4cd705dfa07a4b5ed7a36a1d6fd3eef3064ca54c7cab38b79003f05f"
+    },
+    {
+      "path": "abgiObs/http.go",
+      "sha256": "69446cccf58b767edd45954016b8cee745100815794aa70d89248273ebe72afb"
+    },
+    {
+      "path": "abgiObs/manager.go",
+      "sha256": "939b96e9301982ab88789f5ed62fa35f2f08e9b0580de711a799332f44f4338d"
+    },
+    {
+      "path": "abgiObs/media.go",
+      "sha256": "1b8a02e1ec21f44dd5831457c43a5e5348d1def298783747985158e00b63954f"
+    },
+    {
+      "path": "abgiObs/types.go",
+      "sha256": "1b1be230630671264c8fd3e81abc4e7b6e7572cd39ea10b0b001a5e8e22f5cf0"
+    },
+    {
+      "path": "abgiRepos/path_mapping.go",
+      "sha256": "f7462bf9d02b05cf8b504e1c95f624b7ccaa08f1f3cc0ccb5911dd67b462b0f6"
+    },
+    {
+      "path": "abgiRepos/proxy.go",
+      "sha256": "e01f47104785968702cb0fdc349a7aead8b44db4418b4149c95b4184cdc163a9"
+    },
+    {
+      "path": "abgiSSE/ArtifactsGroupHandler.go",
+      "sha256": "3e1aaf896a2676d69b3a08dd651c270c78c803fa628833972dff94de1b57a9ba"
+    },
+    {
+      "path": "abgiSSE/Handler.go",
+      "sha256": "552b39a5f7d73f3c5e594f07341d70ebcaf65bc140ee774fb28e14270b634611"
+    },
+    {
+      "path": "abgiSSE/VipUser.go",
+      "sha256": "bd8c17383eeafb6d1518ce12b3fd056c8483c95b1b4430c6c1a4aabaa7666075"
+    },
+    {
+      "path": "abgiSSE/aBgiSEEService.go",
+      "sha256": "42cd26cf46fb4d344700569831de4d9b6b6305cef98b47062ece5aef6a9015a8"
+    },
+    {
+      "path": "abgiSSE/abgiFont/HYW.ttf",
+      "sha256": "6c4f9aa137dd4bdc1fdce28f0b77ce7de4f6283f1cf5e744026e567ecf9fc3fa"
+    },
+    {
+      "path": "abgiSSE/abgiSSEConfig.go",
+      "sha256": "73b5240b5baef80a3598f58bc9b205529873645fe7634e3724c123cf4fbdf442"
+    },
+    {
+      "path": "abgiSSE/online_fallback.go",
+      "sha256": "416b54422308550ed78db5336c239971156855302785a9d159f1b60fb48224fd"
+    },
+    {
+      "path": "abgiSSE/room_status.go",
+      "sha256": "1fb5111fa2ac293cbb1da36206a4d3de4dcb894a397e30f8661e25deea89a545"
+    },
+    {
+      "path": "abgiSSE/websocket_message.go",
+      "sha256": "934d4e48477d96832721ebf63f2ea43b69101bc28fac517b61a13eeb9a4cba11"
+    },
+    {
+      "path": "abgiSSE/wsclient.go",
+      "sha256": "8029671401255a28fda9a7e662cf2c54c0271f8c8924c763dd4607ac8c29e899"
+    },
+    {
+      "path": "abgiScreen/abgiScreen.go",
+      "sha256": "84e1bd5a7a67c8c2aa9a001bdf8713cf884889cb4f63222fb6529a886cff37aa"
+    },
+    {
+      "path": "abgiScreen/frames.go",
+      "sha256": "c222fe3e33c674351de5b20533dffa5a262dbbe3372d53234a2a303caeffd0f4"
+    },
+    {
+      "path": "auth/AuthMiddleware.go",
+      "sha256": "58dd00cdf276129c53e42cc197c526b7907e11817e75a286b3950859a77b96bd"
+    },
+    {
+      "path": "auth/LoginService.go",
+      "sha256": "8368e9c3bcd8cdff037d333a7b08876f0fc6a85f96f4068b3f4234bacbb96d67"
+    },
+    {
+      "path": "auth/RDPFeatureMiddleware.go",
+      "sha256": "9fe7744f90f7c8b7c32d124f7651c3fef10436d81bf67a566b4c48954aa3ef33"
+    },
+    {
+      "path": "auth/abgiTeam/client.go",
+      "sha256": "3229b74bc07dedca645a533199aebc285369fcd3956a9b3cad2a323be66f2fdd"
+    },
+    {
+      "path": "auth/abgiTeam/credential_windows.go",
+      "sha256": "e0eb553e5ede0ca63f56c8216fce3ed1b74bbd8f1e7d75b577bb1d1925a4bf2d"
+    },
+    {
+      "path": "auth/abgiTeam/quick_actions.go",
+      "sha256": "5b5034ce00cca53595026a0e43cbf8dc7932e3f6e72f5f49439c8e619129a170"
+    },
+    {
+      "path": "auth/abgiTeam/service.go",
+      "sha256": "d441d2a88f9c3fb4f58ef77a6e16303094516ba7cf5a9225735e581acba0601c"
+    },
+    {
+      "path": "auth/abgiTeam/store.go",
+      "sha256": "8b55355dde2546199584db059ea5be582608ae7796cba932bc4450113c228ac4"
+    },
+    {
+      "path": "auth/abgiTeam/types.go",
+      "sha256": "c445fa2c2feea56fa6416184bb797bad23c0045e5e3b112c7021b70fee034658"
+    },
+    {
+      "path": "auth/jwtUtils.go",
+      "sha256": "d6abe9ce92151e2d062a83ac120fce51a1e37c169a7fb73437b9be26ab5ddfe8"
+    },
+    {
+      "path": "auth/loginMapper.go",
+      "sha256": "cb34c9a4d937a241788eec38522621f827ddfc4b808218ebbf2b74b7bf79f3c7"
+    },
+    {
+      "path": "autoLog/AutoLog.go",
+      "sha256": "936619cea0de969dfe68e5463fb1e1fb291030b9de782362bb7762b4a351b08f"
+    },
+    {
+      "path": "bgiStatus/ArchiveRecord.go",
+      "sha256": "45c3812f95bc13ade5e96a8982b299c9ea94bf907d71fd1136ae4d01cb9485b7"
+    },
+    {
+      "path": "bgiStatus/BagTools.go",
+      "sha256": "e4e6a38c8a20d89af54613aafcb629b9c89d07a1767f7f9f4270451f35f40605"
+    },
+    {
+      "path": "bgiStatus/BetterGIClose.go",
+      "sha256": "123c85aed505b0257d6ab4b849dd4b4919bf0ba25eebeadf0ed1d20b4e3790b0"
+    },
+    {
+      "path": "bgiStatus/BetterGIService.go",
+      "sha256": "a24591a215e460f7dc2955cea7d177f360546ff92e0c65709b267ff8b4d923a4"
+    },
+    {
+      "path": "bgiStatus/BgiLogStatus.go",
+      "sha256": "1987988d25078a128a6b4f211cc26d86a525197b019162cea5262d5a151e30ea"
+    },
+    {
+      "path": "bgiStatus/BgiRestart.go",
+      "sha256": "7550cdbc091374abadee7fcf4eac68101807347cc07d9c3fd842e749e82da398"
+    },
+    {
+      "path": "bgiStatus/BgiStatus.go",
+      "sha256": "c7b33f246b1f996a0d9af2dc2e052351d26539f4d09833c4773fd206910ab400"
+    },
+    {
+      "path": "bgiStatus/CheckRedBlood.go",
+      "sha256": "7ad45ea610d3bfa7e5a5e964ee33db435db40c45b1a4c496d208b9e957e1d129"
+    },
+    {
+      "path": "bgiStatus/DailyReport.go",
+      "sha256": "27be4a3b653c2da48bf7401c11c72bb90841589f1b79435db0fc290b81dd86e3"
+    },
+    {
+      "path": "bgiStatus/EatStatistics.go",
+      "sha256": "5886045ab13bd3265df0ca4798e999cbed9b202811d1c263ac38a5b21ea10560"
+    },
+    {
+      "path": "bgiStatus/LogKeywordLog.go",
+      "sha256": "7c74162d611fdf7b527dd7d46be7b51892d53431be4ecb49166fa791c9b71485"
+    },
+    {
+      "path": "bgiStatus/OneDragon.go",
+      "sha256": "a698a6ff81b47d3aaa44d35c5128b919f89d4c10bce131cff35e7cc44a1f63ed"
+    },
+    {
+      "path": "bgiStatus/OneDragonGroupProgress.go",
+      "sha256": "e5102c18b77a4f8c7d5ac9bcb4f1c2a78c48a8ed36c32a8125040a03f5fb2178"
+    },
+    {
+      "path": "bgiStatus/OneDragonLog.go",
+      "sha256": "3af43383fcefc713f874a04a80661188e9aa6088023a311c57c9f60836a8b3d6"
+    },
+    {
+      "path": "bgiStatus/OneDragonResume.go",
+      "sha256": "a47537dcd2b1adb83c7317dbb239eb1a4ebb443b5ee45a50e4f12d3e0c030cbd"
+    },
+    {
+      "path": "bgiStatus/PickBlackLists.go",
+      "sha256": "ba9b1abd9e7d0dfe1d0a969744c83b12eb8f3c9be4fd082de428d9d50f3a6e4c"
+    },
+    {
+      "path": "bgiStatus/aBGIByJs.go",
+      "sha256": "75ac4962043392a6512f6ab51446095b37bcc53ca77b7c9721f05d018e08dda5"
+    },
+    {
+      "path": "bgiStatus/admin_windows.go",
+      "sha256": "469d88af9d5155834e61fd186e7b36946445d1bd0f345b665bfb08f33fb2840d"
+    },
+    {
+      "path": "bgiStatus/bgiJs.go",
+      "sha256": "b390e0dcd3e41c0bc1c3fc657d5f94206f59c7c1b544d76b0e96f6f3dd924fa1"
+    },
+    {
+      "path": "bgiStatus/bgiLog.go",
+      "sha256": "e6ad6af8ee216a357d4a345e63aae626b150d093a5a8c77ad54a153f70045008"
+    },
+    {
+      "path": "bgiStatus/bgiOneLong.go",
+      "sha256": "668a11576818f0b8cf8dd52ae527fe565b67502bac279c61081652acb14d214f"
+    },
+    {
+      "path": "bgiStatus/desktop_pet_snapshot.go",
+      "sha256": "194468351177e08c123c9f86c7acc8f82bf25e998bf953fd9957d1bfacb03de9"
+    },
+    {
+      "path": "bgiStatus/eat_statistics_files.go",
+      "sha256": "ef63b4531dc2f40eebf98f939c02dcc34edd2723dc87d4a857fb621add0f6db7"
+    },
+    {
+      "path": "bgiStatus/logService.go",
+      "sha256": "aac51472046beee07cf7d371e20375c88e07d1c2f39c50c26b3fafad345b5c4e"
+    },
+    {
+      "path": "bgiStatus/notice_progress.go",
+      "sha256": "b2618dc71addcc596357fe2e9a6b7cbdb1455def26e53a8520037ae15a6b2737"
+    },
+    {
+      "path": "bgiStatus/one_dragon_lifecycle_windows.go",
+      "sha256": "7f775e962d58273929608e47e5368557bdc4c37abd96bcb1c43af89424c7a43f"
+    },
+    {
+      "path": "bgiStatus/one_dragon_run.go",
+      "sha256": "a39c3084bdec553da2e4654aec893b630e28d4fcb889c474b270e6049a962105"
+    },
+    {
+      "path": "bgiStatus/one_dragon_run_windows.go",
+      "sha256": "4232c3c4c90ba3ccd1d9f05ce8743a26a7a27caaa378bf708ebac3f4a2ba19c1"
+    },
+    {
+      "path": "bgiStatus/pickUpList/AutoPick.go",
+      "sha256": "abf1b4f36ca4eebfbac1608cd7078a2051a5a61a7d8db56c2d62608241efac88"
+    },
+    {
+      "path": "bgiStatus/pickUpList/auto_pick_atomic_windows.go",
+      "sha256": "a7537d1b91ee143b3d69fa33a2a893eae172c7e5024d5701843a3f570f80a7f4"
+    },
+    {
+      "path": "bgiStatus/process_session_windows.go",
+      "sha256": "58b77c79c3c455fc06db7bc55dbfdb678080cce40295e63a9f1551c3709e59df"
+    },
+    {
+      "path": "bgiStatus/qqbot_summary.go",
+      "sha256": "2a50db143f547e2462bf55fd491544bac3571112f9a75ab3f447d63d613907fc"
+    },
+    {
+      "path": "bgiStatus/status_state.go",
+      "sha256": "4a57ea12143b53d9382dc12f6d1b57c73bd75e5b500d2d8216dde637c6a2390a"
+    },
+    {
+      "path": "bgiStatus/talent_queue_lifecycle.go",
+      "sha256": "9e7524ce74d97d028a28e1577b2c55b08f1d3dc2289fab72cc263fac2b98674f"
+    },
+    {
+      "path": "bgiStatus/uploadBgi.go",
+      "sha256": "7609dc31791bb586c98fddfa71593a2f3ac8ab0a257bf57a73d7b7b1abbca970"
+    },
+    {
+      "path": "bgiupdate/update.go",
+      "sha256": "cf5407c9c42698f78e7e768e3276b06e13a338c1bae9056f5cfca4a4e48d3330"
+    },
+    {
+      "path": "characterDevelopment/CharacterData.go",
+      "sha256": "845e3641039a471e93318284bbd30056414308399e3cbb271f56ac821e1fb2de"
+    },
+    {
+      "path": "characterDevelopment/auto_fight.go",
+      "sha256": "f9db7e5e45e53d4b3795d95f9f11ea683b56dfdff253d89b1026ac3b9106c8b8"
+    },
+    {
+      "path": "characterDevelopment/characterPlan.go",
+      "sha256": "c87a88b62181fbfcacde00bc16d5439beb34c9421abe8e283d25548c0f2cbf9a"
+    },
+    {
+      "path": "characterDevelopment/materials.go",
+      "sha256": "43e85fb69d025f069c84921e13beff876968f241c323a34df2fe43cf1227d459"
+    },
+    {
+      "path": "characterDevelopment/online_data.go",
+      "sha256": "4d0065f416c4c125837e39888112d2255bfcb1d857c0b278a8531a83bf8d2d82"
+    },
+    {
+      "path": "combatStrategy/condition_validation.go",
+      "sha256": "ed4928e1ebc6e613828c6c94150f73cf7c8ebf6c1476de2988d0840db10c374f"
+    },
+    {
+      "path": "combatStrategy/cooldowns.go",
+      "sha256": "1bd9b430d7f8442946f0217c329c9f60608c1a6579cc3cc9c11cc3d16ed1ee86"
+    },
+    {
+      "path": "combatStrategy/generated_validation.go",
+      "sha256": "f67da2b7f62a0edb52ce34e5d1761431af88cd7b3731355d897a8c91180babc2"
+    },
+    {
+      "path": "combatStrategy/profiles.go",
+      "sha256": "247583518b2b884e22cb817c944c3cf7edbf753a5d945fc3225c35375c6ca954"
+    },
+    {
+      "path": "combatStrategy/universal_json.go",
+      "sha256": "dbdb7fbb531f73dea02288704d0138f2d7fc99ee173e435a9cfd2c67994c8442"
+    },
+    {
+      "path": "config/BagInfoCache.go",
+      "sha256": "32c41392f817e5377d5657286dc34af5647944b97a9bd47308bb3dd8821dab97"
+    },
+    {
+      "path": "config/BgiCloseControl.go",
+      "sha256": "608547eb571d04bc24f232ce88c9d43c945f721e052c8e3f84dc1ec7f6c5875a"
+    },
+    {
+      "path": "config/BgiConfg.go",
+      "sha256": "418ecd070c8095a1e3bff5caa597e21fea2ad5ceb5ecdb549612242b52d44328"
+    },
+    {
+      "path": "config/Config.go",
+      "sha256": "0e07257d22223712b2baf2d68af207b4440295abd575c9c47c968905f58a7975"
+    },
+    {
+      "path": "config/OnlineFallback.go",
+      "sha256": "baf7ee596b41a52e3dd33e4567118a2b5593a1c7123cb9f6ad5907a1d7796ae6"
+    },
+    {
+      "path": "config/YuanShen.go",
+      "sha256": "956bda683d75b3f5a579dc0d146131e433179317ce9958661233678d80793eb4"
+    },
+    {
+      "path": "config/execution_directory.go",
+      "sha256": "816af10f8b280573f0469a2dc0edcc3e4602d5594a258369aa9fe0e8a780cea8"
+    },
+    {
+      "path": "control/Audio.go",
+      "sha256": "644944b416d6df6d8e5b3591cb91c50f145fcf35835e9c656379404749d4b8e9"
+    },
+    {
+      "path": "control/Control.go",
+      "sha256": "d432df68598f4042a13b3c6e52f15b572d4d39ebad160136d16e7e2282b8da3f"
+    },
+    {
+      "path": "control/Injection.go",
+      "sha256": "37e043def6050563e219005f1c53e070b6828e076492c30c3bc35ade8984589d"
+    },
+    {
+      "path": "control/pilot.go",
+      "sha256": "26d09579d1720d60a4696dfb41268ad5e9744fc5f0b418af1e679c74b99c3d9d"
+    },
+    {
+      "path": "desktopPet/cultivation_queue.go",
+      "sha256": "1d1326d889c912b09ca51e179e856516b7e82ecda09fc7ce3f0f83577be3bbca"
+    },
+    {
+      "path": "desktopPet/cultivation_queue_types.go",
+      "sha256": "a778ec4647b39e470bfbf3ee8e3e553f8fdea4376cbbb0e097a9a78ae782ea60"
+    },
+    {
+      "path": "desktopPet/cultivation_queue_v2.go",
+      "sha256": "93b829429d9f767156126d1b084de5e81864b0199fb698dccdb54e1a196bad88"
+    },
+    {
+      "path": "desktopPet/cultivation_queue_v2_types.go",
+      "sha256": "db7241aec15e7ff76eb9ae8c943cb9555aa420ca44783d754d66bceed2652e92"
+    },
+    {
+      "path": "desktopPet/domain.go",
+      "sha256": "cc6bf9c4a3cb5247b564a7f9d98f4dbfe5cc3d4e509726389033e8079049ec1e"
+    },
+    {
+      "path": "desktopPet/domain_cultivation.go",
+      "sha256": "0917875e6163980c1226865615f181f228488fffb1b7a7616d2f0f5614facb3c"
+    },
+    {
+      "path": "desktopPet/domain_earnings.go",
+      "sha256": "21874a7162633e4b1f748d167b706b27c7c9b2cb87348ef88aff119b6671cbe2"
+    },
+    {
+      "path": "desktopPet/domain_query_roles.go",
+      "sha256": "c75ff4d7ce00b17d1c900396279c6d3af1d54a2bb857e31201de2b36c3504460"
+    },
+    {
+      "path": "desktopPet/domain_types.go",
+      "sha256": "b956459a3692936bebfb070768ce16ad9cd84f4578320aed070b404f239ca142"
+    },
+    {
+      "path": "desktopPet/http.go",
+      "sha256": "e8c0f774dab8f93c6d24ed5049ce7e9ceb8597e0bf5223fe25c92d7d6e4cf169"
+    },
+    {
+      "path": "desktopPet/material_event_types.go",
+      "sha256": "7019aea16a0c8eec10208407167d7c3d65bcfa574530e507b7969d228ab1b80d"
+    },
+    {
+      "path": "desktopPet/material_events.go",
+      "sha256": "bf9e7df4641975d17aa8daef03b8ae28a396a17bebdb08cb80df3cce73c3d38e"
+    },
+    {
+      "path": "desktopPet/service.go",
+      "sha256": "7beb613129860e9ad69c16e190239b8b9272ba153bd5ea6a1897d9230155b25f"
+    },
+    {
+      "path": "desktopPet/store.go",
+      "sha256": "41828f343089e261268f67f73815b96f80f4b641ee53872f36b9c9e8485b3da2"
+    },
+    {
+      "path": "desktopPet/store_other.go",
+      "sha256": "c8192685f5f705e0029884bac66bb40fbc398655e85a2704db75c6795c159d8e"
+    },
+    {
+      "path": "desktopPet/store_windows.go",
+      "sha256": "b68105082a2b6a24b71765a333444bb10727bcd6edcf970f3e8f5921c4b81337"
+    },
+    {
+      "path": "desktopPet/target_event_types.go",
+      "sha256": "0c430815429cc7cb8c9296e9d0ce5d83059979e7fdc7d6c6e42b226986ab16d8"
+    },
+    {
+      "path": "desktopPet/target_events.go",
+      "sha256": "12a79ee50c96ff80c588d3bbf2042dbc870786fbf5e75b402e1a1317aa56f631"
+    },
+    {
+      "path": "desktopPet/types.go",
+      "sha256": "254bc68a5a85a7b21b367ec7f6c4b5211f00178c8996df3a31f401ea5ea02f81"
+    },
+    {
+      "path": "desktopcapture/capture_windows.go",
+      "sha256": "0556cd363c8276dd74476c7a9aec27fb0ff244cf8213a33c070a4436e08d7dfb"
+    },
+    {
+      "path": "frpc/chiselService.go",
+      "sha256": "1e0e7154f9993c8b01699aac709b7c3b2eca8a0b6d6efcb8c4b1800d80937b5d"
+    },
+    {
+      "path": "go.mod",
+      "sha256": "91ac30ee0679908a1fd0a440e0b58ddf03a56dc260661981a7824795e8c91dfd"
+    },
+    {
+      "path": "go.sum",
+      "sha256": "6d20b8df86ec932a0f9d38d59c8a3328d5bb274228f9968889e3c7662f7f7006"
+    },
+    {
+      "path": "macro/doc.go",
+      "sha256": "2722e2c1fb33c7ed272f834ebcaaa50c037785d6b8040b073699eb7ac7845ce5"
+    },
+    {
+      "path": "macro/handler.go",
+      "sha256": "193cb85e6b2b82e5ed4faff8ba8b58988a9cebc25c017e7f2bd3bac96d2dacaa"
+    },
+    {
+      "path": "macro/keymap.go",
+      "sha256": "a5c5d49123e564232b0a2e22e59955da02f0d6d041b95fdecba82e451edf2074"
+    },
+    {
+      "path": "macro/player.go",
+      "sha256": "6586ad84315d2c16a8290b8ba85b2c0efb5cb068d84c211163d38bb4737df8d1"
+    },
+    {
+      "path": "macro/recorder.go",
+      "sha256": "ccf7af0ebe0834c2a7b6348041acdb9d2844dc332ba5b2bd17741dfd1a0fbed0"
+    },
+    {
+      "path": "macro/screen.go",
+      "sha256": "f63a690c68108fcf01ea6fa837f022482160c66ef336e2e9741df968c116bae4"
+    },
+    {
+      "path": "macro/service.go",
+      "sha256": "a4d5f3b5cfba46b724cfd63c3d41915d08fb419b714fce0ebf17a096c8603369"
+    },
+    {
+      "path": "macro/store.go",
+      "sha256": "6c4b18b8ad99d94ccd3288be1ac997c0923ba53cdc9e6ceb9fe4e0e2a0355cb4"
+    },
+    {
+      "path": "macro/types.go",
+      "sha256": "4b30adf6995c32e14147a79b9c31fda5176e0e31bb14aea74b4b6c180390f2af"
+    },
+    {
+      "path": "macro/validate.go",
+      "sha256": "04b7845928fa53ec9cd4aa93b92eaa9309c3c68b0550a0fffd47c55995e57ea6"
+    },
+    {
+      "path": "main.go",
+      "sha256": "ae7e11b5ce630cd7c2d7372dcf2d4826f15eef9cdfb49998365b00f177dd561e"
+    },
+    {
+      "path": "menu/ABGIHoui.go",
+      "sha256": "29520277806b84cbd56faec68bca6b01b3cc09e92570be7a3518597d059fcdf1"
+    },
+    {
+      "path": "menu/App.go",
+      "sha256": "6b3bb40c139d5600236252f9d21d9db30552ce32979773c7cc109e0e8d0155d4"
+    },
+    {
+      "path": "menu/HomeFavoriteMenu.go",
+      "sha256": "f5dc7c9fb03761d1741da8ef0c8999f1cc10b63f925143ae9e421d345bd1277c"
+    },
+    {
+      "path": "menu/ScriptGroupWorkspace.go",
+      "sha256": "f974228900cc01145a8a2feee2d657d41c91366d941f7e38f9d23079a73ab162"
+    },
+    {
+      "path": "menu/UserHotKeyShortcut.go",
+      "sha256": "5e93e5ca7a42c776d84095950b33d919e9be66f5b6e8e41f5ebda62261398d22"
+    },
+    {
+      "path": "menu/aBgiUpdateService.go",
+      "sha256": "43b8d567bc391cc342ffb2b86e27ddeeba541f3753c5600e69c387ce6ae0e25f"
+    },
+    {
+      "path": "menu/abgiUpdate.go",
+      "sha256": "cdb75f61b51c9c3b1d8189a1bd073d567e8babffc401700e200792b8eca72443"
+    },
+    {
+      "path": "menu/desktop_pet_cultivation_queue.go",
+      "sha256": "3593b020cb1156385bf2e7623d93811848f6315da8952c273b48a18d449b6e8a"
+    },
+    {
+      "path": "menu/desktop_pet_cultivation_queue_v2.go",
+      "sha256": "fc319a92d17c801312a930c75bb34cd6b77922e1a135931bac2211d887d8b709"
+    },
+    {
+      "path": "menu/desktop_pet_materials_bridge.go",
+      "sha256": "5701b391d70f7430cf57f14c3979f350fe58dc7c003768238be0b6dfea715cdb"
+    },
+    {
+      "path": "menu/desktop_pet_materials_worker.go",
+      "sha256": "0b916b668a76aab97815ecf793d34bf271b54d10c339f9cf6dfac9f9506a4c01"
+    },
+    {
+      "path": "menu/desktop_pet_targets_bridge.go",
+      "sha256": "92e89a89fa82fb16e7f875db27da9027d9f5ab176dbce24e93bd9eb02c20d40c"
+    },
+    {
+      "path": "menu/favicon.ico",
+      "sha256": "7bc254e852daf7cb005e1fef79408b498da5b4cfd4ef8cdff64c6b2b8d6f63cb"
+    },
+    {
+      "path": "menu/menu.go",
+      "sha256": "e2354db07064d99b4b9ac628ecb205fdd176fb6a2def40fc4831502f57ba3252"
+    },
+    {
+      "path": "menu/oneLong_handlers.go",
+      "sha256": "34a8312c4b3cb4ab8657326cde8a5420bfb60ed1a1fbecb082f229b564cb4a73"
+    },
+    {
+      "path": "menu/restart_service.go",
+      "sha256": "af236fc96bf523ae2d350788927ddd88406210b64b090481329f4a54b2e14a19"
+    },
+    {
+      "path": "menu/routes_api.go",
+      "sha256": "e67d5831181c10f43e16265baedcd91ed9ae47387de18bd4df0b2d1473f54ea2"
+    },
+    {
+      "path": "menu/routes_config.go",
+      "sha256": "1c8bc0515428a754f71d063b81375b6d7fe3c5b0ec3d8a64f528e243f7b057cf"
+    },
+    {
+      "path": "menu/routes_desktop_pet.go",
+      "sha256": "44d47fecbf81a58b7d16d45ab33fd88e7aced000e60f291a8560f29cd20015b9"
+    },
+    {
+      "path": "menu/routes_integrations.go",
+      "sha256": "6b9646ea8ec1ad40304f0455177298ad263ead6646f88008c9a5e8e60eaaa20a"
+    },
+    {
+      "path": "menu/routes_public.go",
+      "sha256": "88894cb77684f349a547e0839099d631b80ca30aa484a4840ed0d5718acf0313"
+    },
+    {
+      "path": "menu/routes_runtime.go",
+      "sha256": "888a01bb7ea4d520c5f05c804a609ffe8bfeeabfa1439e1b637940cdc618ab24"
+    },
+    {
+      "path": "menu/routes_statistics.go",
+      "sha256": "b2d98125269833361e648c43db75922116c12663c86fd592792db1988a5ac4fd"
+    },
+    {
+      "path": "menu/routes_talent_queue.go",
+      "sha256": "7b396b925e852bdb096b4167cb6ca2ddb906dc15239a36ab1f52444fccc2678c"
+    },
+    {
+      "path": "menu/routes_tasks.go",
+      "sha256": "db30a5c5391a2ee674318f8f100572b097420e6651ae3a7094ae3f62e6beebd0"
+    },
+    {
+      "path": "menu/script_house_version.go",
+      "sha256": "0999527de799983541f708b8cde778ff6f4c4ffead61855d8ab1d28783351aa9"
+    },
+    {
+      "path": "menu/talent_inventory_collection.go",
+      "sha256": "0f7f7afd0bac17bdda5b6d8fae6b13309adf41d46be91dcc0be5cd2eba7395c2"
+    },
+    {
+      "path": "menu/talent_inventory_files_windows.go",
+      "sha256": "ef0e4c9e637297d1914fa7b84c487e3f56ac682874cba0656afa282bf749ca02"
+    },
+    {
+      "path": "menu/talent_inventory_sources.go",
+      "sha256": "bb4f67f26b8313df74ee36e23dd0be82cf55cf75330d080a53dd086e834e41a6"
+    },
+    {
+      "path": "menu/talent_queue_json.go",
+      "sha256": "ecf4de2100431cc2301200ba742a310c3d838d09c8c1973b4040889c50515b6c"
+    },
+    {
+      "path": "menu/talent_queue_lifecycle.go",
+      "sha256": "43df7fa4baa8f9e9f9fe7de34a075fef5d6cd4fdc896a6a39e5bccdcb1e2b689"
+    },
+    {
+      "path": "menu/talent_queue_requirements_refresh.go",
+      "sha256": "5f0daa61b574f1b5886acf6d8d8cd341eba08fceb813aa6158fa53c2cfd470d5"
+    },
+    {
+      "path": "menu/talent_queue_skill_refresh.go",
+      "sha256": "f919f67b8118ab68f831bc756930bb5151d16dc484092400fd1e3dd3072f9406"
+    },
+    {
+      "path": "menu/talent_queue_skill_selection.go",
+      "sha256": "ccdec89bdcb6dbf6ae4d3724e62277becfdd8bd177cc70529cae96a8186b4564"
+    },
+    {
+      "path": "menu/talent_queue_start_recovery.go",
+      "sha256": "20fd532786e8a858e05d34e35dc7936c1af1e43297b31c65b67d7ade46bcd401"
+    },
+    {
+      "path": "menu/talent_queue_startup.go",
+      "sha256": "d80604932a2d23c047781b318bbc29a8d9a583b406ce16f653f1e5a231b05cc7"
+    },
+    {
+      "path": "menu/web/dist/assets/AbgiTeam-4c770139.css",
+      "sha256": "4c770139b8b4eebc965a7ee2e798c5a7a4ec10996c546561b4a41b624fbd5caf"
+    },
+    {
+      "path": "menu/web/dist/assets/AbgiTeam-dbeda338.js",
+      "sha256": "9e2b723b859730858c1b0ba40cc0caf9baa6c2068db349f8cc4c76ec5500732b"
+    },
+    {
+      "path": "menu/web/dist/assets/AbundantOre-1fa6a523.js",
+      "sha256": "d4cbdd6f7db838c0ed34b67708cc355bc5416b0eeb812fe30a3b0cd9601b4f66"
+    },
+    {
+      "path": "menu/web/dist/assets/AbundantOre-97014c6f.css",
+      "sha256": "97014c6f80043a492fdf7e1d742c3f2c2f23aa1cf1f2316e5e07cb28e58f61c9"
+    },
+    {
+      "path": "menu/web/dist/assets/AiChat-8ab84976.js",
+      "sha256": "cde80ab74a262b64b40d01bb0b882f2016af2d680aaeac26e440b00c30dd739d"
+    },
+    {
+      "path": "menu/web/dist/assets/AiChat-b53668f6.css",
+      "sha256": "b53668f62083e013ecec99340a2eeb0f21c4ea85f97bb8dcc96393ed70717108"
+    },
+    {
+      "path": "menu/web/dist/assets/Archive-1b4307be.css",
+      "sha256": "1b4307be3da5a811da1ab678c70a95d8a96032c1f011348c376de9aba4912cc4"
+    },
+    {
+      "path": "menu/web/dist/assets/Archive-da839aa3.js",
+      "sha256": "d3694e7796ed82d6711e32defe565be9e9d600db2f1f0f543ce36bc3e603a947"
+    },
+    {
+      "path": "menu/web/dist/assets/AutoArtifactsPro-65683d9e.js",
+      "sha256": "4c821f6873764a7e7b51aea77561581a0b6a70824442611826cbe968ca311762"
+    },
+    {
+      "path": "menu/web/dist/assets/AutoArtifactsPro-b66c6778.css",
+      "sha256": "b66c6778f0d193f8f864ab7e52a4e23d9afb80ff76dbc8fb2163f12108ff6c51"
+    },
+    {
+      "path": "menu/web/dist/assets/AutoArtifactsPro2-631c9576.js",
+      "sha256": "9713850cf6ccf1b4f925b1971c1164b25c74a7cbef9c46284294c38fd4930641"
+    },
+    {
+      "path": "menu/web/dist/assets/AutoArtifactsPro2-86469916.css",
+      "sha256": "86469916b15caca2ea8858fdebaa772e976fec52a0a01b8c5cdc2d77f4d2c7f2"
+    },
+    {
+      "path": "menu/web/dist/assets/AutoFishingTeyvat-48f4f608.css",
+      "sha256": "48f4f608240a36781b2325cc304d6f172476453ce0c4006c26a79ebeb6817b95"
+    },
+    {
+      "path": "menu/web/dist/assets/AutoFishingTeyvat-f5d6fbf9.js",
+      "sha256": "e84f689820cd4e8c8b37656f23bf43be45e3b0d376dc7f5cf90e2dc9a23abb54"
+    },
+    {
+      "path": "menu/web/dist/assets/AutoHoeingOneDragon-815aabc1.js",
+      "sha256": "db1ea59ff6fea082587c187b79cf9956dde2b4e20840ab8f756360bd007d5fcb"
+    },
+    {
+      "path": "menu/web/dist/assets/AutoHoeingOneDragon-d17cd550.css",
+      "sha256": "d17cd550ca4d15ebeca2a4d6dc47d851c69121fd61c52994110029d14db3dbc1"
+    },
+    {
+      "path": "menu/web/dist/assets/AutoLog-1257d5e2.js",
+      "sha256": "ebd1f147b3c6c3758de4dc8efd7e503000a1acb8d68d260adf4b674eda32d030"
+    },
+    {
+      "path": "menu/web/dist/assets/AutoLog-a33217c6.css",
+      "sha256": "a33217c6a6daca4870ac99dcf79c0444198789cd41d6dee59e13106957912c75"
+    },
+    {
+      "path": "menu/web/dist/assets/BagStatistics-28463ea8.js",
+      "sha256": "cdd98097a20c1cd10ab4ab9639610ebf43c9431b96d4fdee41bcae0f7e3a8f57"
+    },
+    {
+      "path": "menu/web/dist/assets/BagStatistics-ba880202.css",
+      "sha256": "ba880202c6c5f85f94d02683405a13c20e54a55084b75b91767f5abd7a408bd9"
+    },
+    {
+      "path": "menu/web/dist/assets/Bg-751d17d8.css",
+      "sha256": "751d17d87378f1d496d92dd5100c45334b1fe130a961df16f340f01c37ec780a"
+    },
+    {
+      "path": "menu/web/dist/assets/Bg-960a46eb.js",
+      "sha256": "b78961354669aac30a20852510e8e0c60cf372e7e40bf7832fd17e8c9c411df3"
+    },
+    {
+      "path": "menu/web/dist/assets/BgiConfig-38c051dd.css",
+      "sha256": "38c051ddbc15e923aa6b909e36b7c5975aca07c36e6f5588d440954fcd53c212"
+    },
+    {
+      "path": "menu/web/dist/assets/BgiConfig-e738b44e.js",
+      "sha256": "8536eab803e2b94425b7b7215006971b2b86d509e56db70a3463bfb7d584f72a"
+    },
+    {
+      "path": "menu/web/dist/assets/CDAwareAutoGather-289709f9.js",
+      "sha256": "3f210e337c3ee8d9f3e701be95f37fd9f69afffdee0a1427378e1613a3bc6890"
+    },
+    {
+      "path": "menu/web/dist/assets/CDAwareAutoGather-cd729fdc.css",
+      "sha256": "cd729fdcd630877d1d72efc4b34f0fab14ae475668a9043ea657758a6d76e409"
+    },
+    {
+      "path": "menu/web/dist/assets/CalculateTaskEnabledList-3ca749a6.css",
+      "sha256": "3ca749a69e36624d560056b287865e1b79577e82feba37f6773de1e231790ee5"
+    },
+    {
+      "path": "menu/web/dist/assets/CalculateTaskEnabledList-f9edd6c4.js",
+      "sha256": "b0d362cc4388180f75af4c2ebee68dddf654ff668f3f2e610325b60f2866a3d9"
+    },
+    {
+      "path": "menu/web/dist/assets/CharacterPlan-04e49c77.css",
+      "sha256": "04e49c7704971a3e9b568c94aadf715f379907703eed8def393c8fc57dc6e519"
+    },
+    {
+      "path": "menu/web/dist/assets/CharacterPlan-90614183.js",
+      "sha256": "71b7905a0cce62a0e9b56d05a172b38eb1cefe51ffe0dc1a1cc15c6aa0c743a2"
+    },
+    {
+      "path": "menu/web/dist/assets/CollectionManagement-2a7a2b2a.css",
+      "sha256": "2a7a2b2a724919e1af99a52612a18202d915eafffd4989d649e232ef0a35315f"
+    },
+    {
+      "path": "menu/web/dist/assets/CollectionManagement-92668a51.js",
+      "sha256": "8b934c41ced970749aef7a983798d467d2706c72604ac02f4082522dec2d3ee3"
+    },
+    {
+      "path": "menu/web/dist/assets/Config-01e094d4.css",
+      "sha256": "01e094d402c8775dd6fe8315d5fcfd62835396337463d359a829c5e26a58a43b"
+    },
+    {
+      "path": "menu/web/dist/assets/Config-99ab7a96.js",
+      "sha256": "2be0d5cabe69520202bcca6c025a1b7a9e50a4bb0126926f7f5e9efc8f2ac450"
+    },
+    {
+      "path": "menu/web/dist/assets/Error-0bf038d1.js",
+      "sha256": "09a5e40ce08775b92304b17c2437c3503a047e26fde7e1660b4c759b884e7333"
+    },
+    {
+      "path": "menu/web/dist/assets/Error-8ac0401a.css",
+      "sha256": "8ac0401a5ca346c39bf1a9ace12c1639ea545ed69639fd4a9e029e96f10e0180"
+    },
+    {
+      "path": "menu/web/dist/assets/GachaLog-489a7b81.css",
+      "sha256": "489a7b81422f6fcdbe47d317b7de2670604c45eaaa87a7d731be816470ae99d5"
+    },
+    {
+      "path": "menu/web/dist/assets/GachaLog-6d0a6b36.js",
+      "sha256": "9bedf9cea9497f4fc5e73389e71f09c788bf3063f9e8ce6e4c93b9eab6165925"
+    },
+    {
+      "path": "menu/web/dist/assets/Gitlog-b7256842.css",
+      "sha256": "b7256842fccef6f944426b4bd163427e2cb332d56576b82d261a960c262d94a8"
+    },
+    {
+      "path": "menu/web/dist/assets/Gitlog-bb2bd6a4.js",
+      "sha256": "f71fc0c19b0151a5f1d506fadb57435c484b188cd3f0202e23002edc2c01df36"
+    },
+    {
+      "path": "menu/web/dist/assets/GroupDetailDialog-e76b4627.css",
+      "sha256": "e76b4627a4b01f7b8862634115feebb67f30688a8407c301848b973250b7362e"
+    },
+    {
+      "path": "menu/web/dist/assets/GroupDetailDialog-edfb2dca.js",
+      "sha256": "65d8b8af63d80f18752af9a7a1fe25d3edafa67c79507eb9b3fc41aa58b4e9db"
+    },
+    {
+      "path": "menu/web/dist/assets/Harvest-9c08782f.js",
+      "sha256": "994de34f653c9b2131bf456b22fb1c7de8fe219ed614f9d8d4012e505fc7e993"
+    },
+    {
+      "path": "menu/web/dist/assets/Harvest-f8016a0c.css",
+      "sha256": "f8016a0cc4ff2c9d3423b4c606e61bb6ca76f42d93043c99e693a761d4d578e8"
+    },
+    {
+      "path": "menu/web/dist/assets/Home-52bb851b.js",
+      "sha256": "716b1b57bc7a20bac95e7e1ab1ab76902a79c2e255ad8fe907e4fc835a0d9156"
+    },
+    {
+      "path": "menu/web/dist/assets/Home-e5785429.css",
+      "sha256": "e57854296d914877316615c83db5f271852e84acf154872e4647a660185a0b9c"
+    },
+    {
+      "path": "menu/web/dist/assets/HomeMediaModals-166bd8e6.js",
+      "sha256": "9cd3c34a5379c161fbe2beb3d8c8689c3d98518631c85ad5c7486a171ba412a6"
+    },
+    {
+      "path": "menu/web/dist/assets/HomeMediaModals-dfce32bd.css",
+      "sha256": "dfce32bd0dbace09043739746be17cfd4e38abfcbb82a82b397fafa3f61a2350"
+    },
+    {
+      "path": "menu/web/dist/assets/HomeSupportModals-8c24d93e.js",
+      "sha256": "68e743ce870f742555d7efcc33fdbad7d9d77309cf8781db5a078221ac6aa3c0"
+    },
+    {
+      "path": "menu/web/dist/assets/HomeSupportModals-a401bc91.css",
+      "sha256": "a401bc91e41940f8282e4890ee349a534cfa3807417e0df1d84fb86183be5316"
+    },
+    {
+      "path": "menu/web/dist/assets/HotKey-8236a060.js",
+      "sha256": "139e00d3fb1d5b8b89160755976076826cca5c79e101382bf7023418264d20f8"
+    },
+    {
+      "path": "menu/web/dist/assets/HotKey-ee6839de.css",
+      "sha256": "ee6839de916f7549b90b4fa75462ef6674826037f2ac90604f7ce44f379d9859"
+    },
+    {
+      "path": "menu/web/dist/assets/JsonCombatStrategyEditor-e2985833.css",
+      "sha256": "e2985833c7044ad0f0a431e96ec4dead389b713c27f06d4ad0f903e96609d544"
+    },
+    {
+      "path": "menu/web/dist/assets/JsonCombatStrategyEditor-f664bd3d.js",
+      "sha256": "b29fe4e08ee1aa6998f2c039d659c44475044b0fd41919090878abcb61424ecd"
+    },
+    {
+      "path": "menu/web/dist/assets/ListGroups-2a49d8e5.js",
+      "sha256": "36741409dbaf0a82b7cd6bc6c387c01a275bd0175c74febd1523e17117401170"
+    },
+    {
+      "path": "menu/web/dist/assets/ListGroups-56ea387d.css",
+      "sha256": "56ea387deb7315d70bec36c17bf0ae95ff0eb15cfadf898a13dccc0e77aae83f"
+    },
+    {
+      "path": "menu/web/dist/assets/Log-7f2cf19c.css",
+      "sha256": "7f2cf19cb1b8d9f4117d3f3eda18c15336c303d2bd1f0d5e583989e7ba14b301"
+    },
+    {
+      "path": "menu/web/dist/assets/Log-9e5bcbcf.js",
+      "sha256": "8b14b3d086c039fdb52068ca2528bb57dd1d06ef670a4a09a0d02891d3d6064b"
+    },
+    {
+      "path": "menu/web/dist/assets/LogAnalysis-130df90d.js",
+      "sha256": "99516c94815944a78da37f38520310fcc20b9a579cdb27385a324560b5f60f2c"
+    },
+    {
+      "path": "menu/web/dist/assets/LogAnalysis-fce68049.css",
+      "sha256": "fce68049b48a9c4e9a8451273b675dc5e828f4a6cb89d67577a322fa911af9b1"
+    },
+    {
+      "path": "menu/web/dist/assets/LogDetail-0c0a6702.js",
+      "sha256": "093113f287761c340e627fe68b4fc972627cbac4ce1803818248ba10c1316b99"
+    },
+    {
+      "path": "menu/web/dist/assets/LogDetail-a743b222.css",
+      "sha256": "a743b222a42c2b5a554a392a9d8157b32054d4364be71d7f75edf659217ed2b4"
+    },
+    {
+      "path": "menu/web/dist/assets/LogKeywordAutomation-8f3eb650.js",
+      "sha256": "f7ccf52b8de22b77b59d4ecde45f495ed299439ee42f205b1f0207f3bf06d6d9"
+    },
+    {
+      "path": "menu/web/dist/assets/LogKeywordAutomation-e9316a56.css",
+      "sha256": "e9316a563cdbcc1f8079689661cd210f51654aaf2abc701a244ba08c20af39bb"
+    },
+    {
+      "path": "menu/web/dist/assets/Login-6fcecf71.css",
+      "sha256": "6fcecf71d1f4d6274037938e1bf84899909475c5501ac4921e28b9458fa2a84f"
+    },
+    {
+      "path": "menu/web/dist/assets/Login-8ec1d5a8.js",
+      "sha256": "7f60041b04b0c3103e958dd8cab40834ad7a064cc6a9d42fc9618c1cfbc5e0ee"
+    },
+    {
+      "path": "menu/web/dist/assets/Maa-22ef4e81.js",
+      "sha256": "e263d4d345fc94870ddcd5440e95590ecfed64d1101cd7a94f4ee209c165adbf"
+    },
+    {
+      "path": "menu/web/dist/assets/Maa-eaffeba4.css",
+      "sha256": "eaffeba41edd76b46c257d34d1d5b762ca32092191aa5f1b2b56fedb491b3d4c"
+    },
+    {
+      "path": "menu/web/dist/assets/MacroRecorder-5218ce2f.js",
+      "sha256": "36576566959fb2e851f5a207941acdd082b54f1da611e79aba41ac4306b8a902"
+    },
+    {
+      "path": "menu/web/dist/assets/MacroRecorder-cf8e0144.css",
+      "sha256": "cf8e014469d9ba620c677e96e76fbce2f56f9fa5fb3b7b5af56f68111ceba727"
+    },
+    {
+      "path": "menu/web/dist/assets/MaterialTrend-6a421321.js",
+      "sha256": "bb9cff152dab80a8d4c4117cc6043349cd1fd785d430db3f1a1ca6cfd17f029a"
+    },
+    {
+      "path": "menu/web/dist/assets/MaterialTrend-ee03a610.css",
+      "sha256": "ee03a61055ab41bca7164ceb84acc076f18e6fc085258409af5ace35fbeea3d6"
+    },
+    {
+      "path": "menu/web/dist/assets/Morale-014f17c7.css",
+      "sha256": "014f17c7f50bf4e34adf251f3847781c38029da61feef1ac4c7b5c36048321a5"
+    },
+    {
+      "path": "menu/web/dist/assets/Morale-31b70c7c.js",
+      "sha256": "33e7bba9bb3e61d65d8b84b27ebd4ced921e129dfd9ecc8ed0ab84870ef4bb7e"
+    },
+    {
+      "path": "menu/web/dist/assets/MyBag-df1a6bbd.css",
+      "sha256": "df1a6bbd1aa0bdc4e5fd946a4d28d822bef4ac111400bd420ff438734c6f6d71"
+    },
+    {
+      "path": "menu/web/dist/assets/MyBag-e60f31a9.js",
+      "sha256": "9f4ce5cb092d78df1f343bdbaad8f1bab65f9b063b3de6bb5d2531cc429ebd92"
+    },
+    {
+      "path": "menu/web/dist/assets/MysCredentialCapture-0360d5e9.js",
+      "sha256": "13be16100b0a89b68ebb6c23addaaa48e1052e49900898f310178d45d47b894f"
+    },
+    {
+      "path": "menu/web/dist/assets/MysCredentialCapture-80cfb9e9.css",
+      "sha256": "80cfb9e9bec2cf4c5f619ca6fc3288f74ab578bb55d06d607d6553c88037a410"
+    },
+    {
+      "path": "menu/web/dist/assets/MysSignIn-38ffeabd.css",
+      "sha256": "38ffeabde2cec7e8dcca91656e0f8be1bd6d1eb1bb19189a57e33eac7da2b1f2"
+    },
+    {
+      "path": "menu/web/dist/assets/MysSignIn-59bf2cf3.js",
+      "sha256": "d5f7cc380be46ab7076a29c48e8bf36bfe432b3cefb5a40707ab1cf7f5456657"
+    },
+    {
+      "path": "menu/web/dist/assets/MysTool-0fc3a780.js",
+      "sha256": "d9a542b4d1bf9ed01accf30a34e8dae2765765a277d95a285c0724b9e5e5882a"
+    },
+    {
+      "path": "menu/web/dist/assets/MysTool-f7e6cb4d.css",
+      "sha256": "f7e6cb4d20afc2ee4ba116595ced6616f40772de916602eeb2970c6d4371ef63"
+    },
+    {
+      "path": "menu/web/dist/assets/NewJsNames-7ead0b21.js",
+      "sha256": "c4dfca8d2a3dec8eafe72f4251ebafbd8e9ebfa69c18fd5f07932516fb7ba616"
+    },
+    {
+      "path": "menu/web/dist/assets/NewJsNames-fb02ee90.css",
+      "sha256": "fb02ee90e2f5156b55c3c70d53cc20d3b2d807bf8b585f9c7054113e672f661c"
+    },
+    {
+      "path": "menu/web/dist/assets/OneLongPlan-88861334.js",
+      "sha256": "45a742d8147af1b4df5172d5f03535a98f98cd1314310f7c849b50897cd58bc2"
+    },
+    {
+      "path": "menu/web/dist/assets/OneRemote-e1bc854b.css",
+      "sha256": "e1bc854bf2f522299a1da7a7ae5f0cf21fa508824736e23c727ac6154ffbc1d4"
+    },
+    {
+      "path": "menu/web/dist/assets/OneRemote-ed1ca476.js",
+      "sha256": "f6b611617df3eac29cfbcc3467d50ec31711e20566055430ff0947b13a58a3b3"
+    },
+    {
+      "path": "menu/web/dist/assets/OneRemoteDesktop-855cbfbc.js",
+      "sha256": "762b4b3d364e99c2f629e43339cb51577fd0937b1977f629fad68c3082ca44c9"
+    },
+    {
+      "path": "menu/web/dist/assets/OneRemoteDesktop-c1b6bd80.css",
+      "sha256": "c1b6bd8020f863274bd183dc773920f4576d143b7f94b1583cafdd1e3b1b9886"
+    },
+    {
+      "path": "menu/web/dist/assets/Other-6f6965b7.js",
+      "sha256": "0be77a9614c999b4165e3a8e00da4d97062b9feeb18a8bc3747f514b095117c3"
+    },
+    {
+      "path": "menu/web/dist/assets/Other-b6fcd240.css",
+      "sha256": "b6fcd240196e4c00f0105f0c9ba3c3688b088fc535376c391d575cd8f6893240"
+    },
+    {
+      "path": "menu/web/dist/assets/Pathing-6f21f3cb.css",
+      "sha256": "6f21f3cb34442bedf791f968bc4b18dfc7d420e0ae715f36b424f75999f015f6"
+    },
+    {
+      "path": "menu/web/dist/assets/Pathing-797b02e3.js",
+      "sha256": "d52e2fd1ac857e15a08c16f0563f7467bae9a53cf6ab6163b4ba2881b9b393f6"
+    },
+    {
+      "path": "menu/web/dist/assets/RedBloodStats-0bafd28c.js",
+      "sha256": "4b56c582b513411002979f4afafd83ec22f944077c2a70e9ff5362f87330d451"
+    },
+    {
+      "path": "menu/web/dist/assets/RedBloodStats-66750697.css",
+      "sha256": "66750697988e955410dda0ffcee49b4ce393ee246521acc27aac013c556c391f"
+    },
+    {
+      "path": "menu/web/dist/assets/Repository-1ba56083.css",
+      "sha256": "1ba560839f2d86d8123fa111f3b4dc2f9ce13d85a529b9dc085b23b6bacc6729"
+    },
+    {
+      "path": "menu/web/dist/assets/Repository-dfc24838.js",
+      "sha256": "65e356b31536fa415100b811fdab75a160841518936b346038e197f1286b354a"
+    },
+    {
+      "path": "menu/web/dist/assets/ScriptManagement-534a2231.css",
+      "sha256": "534a22313d18a3a907c9da215c94a4eacea066e93391ae09caaefb3cabfcf64c"
+    },
+    {
+      "path": "menu/web/dist/assets/ScriptManagement-cd52e0bc.js",
+      "sha256": "8ae6785fb426020402d5379d05e4d6f2a82411cb79c881d4b61afee1f2f957da"
+    },
+    {
+      "path": "menu/web/dist/assets/SessionActions-4e3206ce.js",
+      "sha256": "f984068878d8b60912cb23775c544fc030add85c6c8d35a68275d862534fc73d"
+    },
+    {
+      "path": "menu/web/dist/assets/SessionActions-f83c7b9e.css",
+      "sha256": "f83c7b9e129ada28683da2ba9ae14f9cc863e59a6c00e4e4d5bc61263f9ab82b"
+    },
+    {
+      "path": "menu/web/dist/assets/Skills-696eebf3.js",
+      "sha256": "b956e48026b326352bcd50cf9978c5c106d8f3eb24571ef1ddada3bec8a0d03b"
+    },
+    {
+      "path": "menu/web/dist/assets/Skills-76666927.css",
+      "sha256": "76666927a4ff296c358fd8de5203a2f4684a002211950e079a7166fa419897a8"
+    },
+    {
+      "path": "menu/web/dist/assets/StoredReport-1eab634d.css",
+      "sha256": "1eab634d545b0a90c75b41ff9f13a979ea3d949f032fab69459d0aaa93dbe33f"
+    },
+    {
+      "path": "menu/web/dist/assets/StoredReport-4030e886.js",
+      "sha256": "36ac6e50c6042c6d23af8b7afcdde1097c337f7f385907f32676b46bfafb4314"
+    },
+    {
+      "path": "menu/web/dist/assets/TaskCron-5c754ba9.css",
+      "sha256": "5c754ba968deacec001adf141618e5aff06a499e16485206c9c28351a5adc5a1"
+    },
+    {
+      "path": "menu/web/dist/assets/TaskCron-d01de3f5.js",
+      "sha256": "cfbfc77a3a73873db91d90c17b6b8d6b4fc11e4d914c2462fe86e1f5f3459825"
+    },
+    {
+      "path": "menu/web/dist/assets/Update-55608f5a.js",
+      "sha256": "3735b141f2cfb91d809977671f578404710c37dae27be3a984109a8c2534d7e7"
+    },
+    {
+      "path": "menu/web/dist/assets/Update-7c63653e.css",
+      "sha256": "7c63653e850aab2b427f54f063dd543ce29071bb833cd99c0046ec8a4865a8bd"
+    },
+    {
+      "path": "menu/web/dist/assets/ZzzOneDragon-43bc2bac.js",
+      "sha256": "4ce374cea5c6dfbf9bc826921785a9f505f125578f6e9ddced20db601cda5391"
+    },
+    {
+      "path": "menu/web/dist/assets/ZzzOneDragon-9de6e50b.css",
+      "sha256": "9de6e50b48fff342d830044c44fc77f3275915d4f1913791bd43fad8e5648f2f"
+    },
+    {
+      "path": "menu/web/dist/assets/antd-25a63267.css",
+      "sha256": "25a632677f1a9baa68b71d3f9bb54ec9785c5f2ab1f7cf2989d0a9af18ba2706"
+    },
+    {
+      "path": "menu/web/dist/assets/antd-64eae326.js",
+      "sha256": "3434f15170c89b31cf5bc5609b5c64ad95a64c16d22ff017626a7f95cd3a4f71"
+    },
+    {
+      "path": "menu/web/dist/assets/api-c0ea3b75.js",
+      "sha256": "f3b87a13789cfcd78c62db74dcafcf724a962baaaeb9bd8f2fb4a36a4eebb00e"
+    },
+    {
+      "path": "menu/web/dist/assets/bag-paper-texture-ec1db466.png",
+      "sha256": "ec1db46694f2d1e8a3abac8f41036ec8bb79a37f30a430e4051d56437fbc97bc"
+    },
+    {
+      "path": "menu/web/dist/assets/catherine-duty-02c2ece7.png",
+      "sha256": "02c2ece73555bd464b3e7e74fbc53a3255415b734193d726b3ccfb07f395cf40"
+    },
+    {
+      "path": "menu/web/dist/assets/css2-2886b620.css",
+      "sha256": "2886b620b5d24b184cc8239e6ed61effdc29de1fdb4e6103986a72bac5755328"
+    },
+    {
+      "path": "menu/web/dist/assets/echarts-356f41c6.js",
+      "sha256": "a43eb819692e6c6bee0e4e9546e5e9a0543b0c92e7992fc748c7d9d5bbb1c790"
+    },
+    {
+      "path": "menu/web/dist/assets/elite-854e0f7c.png",
+      "sha256": "854e0f7c9d43ba161a36245a561e62b7d6b1604c682aeb8fecd2d454f7d0dae5"
+    },
+    {
+      "path": "menu/web/dist/assets/favicon-7bc254e8.ico",
+      "sha256": "7bc254e852daf7cb005e1fef79408b498da5b4cfd4ef8cdff64c6b2b8d6f63cb"
+    },
+    {
+      "path": "menu/web/dist/assets/genshin-bg-9ad2224e.png",
+      "sha256": "9ad2224e77ed885d1cb82a0fa91ef3468fa6e3ecd8a998437985b9ca44f96831"
+    },
+    {
+      "path": "menu/web/dist/assets/genshin-combat-icons-b2552554.png",
+      "sha256": "b255255437d8a4277a2e77ce183c3c39aeffc396c885a09d1616b2bd9369357a"
+    },
+    {
+      "path": "menu/web/dist/assets/genshin-ledger-icons-d00072af.png",
+      "sha256": "d00072af2cabd72240393543e71dcda858343c4a671cd9c6d2ad848a8452a387"
+    },
+    {
+      "path": "menu/web/dist/assets/homeArchiveTiming.helpers-ba33732c.js",
+      "sha256": "6d914df3d29bce1c8ef8070ca2580d4209f01d0ad461b170161a0554d662b2f1"
+    },
+    {
+      "path": "menu/web/dist/assets/hu-tao-morale-card-033e0fa6.png",
+      "sha256": "033e0fa6abbcef23ff7868ced7dc52d51b3a485a9301ff1516742357a657f647"
+    },
+    {
+      "path": "menu/web/dist/assets/index-54ae8307.css",
+      "sha256": "54ae8307ec73e9f1af04534ba5e490ced554dd15cdd8148b5a40d00952049950"
+    },
+    {
+      "path": "menu/web/dist/assets/index-729dcfc1.js",
+      "sha256": "9b3954d5da41396f63aa9a8c13a313dcf64f8c5476cf27de007c827a71b9d31d"
+    },
+    {
+      "path": "menu/web/dist/assets/maaCronConfig-d83d678e.js",
+      "sha256": "a50e339fa03db4afca37f49ac5528ea90b9648bfe771956f14054232db7fabcc"
+    },
+    {
+      "path": "menu/web/dist/assets/monster-b570993d.png",
+      "sha256": "b570993d005bceb1561d981e9ca91cfe52b6676aa615132bc47a4c09ef3bb602"
+    },
+    {
+      "path": "menu/web/dist/assets/mora-0179d987.png",
+      "sha256": "0179d98783f668075f3a72a67c9207729b75f9aa36ffab32aac7d4712f2cee8a"
+    },
+    {
+      "path": "menu/web/dist/assets/obsAutomation-27d02211.js",
+      "sha256": "d4348de25321e08c67940657278d99aa4ee5ff5bb049ee5f568f5c890cde8b99"
+    },
+    {
+      "path": "menu/web/dist/assets/obsVideo-10da10f2.js",
+      "sha256": "d0f358138735367e2f184f2b440934d474e10071dbf76ce65c2204ed2efee91e"
+    },
+    {
+      "path": "menu/web/dist/assets/obsVideo-e1e57454.css",
+      "sha256": "e1e57454bf06ccf60d5672c6e6b9f6b1dd05094a41e997bb6ceb23f0a89603da"
+    },
+    {
+      "path": "menu/web/dist/assets/online-3cbf2507.css",
+      "sha256": "3cbf2507769b7e727435dd4b750b35dd5d18fa1209ad26b597a8c39581717391"
+    },
+    {
+      "path": "menu/web/dist/assets/online-4b8367f8.js",
+      "sha256": "7d62416d12d2184080af46f22c525fd95e7fecc3c59945b381ef62dc4c07f583"
+    },
+    {
+      "path": "menu/web/dist/assets/outfit-latin-400-normal-71f028fd.woff2",
+      "sha256": "71f028fd2349990b3f8aa643abe767e82e0f596be407ae66f0004ff164121bdb"
+    },
+    {
+      "path": "menu/web/dist/assets/outfit-latin-400-normal-f329dc36.woff",
+      "sha256": "f329dc36d2d9285431fb8322f5e951def9cac4a42c1cada679747f7c64b04916"
+    },
+    {
+      "path": "menu/web/dist/assets/outfit-latin-500-normal-40083be5.woff",
+      "sha256": "40083be5d9c1935c562bfe9be662d5a2798910deee9e8049509142549a995626"
+    },
+    {
+      "path": "menu/web/dist/assets/outfit-latin-500-normal-fc9bff94.woff2",
+      "sha256": "fc9bff941def6d924a71632bd8a93190528872eae6414844f3c367ff948d92fd"
+    },
+    {
+      "path": "menu/web/dist/assets/outfit-latin-600-normal-3d1cd1b4.woff",
+      "sha256": "3d1cd1b42cb525acde934764b2adec41dddf7932e1a965392d285efd56f2c148"
+    },
+    {
+      "path": "menu/web/dist/assets/outfit-latin-600-normal-8cfe15c2.woff2",
+      "sha256": "8cfe15c2c6de6ef8efff3eedbd52a383ac9ef23d6c23f6cd9f9b838f5f37dc36"
+    },
+    {
+      "path": "menu/web/dist/assets/outfit-latin-700-normal-5d5e3734.woff2",
+      "sha256": "5d5e3734089a74707292ce8a3e186def34cd63e33879f9ac3689a8d8da9d0706"
+    },
+    {
+      "path": "menu/web/dist/assets/outfit-latin-700-normal-fb730df7.woff",
+      "sha256": "fb730df77799be655b0028de3ff2952a6ebcd3ca85d32cbf188c6f3ea66f82b7"
+    },
+    {
+      "path": "menu/web/dist/assets/outfit-latin-800-normal-eabf8cb2.woff2",
+      "sha256": "eabf8cb2c01d0345e2eb19a49d04e8f8d0d520b74959b173d5ea6c2dcb95e4cd"
+    },
+    {
+      "path": "menu/web/dist/assets/outfit-latin-800-normal-f39dd1c8.woff",
+      "sha256": "f39dd1c80842af90da037b4ea7a7302cd0268a849e2173dbc5e3c5f7edcd6c3b"
+    },
+    {
+      "path": "menu/web/dist/assets/outfit-latin-ext-400-normal-a6697dab.woff",
+      "sha256": "a6697dab76ab8386fc4244f9f6d3ed8639fce59e3be228c146d6c4586c835022"
+    },
+    {
+      "path": "menu/web/dist/assets/outfit-latin-ext-400-normal-e279fd50.woff2",
+      "sha256": "e279fd5005b5936e4f4d20fd21e1fdd6a35d724ff576623d31e7c425c356b7ac"
+    },
+    {
+      "path": "menu/web/dist/assets/outfit-latin-ext-500-normal-0bee549f.woff",
+      "sha256": "0bee549f28f292ac938f04ff97b235dc9fa0b42fbbd8b53a279355da59443cd2"
+    },
+    {
+      "path": "menu/web/dist/assets/outfit-latin-ext-500-normal-89894a60.woff2",
+      "sha256": "89894a600bea0ec4724988d191ea32a0353bb1c9c130cbdf346654d356b1ba84"
+    },
+    {
+      "path": "menu/web/dist/assets/outfit-latin-ext-600-normal-a049363d.woff2",
+      "sha256": "a049363d2c3565ef5ea79725c71d23030c91f679cc7a0cf45e9726375bd58e7c"
+    },
+    {
+      "path": "menu/web/dist/assets/outfit-latin-ext-600-normal-a0c20185.woff",
+      "sha256": "a0c20185e588d3dd8f6d5557c3499a0e3c95f463a555ebe1bf7e233263972749"
+    },
+    {
+      "path": "menu/web/dist/assets/outfit-latin-ext-700-normal-545d41d8.woff2",
+      "sha256": "545d41d83230a139623b3ec2889b338bb3c5a19a8aefe9c23b203dbe72b2bbe4"
+    },
+    {
+      "path": "menu/web/dist/assets/outfit-latin-ext-700-normal-8c2539e9.woff",
+      "sha256": "8c2539e9840ed06109ace086bda20c9985d69c2ff70f931c9a66cf459f3a617b"
+    },
+    {
+      "path": "menu/web/dist/assets/outfit-latin-ext-800-normal-76bc5d45.woff2",
+      "sha256": "76bc5d459840a87367e894a2d0e648b43e5f546b726f9bb8ef4f801107cc2e30"
+    },
+    {
+      "path": "menu/web/dist/assets/outfit-latin-ext-800-normal-99eb2a48.woff",
+      "sha256": "99eb2a4847b3dce3374696c57f865fd05fbe4647380eb8b05134a50034c5127e"
+    },
+    {
+      "path": "menu/web/dist/assets/restart.helpers-0bbe04bb.js",
+      "sha256": "d6d52c12de70cbeb938dac017353b08e875177ac45cd60e66e6652cf4607c6f5"
+    },
+    {
+      "path": "menu/web/dist/assets/route-7da23217.png",
+      "sha256": "7da23217c9fbcc0fb6c2d5f7d9b8a9617968c4cc5bc8d7cc8b272933a0f1032b"
+    },
+    {
+      "path": "menu/web/dist/assets/screen-21cefe34.js",
+      "sha256": "d316e10ed832e8e5e5ab21d043f0a8b7913cd7bfa9a0cab75c0bde3f41022f62"
+    },
+    {
+      "path": "menu/web/dist/assets/screen-b9dcdbf1.css",
+      "sha256": "b9dcdbf15002f7353b2a7ce8596e7252183e0333b88886af81bf6a4580d3f076"
+    },
+    {
+      "path": "menu/web/dist/assets/swiper-953184c7.css",
+      "sha256": "953184c712fff7bb2706158b359202a98a76e35b9366768ff41bdb8f12bdb657"
+    },
+    {
+      "path": "menu/web/dist/assets/swiper-dfbac240.js",
+      "sha256": "665c5ddcd6047642589a11ee1909db2fbe9d5bee6f384eb11d9adce8ecfa8809"
+    },
+    {
+      "path": "menu/web/dist/assets/vendor-2aa8584c.js",
+      "sha256": "3bc0820ea5dcf664236c754be9073f5621172e888c70ae85119e9f1af22fa389"
+    },
+    {
+      "path": "menu/web/dist/assets/vendor-61cc7729.css",
+      "sha256": "61cc7729fdc3ff6b133cc70bb94328e7f584e97ad23611345f286105b6ba7fe0"
+    },
+    {
+      "path": "menu/web/dist/assets/xlsx-5400832e.js",
+      "sha256": "cf482603cc490e05c8fe3e724a032372571b59795a9ec370ee6e35ecae3fd832"
+    },
+    {
+      "path": "menu/web/dist/assets/zzzOneDragonApi-09ea4b94.css",
+      "sha256": "09ea4b94bfa265a7662ea3bbed0cc4aee92f43ea1f65aba1faa1be7b7d917d36"
+    },
+    {
+      "path": "menu/web/dist/assets/zzzOneDragonApi-85afbb48.js",
+      "sha256": "3277ab736c3529ecb84a842438439205d45c7201dd1b0a7f88af15764a3220bb"
+    },
+    {
+      "path": "menu/web/dist/furina/debug.log",
+      "sha256": "e8a55359cb4e806ffe02ae7e7db0715633fd8dd28cc7d0fc9dec5c13b2f6bbca"
+    },
+    {
+      "path": "menu/web/dist/index.html",
+      "sha256": "b6d12190e1a9eef77a2aa8a7fd2207d8ea010fe72366cc93f619ad084eb904f2"
+    },
+    {
+      "path": "menu/web/dist/skill_abundantore.json",
+      "sha256": "89d1e3fbe84fa71d874562f5bc64e623e1ec67ea3237b0c1689998b333c7a664"
+    },
+    {
+      "path": "menu/web/dist/skill_autohoeingonedragon.json",
+      "sha256": "06b56cacb3d647a3ba14abff0883247a0631b9380a87ebc8cef03b6e069a1152"
+    },
+    {
+      "path": "menu/web/dist/skill_collectcd.json",
+      "sha256": "94c933f08b0a638a8cf17eae2eda8ebb7ae25bb652b821c37c11a3d478f7cef5"
+    },
+    {
+      "path": "menu/web/dist/vendor/uni.webview.1.5.2.js",
+      "sha256": "df5dbb31b393e0a5cea19b6b59163385d78e0d39950cd40e543f23d3db264198"
+    },
+    {
+      "path": "menu/web/version.txt",
+      "sha256": "28ae199272f193ac9368dc9f4abcd8bbe4631ea6eba15f167675ec53512b5c01"
+    },
+    {
+      "path": "menu/webdav_config.go",
+      "sha256": "06bc2715cf53a4d9cda439377fe62acc29da53f9e289b753b07b69d2e4086f45"
+    },
+    {
+      "path": "menu/webdav_handlers.go",
+      "sha256": "e5bae849e803294aa8f0cdac51052f9290d86524716bcd6ddb0e8f422b817f9e"
+    },
+    {
+      "path": "models/AbgiTeamConnectionModel.go",
+      "sha256": "f80999fb69c25c9a492a2433360c84544741bda5bac8fe4cdd69cda0a670e524"
+    },
+    {
+      "path": "models/ArchiveRecordsMapper.go",
+      "sha256": "0af6bb2b0f1def8d69040743d8142be358dd53eb8af30045f5280387cfe01666"
+    },
+    {
+      "path": "models/AutoBgiConfigMapper.go",
+      "sha256": "3f28a3236bb3fce62d9703b4763878b9cd4bef7071c29a857601ba6abd45e894"
+    },
+    {
+      "path": "models/CharacterCultivationRemoteCacheModel.go",
+      "sha256": "4e936beae591052d024d9d73a55a69a8b9fcac6fcf883fe20e305d27805f81b7"
+    },
+    {
+      "path": "models/CharacterPlanModel.go",
+      "sha256": "aff570a0b6103cf1825253205dc6947bf97f80345bc1f9b2e79bf05d7d98899d"
+    },
+    {
+      "path": "models/DesktopPetMaterialEventModel.go",
+      "sha256": "b245829b6f26d3aaaa8563c1774ce5b7c39edd2b7bb806678156854fef837378"
+    },
+    {
+      "path": "models/DesktopPetTargetEventModel.go",
+      "sha256": "9ee04d0fd74938e83a370b053ab90ef179d9eda8ee695955cdc701578cb966da"
+    },
+    {
+      "path": "models/GachaLogModel.go",
+      "sha256": "7ae8b5821983c6380e8b681511d9631d46b15ab64358cfd4b386290a79051295"
+    },
+    {
+      "path": "models/HomeFavoriteMenuModel.go",
+      "sha256": "48f5859b567ab3f7247d91096906a64a17af220f666132fcd3fe950efd6ade37"
+    },
+    {
+      "path": "models/InitDB.go",
+      "sha256": "7283a6b85900b662a5a6777be6de8db56fecae37b903c28f74c47b3ff82588ba"
+    },
+    {
+      "path": "models/LogAutomationModel.go",
+      "sha256": "800c27626950765bb534c3b9bf9332852153001d92007c8df1975d85f1613993"
+    },
+    {
+      "path": "models/MoraleRecordMapper.go",
+      "sha256": "cbedec483e17b995937f48b50875467e2cc3e1bdff64035746cd19c20d8c27ae"
+    },
+    {
+      "path": "models/MysCharacterPanelCacheModel.go",
+      "sha256": "d75b17a099d82ca07d1a7eb49acacefaed94267090177983c465b66b4f0b7178"
+    },
+    {
+      "path": "models/MysSignInModel.go",
+      "sha256": "52d2e720db879938ee46fd37c444fed4d72e557ea5b7704b4b03c36620ecf7e2"
+    },
+    {
+      "path": "models/RedBloodRecordModel.go",
+      "sha256": "3b86dae511c11b1c684ceeefff6514fd2e41bf9bb0f408487bfd895cecb39d61"
+    },
+    {
+      "path": "models/ScriptEntryModel.go",
+      "sha256": "4097ef1515950a2b05784288f881d6a2ee8d90b1ad710e01b575206e300450bc"
+    },
+    {
+      "path": "models/ScriptGroupWorkspaceModel.go",
+      "sha256": "e8a359359bb2bab98cb4d1641b63dbbbf1e690ae2bd85a4e058e48b65c376dc4"
+    },
+    {
+      "path": "models/ScriptQueueModel.go",
+      "sha256": "4c1bdadc1c7705191a4dee14032a2706cae2b446a1fd6579faeba2db7a88d664"
+    },
+    {
+      "path": "models/SessionActionModel.go",
+      "sha256": "a2fb40aec5a11ae9f68383c65d7ec0ec2e7f712a677869dceeed1841fa1384b9"
+    },
+    {
+      "path": "models/SkillModel.go",
+      "sha256": "6da9c7410fb94c08ad928e922cd0ffac53f2a258ef590a0cf067a6f7e4a5e56d"
+    },
+    {
+      "path": "models/TalentInventoryCollectionModel.go",
+      "sha256": "7259a2b2de81220a2949923d6936ef1ee72c61be0af16aa3928814b28f3ae5e4"
+    },
+    {
+      "path": "models/TalentQueueLifecycleModel.go",
+      "sha256": "64ce989fe085b4c39a21872d5d3bff1ba1e5235b2e4739817853a827c2c1eed7"
+    },
+    {
+      "path": "models/TalentQueueModel.go",
+      "sha256": "3ea9bbbcfe56954fb3fa757e7742a999fa8b8a01913c8de9ffbd0fa8a54afe13"
+    },
+    {
+      "path": "models/TalentQueueStartModel.go",
+      "sha256": "326fd5f36913f6842b9f48ae473e2cc3e23ab748c4262c939666744b495248ca"
+    },
+    {
+      "path": "models/TaskCronMapper.go",
+      "sha256": "0fd3eb725feace1cc8fc23c7d51b37cd065ea526588d8288c08a2d451b097a61"
+    },
+    {
+      "path": "models/UserHotKeyShortcutModel.go",
+      "sha256": "507c68c435fe5a5e5bc14dcb1ffe5981cb0b0e849a0e20aa5458ec23b98f6f00"
+    },
+    {
+      "path": "models/models.go",
+      "sha256": "d95c4e06a281063872ea8b0e298ba74b159aefc9eba8b11e28625229f544571b"
+    },
+    {
+      "path": "models/morale_income_book.go",
+      "sha256": "d5d6362062fe2223adbae9ab1375fb7f7ecae207877b6b828654c76b70f18fab"
+    },
+    {
+      "path": "models/morale_monster_book.go",
+      "sha256": "3a413a07680869da487543fa674789f69fa4a99f07edbabb2683d8ae0e3042bd"
+    },
+    {
+      "path": "redblood/assets/RevivalUI.png",
+      "sha256": "2ee5ab529a2b5110d41c5d8bb969d64a81d813ca2036527be8011cc519195a55"
+    },
+    {
+      "path": "redblood/fastQ.go",
+      "sha256": "852aa4ce4e2bcbd940ddb93c44e21de449ebef7d2f3bc05fc4f74e8fbf25eb61"
+    },
+    {
+      "path": "redblood/record.go",
+      "sha256": "814e3f91891f9cccb47a0255085fb94d62e3c94c6ecf7005f1136c12b16746b5"
+    },
+    {
+      "path": "redblood/redblood.go",
+      "sha256": "b8bbb57049733ec3694b483ca0e6c1aa71c67a4b8622d45ebcca3efbb6c4c68e"
+    },
+    {
+      "path": "redblood/window_windows.go",
+      "sha256": "b65924fcbd012520e1d11ace5edf9b1b44440b3c2833e6506244a433afd511a7"
+    },
+    {
+      "path": "rsrc.syso",
+      "sha256": "a7c036d53b9275d285feaaf577e819866456077e1e94e9f6901c37cf06d70381"
+    },
+    {
+      "path": "task/MoraleRank.go",
+      "sha256": "96ef3f475b67cae896ce8a6e49f1021524dd2af335b892c24a8a07b4dfd8c472"
+    },
+    {
+      "path": "task/Rank.go",
+      "sha256": "cd48d47808358150d886ec4cb0108d4aa0dfcb69eab875aec761b4ccc8dbb23b"
+    },
+    {
+      "path": "task/RankService.go",
+      "sha256": "d676045774547240c92b9ffec32288af297000bc91716950ce2751200b76dcfe"
+    },
+    {
+      "path": "task/Task.go",
+      "sha256": "17c0208785466d6b1d9ad550fef9c71bd418902d3360f3cf71b7e2482302fa6a"
+    },
+    {
+      "path": "task/desktop_pet_start_windows.go",
+      "sha256": "298a66721e8a56ca274d6a504f2c3a52541c4b3e463c4f157daba96e2133cc44"
+    },
+    {
+      "path": "task/legacy_startup.go",
+      "sha256": "e624828d9edb5195b9a6afb1be9b1ddfd1f186f3032568e6bd59e785360d46be"
+    },
+    {
+      "path": "task/startup_artifact.go",
+      "sha256": "cab900782066e7d3f0a271bdbd1ffde157eb44a7f82f6c177f00b3c85c7a3b09"
+    },
+    {
+      "path": "task/startup_artifact_windows.go",
+      "sha256": "6631971e78d5d072a8ce70f991fbc8e374f3208e38bc9ec76b4ba67414445035"
+    },
+    {
+      "path": "task/startup_hooks.go",
+      "sha256": "83648c28b5a5d6abe5a89c34cec05b1df3c3249f021de21fc065d06327d941b5"
+    },
+    {
+      "path": "task/summary.go",
+      "sha256": "a70cffed08f3a6a6a22bbb232ae6ac0b404b9cdc1f699a76ea825c1637dd3c1f"
+    },
+    {
+      "path": "third_party/grdp/convert_amd64.go",
+      "sha256": "a685fa5263daad6da352dc73b27150cfefd290c16bed7e64c9dccc78818d2101"
+    },
+    {
+      "path": "third_party/grdp/convert_amd64.s",
+      "sha256": "3532c842e5232de408b4c43cb5e4fd9815f2442410a15907dde84b4258ce9d3d"
+    },
+    {
+      "path": "third_party/grdp/core/io.go",
+      "sha256": "0a6ab45daf3dca60a42d9fc3d23655b502849da842a0c0b67f3f1ded2ea864e1"
+    },
+    {
+      "path": "third_party/grdp/core/log.go",
+      "sha256": "96be2fec22f7cf6f2b08fd84d00e36ba2801be4f6f0a97ea09bb20c712aca93c"
+    },
+    {
+      "path": "third_party/grdp/core/mppc.go",
+      "sha256": "a5b2aa317c29aae6bed062eedee5f4073e083bdb5ab02fa186b94b73191ed7a1"
+    },
+    {
+      "path": "third_party/grdp/core/rle.go",
+      "sha256": "06dad9c78ef7aa2a2862761387846c3fba7a3e7d48b97c4628830375a4f54297"
+    },
+    {
+      "path": "third_party/grdp/core/socket.go",
+      "sha256": "a3dc4fb6aa38b6e89bcc69a21d7b5fb256a3850e504ece94adb29c99baea055e"
+    },
+    {
+      "path": "third_party/grdp/core/types.go",
+      "sha256": "a73b30f050cf08967fc6699a8cea9ee441befcaace77f2b9f10d086fefa7189c"
+    },
+    {
+      "path": "third_party/grdp/core/util.go",
+      "sha256": "ad379c3f977fac37d33f74b90fd625ade4716d4e5ed01d1b9c03fb3cc150dc4d"
+    },
+    {
+      "path": "third_party/grdp/emission/emitter.go",
+      "sha256": "e7cee524332ce108093fcba7972502b4631169c7868df84523fcf1385f7b595a"
+    },
+    {
+      "path": "third_party/grdp/go.mod",
+      "sha256": "bc4761e45a5a58311a9f082a5a77eccec009746a96545072f75025981c073bf7"
+    },
+    {
+      "path": "third_party/grdp/go.sum",
+      "sha256": "36f0650eace8caef263646f0ab89969eeb790aa813821c451746e8c91c30cb71"
+    },
+    {
+      "path": "third_party/grdp/grdp.go",
+      "sha256": "a323c138917ce814255d13021d980fdefa5ff3122e60f2a29d9066a00bea3ac9"
+    },
+    {
+      "path": "third_party/grdp/plugin/channel.go",
+      "sha256": "2167913039b775119d7e25252f01f67e8d067f5b6ae79ccccd089291616bdf92"
+    },
+    {
+      "path": "third_party/grdp/plugin/cliprdr/cliprdr.go",
+      "sha256": "e2a8ef45d4a0fbce482145409fb615c0f57077b044832259ecdf6733670aab73"
+    },
+    {
+      "path": "third_party/grdp/plugin/cliprdr/cliprdr_generic.go",
+      "sha256": "9c9c7d5ed62569c89c8ef22664514fd6599d2c7dd3bff3175c2202cc263062f3"
+    },
+    {
+      "path": "third_party/grdp/plugin/cliprdr/cliprdr_types.go",
+      "sha256": "bc4a2deb33ed198b6fbce3ac35afa66b6d4938e443f976f72eae85970bb59d22"
+    },
+    {
+      "path": "third_party/grdp/plugin/cliprdr/handler.go",
+      "sha256": "f6a448a2ceee88efe2d2de9b22fe375127cc880aa6356c8ebc67521442d03bf5"
+    },
+    {
+      "path": "third_party/grdp/plugin/drdynvc/dvc.go",
+      "sha256": "f2af4e23a9d5bb07f59423a51d987ed1bacd75070dfa792d7162b37348ed196b"
+    },
+    {
+      "path": "third_party/grdp/plugin/rail/rail.go",
+      "sha256": "62f3252cff5655139f178ba6a80ed47d7495d0778d1541761ec6de9d3448ef9b"
+    },
+    {
+      "path": "third_party/grdp/plugin/rdpedisp/rdpedisp.go",
+      "sha256": "f1759c95a71a74e4e32b62ac8e64f67cde99e61b969128f5abcc65edffdded26"
+    },
+    {
+      "path": "third_party/grdp/plugin/rdpgfx/avc.go",
+      "sha256": "3ac86979b50705157ac2fe031574b9388c2cc93a12ce502de1e88598bbab112f"
+    },
+    {
+      "path": "third_party/grdp/plugin/rdpgfx/h264_decoder.go",
+      "sha256": "6a8c2d616f701b7d34d5811157560ae0f91bce4957863272f16dd5a9fa508a36"
+    },
+    {
+      "path": "third_party/grdp/plugin/rdpgfx/h264_scan.go",
+      "sha256": "4c751e525db33f27f2aa8ea7f34313316fbf5d7f5a030a588a1cf8d56602a576"
+    },
+    {
+      "path": "third_party/grdp/plugin/rdpgfx/ict_generic.go",
+      "sha256": "4ce7d78909b646213e73992d5ed37669773057ef63d3cf6683b0c9abb6e5bcdf"
+    },
+    {
+      "path": "third_party/grdp/plugin/rdpgfx/rdpgfx.go",
+      "sha256": "c7feaf05b8265e867fc7d9f6e11db798509f589ab40004be146bb23a8e8301c7"
+    },
+    {
+      "path": "third_party/grdp/plugin/rdpgfx/rfx.go",
+      "sha256": "4546f00a37b9f2cdf4653cf4ac50874981fe40fa9178de7bed38db9c676eac5d"
+    },
+    {
+      "path": "third_party/grdp/plugin/rdpgfx/rfx_pool.go",
+      "sha256": "c5187ac77cf2f29a32d6314f03bbd3cc6612985864a179876c86420a2475a8f3"
+    },
+    {
+      "path": "third_party/grdp/plugin/rdpgfx/rfx_progressive.go",
+      "sha256": "89b76f5abba91f9f062d7b2b5d90b10651b8addf8af8ac0e65e911266e14021e"
+    },
+    {
+      "path": "third_party/grdp/plugin/rdpgfx/rfx_rlgr.go",
+      "sha256": "8208df3b54f08ebb507f09ba0155fbb8adc8ac37751b36a8c233a00da1ed164a"
+    },
+    {
+      "path": "third_party/grdp/plugin/rdpgfx/zgfx.go",
+      "sha256": "28cd1c6c5c0c8dca48817b622c573e1fd46ab8ea63806e7146c44051237b9a05"
+    },
+    {
+      "path": "third_party/grdp/plugin/rdpsnd/rdpsnd.go",
+      "sha256": "5c7abe1700c6709957e86bc5163f085e7ce2d4ebfb18ef0adbc3a13acb2f787d"
+    },
+    {
+      "path": "third_party/grdp/protocol/lic/lic.go",
+      "sha256": "bc3098d690154ecf1f60055b4f2112662d5f97ee1281de7cbd6161a499140a83"
+    },
+    {
+      "path": "third_party/grdp/protocol/nla/cssp.go",
+      "sha256": "f639305ac1a9f82ab9b0716f4fb0aefc2f00fa9968ae084528534af42d5ccf54"
+    },
+    {
+      "path": "third_party/grdp/protocol/nla/encode.go",
+      "sha256": "15b739ee689a178ae3e2b5b669c9017423180f3e017abc9817d8b6731f68932c"
+    },
+    {
+      "path": "third_party/grdp/protocol/nla/ntlm.go",
+      "sha256": "cd388fcbd3f9a10c3045700935e011e47f6657cd15afbdd853c88ee4649a7d17"
+    },
+    {
+      "path": "third_party/grdp/protocol/pdu/caps.go",
+      "sha256": "48147900ed2d68d41539075e8f8971b9e76eedd47b76a8242764c74c841717b6"
+    },
+    {
+      "path": "third_party/grdp/protocol/pdu/data.go",
+      "sha256": "69080880bb477f93dd0a5f6bea5f2394722f32148f7d5eb7e7f3b3c9a4ee6873"
+    },
+    {
+      "path": "third_party/grdp/protocol/pdu/error_info.go",
+      "sha256": "65a1a6c2f33a53df6615c1ecbfa21eab6d43a6bfc97e14c76ffb2d564c5c44fb"
+    },
+    {
+      "path": "third_party/grdp/protocol/pdu/orders.go",
+      "sha256": "496ced3dc887fd16dcc31d3eba12f6b5aa30f6bc09ddcc7202c47e96a173331d"
+    },
+    {
+      "path": "third_party/grdp/protocol/pdu/pdu.go",
+      "sha256": "62e2e73aeef1f89a1979ba4a69b1cd2ffd469eb21d65f2073e381b8d6c5ebd95"
+    },
+    {
+      "path": "third_party/grdp/protocol/pdu/ycbcr_amd64.go",
+      "sha256": "01cdebccc6381ff030a013b3d1c551f953b59b4a5bb00c1540dfbffc3ff4500b"
+    },
+    {
+      "path": "third_party/grdp/protocol/pdu/ycbcr_amd64.s",
+      "sha256": "c8c3f5d00ba6ffef29bb0f9ad75e654a5dfcd85aa07397bbf3b8a69377c116f5"
+    },
+    {
+      "path": "third_party/grdp/protocol/sec/sec.go",
+      "sha256": "b2b6a73d7b54137095c00a6cd9f7566026cbf8d67205749af95906338c069ca1"
+    },
+    {
+      "path": "third_party/grdp/protocol/t125/ber/ber.go",
+      "sha256": "0b469f2a7db1d209f7a781f50e188ec3c9662b8820cecb47482178f7e10a2845"
+    },
+    {
+      "path": "third_party/grdp/protocol/t125/gcc/gcc.go",
+      "sha256": "6f586b4aa0aafa1a6e3b75b21853b8a1d35e2ce72a63415f95de46ee1f5aeb7c"
+    },
+    {
+      "path": "third_party/grdp/protocol/t125/mcs.go",
+      "sha256": "88da44c699a2fb930171c22cc276607184e71ecb038d3423a7755ad789917500"
+    },
+    {
+      "path": "third_party/grdp/protocol/t125/per/per.go",
+      "sha256": "9e252b6058adcbeeebd8f79157889f5fb1e4cbdb6a708e7fd4aaf2c54b998acd"
+    },
+    {
+      "path": "third_party/grdp/protocol/tpkt/tpkt.go",
+      "sha256": "700f4aa268bf6969600d673c4d8df743e907fe01962a3af916af47bbec5a89d3"
+    },
+    {
+      "path": "third_party/grdp/protocol/x224/x224.go",
+      "sha256": "b40bde8a94159c98e90c25994f51ae9b4e72e733122ac15f220bc4d5b92ac7e5"
+    },
+    {
+      "path": "tools/7zr.exe",
+      "sha256": "27cbe3d5804ad09e90bbcaa916da0d5c3b0be9462d0e0fb6cb54be5ed9030875"
+    },
+    {
+      "path": "tools/Tools.go",
+      "sha256": "f25f3ad61ec71dbb0a5569ed68b2bc1d339cf5f6fd9bb664c9cc78b83224ce14"
+    },
+    {
+      "path": "tools/Un7z.go",
+      "sha256": "dd5079757101ebc906501f47496ee16b482965d9f8b092a33ccc6aa0d8908d45"
+    },
+    {
+      "path": "tools/restart.go",
+      "sha256": "a839ece178fe8322428da441c0ad9b8808682d21332396f3c419da8ce02ed7be"
+    },
+    {
+      "path": "tools/updater_embedded.go",
+      "sha256": "030101c637d34365bb8a3bcfbfaa67c7374ee43d6b2190031c1236e7838f4fbb"
+    },
+    {
+      "path": "updaterpayload/abgi-updater.exe",
+      "sha256": "0279ba6eee199c3c1fd8fead6b360405bef5d68f07067b6ab95b26d6a6150b79"
+    },
+    {
+      "path": "updaterpayload/cache_cleanup.go",
+      "sha256": "f6b29f7de89f6652d3811d5d9b5fd1918ad1424a102d88cb607e18827f6d399b"
+    },
+    {
+      "path": "updaterpayload/payload.go",
+      "sha256": "fbe1a4a2fb89445b2dbefdb4ab0b2be3f6a66700d0297cc9b769fca63f59011c"
+    },
+    {
+      "path": "warehouse/bettergi-scripts-list.go",
+      "sha256": "b62c26a8636da258a7203cd1c3b232bfa0036908385b9933dd4dd78403c8ab22"
+    },
+    {
+      "path": "warehouse/git_commits.go",
+      "sha256": "a09b3484cfa93fd00685f72a372e638f86d30c54412fcb8ed51dcbb84a54f9aa"
+    },
+    {
+      "path": "warehouse/new_script_house.go",
+      "sha256": "5c010cb6592b7a4d37dec9dfd55f1dbc39b9b5c3208a89d4e2081651f8d33e44"
+    },
+    {
+      "path": "warehouse/script_git_changes.go",
+      "sha256": "0c5154d83661029e0ac08fb6866cc78eddafc155813a32f35dcbebfd3acd4ec4"
+    },
+    {
+      "path": "webdavbackup/archive.go",
+      "sha256": "c0cf4c48b0ef03bb96872d00fa6dabb106fd340e316682b1afb5d16aeb63e720"
+    },
+    {
+      "path": "webdavbackup/config.go",
+      "sha256": "3963e8a770042798578a499b0e25514e78744e125705387b8fe985341eb1eac8"
+    },
+    {
+      "path": "webdavbackup/errors.go",
+      "sha256": "fa799927bf9903265563cf128efde9470f835d9313609d2e06953a80418e002a"
+    },
+    {
+      "path": "webdavbackup/service.go",
+      "sha256": "232f47e536b1868010f8af2d2d1fb517b9e82dc81b512074f21e7b5c11e45c4e"
+    }
+  ],
+  "evidenceBindings": [
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/pet-queue-skill-ui-881c13f3411c478dad19c2732d1c57bd/cleanup-result.json",
+      "sha256": "47bed872d91b92d1172c1c4e3f3f0548aba2a89ab7c9f46f1572f4531655a25f"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/pet-queue-skill-ui-881c13f3411c478dad19c2732d1c57bd/cleanup-targets.json",
+      "sha256": "601cc85eb481a4ea840558186ca90751276853a0b55e1bab7f22f2076edc0611"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/pet-queue-skill-ui-881c13f3411c478dad19c2732d1c57bd/sfc-final.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/pet-queue-skill-ui-881c13f3411c478dad19c2732d1c57bd/sfc-final.stdout.ndjson",
+      "sha256": "72332469a98605417058d4e83f5a783409c701903cfd9c3426ebeec5703b8205"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/pet-queue-skill-ui-881c13f3411c478dad19c2732d1c57bd/sfc-results.json",
+      "sha256": "88f0b7bbdbca75766473bb95e7ddb6620e6974577c0eabbd628f9c2fe2b63eff"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/pet-queue-skill-ui-881c13f3411c478dad19c2732d1c57bd/synthetic-bridge-wire.json",
+      "sha256": "78fdd3647539bb660f0e1af985d0218759d1c300eabcf82e75b22c2cb2701fe8"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/pet-queue-skill-ui-881c13f3411c478dad19c2732d1c57bd/typecheck.exit.json",
+      "sha256": "f34c14bb7c89b7302056aedef49e308618704b6e3c245dc18ccb419c29fcce3c"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/pet-queue-skill-ui-881c13f3411c478dad19c2732d1c57bd/typecheck.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/pet-queue-skill-ui-881c13f3411c478dad19c2732d1c57bd/typecheck.stdout.log",
+      "sha256": "10d8da7c9ae95d54e432455ef43573aac724ccb155ddc1c42cf6043b2aa5fcd8"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/pet-queue-skill-ui-881c13f3411c478dad19c2732d1c57bd/ui-evidence.json",
+      "sha256": "f15b43140aaad14c7b9ca10b9c2a441bfb8e2ba6e5bac49358ca2f94ae7b9368"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/queue-skill-client-465c178173034780a64885830ea13e3f/cleanup-manifest.json",
+      "sha256": "d0b3d03f5a96d36a4a162e604e04b862c6b9c88da6f2abb05f6791f6c0e4d89e"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/queue-skill-client-465c178173034780a64885830ea13e3f/cleanup.json",
+      "sha256": "b1fce0c6ea69923eb7f9d833bcc218a0c635146f6b5291f2a833034f46e5a0f1"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/queue-skill-client-465c178173034780a64885830ea13e3f/final-audit.json",
+      "sha256": "7d504bed3ef09716ea7461199a7d56767ea2cb0577bced065c87f575a110c8e6"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/queue-skill-client-465c178173034780a64885830ea13e3f/frozen-source-hashes-final.json",
+      "sha256": "64dc24e8fbb83833c9983600fec1583b8a21d8ed176b70a74e335662c454f02d"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/queue-skill-client-465c178173034780a64885830ea13e3f/integration-normal.command.json",
+      "sha256": "2815e85616f78792910b781f00cabe2979cde7f85c0f7c6fc89d1d981ffd013b"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/queue-skill-client-465c178173034780a64885830ea13e3f/integration-normal.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/queue-skill-client-465c178173034780a64885830ea13e3f/integration-normal.stdout.log",
+      "sha256": "1f615561d271d77fc15682211227a3b2c4235279d0e4a829da5d570805124797"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/queue-skill-client-465c178173034780a64885830ea13e3f/integration-race.command.json",
+      "sha256": "0f2e26d9776433556de36353e7f1d666fb82c63de507ba0c281aee5fb6186334"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/queue-skill-client-465c178173034780a64885830ea13e3f/integration-race.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/queue-skill-client-465c178173034780a64885830ea13e3f/integration-race.stdout.log",
+      "sha256": "55e5c8cf1714a46ed15116f76a4f4a73e72f48c6f695339824d30d693a49a1ae"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/queue-skill-client-465c178173034780a64885830ea13e3f/integration-vet.command.json",
+      "sha256": "e9bfe49f3e3eabab2f4c2b05992faba863f981bc96a568d4d400b8b9a8e25a44"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/queue-skill-client-465c178173034780a64885830ea13e3f/integration-vet.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/queue-skill-client-465c178173034780a64885830ea13e3f/integration-vet.stdout.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/queue-skill-client-465c178173034780a64885830ea13e3f/normal-final.command.json",
+      "sha256": "16d93fdcf77cf0ceb40358d007be345bb37d7044d1786945ee56ee9212ee8fe0"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/queue-skill-client-465c178173034780a64885830ea13e3f/normal-final.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/queue-skill-client-465c178173034780a64885830ea13e3f/normal-final.stdout.jsonl",
+      "sha256": "b704c70f6591d72daeba005b98994cb2fa81af2169771f85a566f4b1c86df0b1"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/queue-skill-client-465c178173034780a64885830ea13e3f/race-final.command.json",
+      "sha256": "6b993cbdedd7901cee262bd720095656f6bc068e1afa4df274f9ac64b76a96fe"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/queue-skill-client-465c178173034780a64885830ea13e3f/race-final.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/queue-skill-client-465c178173034780a64885830ea13e3f/race-final.stdout.log",
+      "sha256": "abf8e44724b480d4b272410a2bf2c27370fadc2bf5297a4d0f6aca05f04a3ce7"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/queue-skill-client-465c178173034780a64885830ea13e3f/server-source-hashes.json",
+      "sha256": "4cb861540ff017089f004ed7ca785a657ffcbac01a4c673626a4692b67705ded"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/queue-skill-client-465c178173034780a64885830ea13e3f/source-hashes-final.json",
+      "sha256": "d7c7d8fee711519efc4a098a06d5f5762b1c7ff7c21f470a52fa7cbc5e132c77"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/queue-skill-client-465c178173034780a64885830ea13e3f/validation.json",
+      "sha256": "bd72b0d72362916eff9127f6252220246dd554286841863be85d8623a1415443"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/queue-skill-client-465c178173034780a64885830ea13e3f/vet-final.command.json",
+      "sha256": "9079bf4f49eb7aa924ffc782408ba570ca314d73c459a5b0f946290268804a15"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/queue-skill-client-465c178173034780a64885830ea13e3f/vet-final.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/queue-skill-client-465c178173034780a64885830ea13e3f/vet-final.stdout.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/queue-skill-projection-root-0bc011114b344e45b1fea26123ca6bbc/bindings-generation-final.log",
+      "sha256": "77f989a569b08bf5018e957fbc490fe32f6b82d0037abc5406d28d84add4f3f9"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/queue-skill-projection-root-0bc011114b344e45b1fea26123ca6bbc/bindings-generation.log",
+      "sha256": "2d010f6877c96200c5e7e8bf57a52ce3c3924b15d9c2036907a39dbbdff1006b"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/queue-skill-projection-root-0bc011114b344e45b1fea26123ca6bbc/build_audit.py",
+      "sha256": "d2d4a0be4231c01dd75bb95524649a71d5dc4494ba11a86eb849860e33cd3b04"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/queue-skill-projection-root-0bc011114b344e45b1fea26123ca6bbc/cleanup-manifest.json",
+      "sha256": "3bc34c34c87f0d3542b5915167d1e9bc5330f452f80701d02fa717df7f20e950"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/queue-skill-projection-root-0bc011114b344e45b1fea26123ca6bbc/cleanup.json",
+      "sha256": "dae2ce15949ef45c35c6cf1a312a4c34162681b1dbc42e65bcc7befd2e77e39f"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/queue-skill-projection-root-0bc011114b344e45b1fea26123ca6bbc/contract-validation.json",
+      "sha256": "1892b8b6232bd1f896aae5634c7463eba4e008ecf6c6de67de9874b0b5c4408e"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/queue-skill-projection-root-0bc011114b344e45b1fea26123ca6bbc/copied-inputs-postwrite-audit.json",
+      "sha256": "64fb67c4cfa256e581c193169fafc13b90bf19a5fc3120ec7c978156cc18574c"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/queue-skill-projection-root-0bc011114b344e45b1fea26123ca6bbc/finalize.py",
+      "sha256": "ae7ac672db487139b2a22c5234350e2d691891462d6ba6d587b7ed8442f48c72"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/queue-skill-projection-root-0bc011114b344e45b1fea26123ca6bbc/frontend-build-command.json",
+      "sha256": "e4d392773d8262addd32c6ad442448f6747134b8165d5b7e37a36bcef02749f4"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/queue-skill-projection-root-0bc011114b344e45b1fea26123ca6bbc/frontend-build-stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/queue-skill-projection-root-0bc011114b344e45b1fea26123ca6bbc/frontend-build-stdout.log",
+      "sha256": "c80df08ac776b96d4b92609ad8c4bb2f62746957527739c80532a922065a0b6d"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/queue-skill-projection-root-0bc011114b344e45b1fea26123ca6bbc/frontend-output.json",
+      "sha256": "8bacea4983c5b778f8a1bbc208e9e95b0307f9a753052c85edf04de4c2fe315f"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/queue-skill-projection-root-0bc011114b344e45b1fea26123ca6bbc/frontend-source-after.json",
+      "sha256": "9271b05782f167970ad823695e27488ddeb90417520edf3867ad8877fdda707c"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/queue-skill-projection-root-0bc011114b344e45b1fea26123ca6bbc/frontend-source-before.json",
+      "sha256": "9271b05782f167970ad823695e27488ddeb90417520edf3867ad8877fdda707c"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/queue-skill-projection-root-0bc011114b344e45b1fea26123ca6bbc/frontend-validation.json",
+      "sha256": "e64e94b5c35e82e3b9a152076fc8f5b5fa0fd17643ff25c96fb4a8e0e8ece100"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/queue-skill-projection-root-0bc011114b344e45b1fea26123ca6bbc/host-build-command.json",
+      "sha256": "2b2a35b1e7f0dfa93a76db359ba81c185e48e5d44190e485a7ba8aecd6a2c2cf"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/queue-skill-projection-root-0bc011114b344e45b1fea26123ca6bbc/host-build-stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/queue-skill-projection-root-0bc011114b344e45b1fea26123ca6bbc/host-build-stdout.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/queue-skill-projection-root-0bc011114b344e45b1fea26123ca6bbc/host-dependencies-command.json",
+      "sha256": "bb3e55fd1b758f7918a69bf426474072c8c0871379d563acca2b435227af625e"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/queue-skill-projection-root-0bc011114b344e45b1fea26123ca6bbc/host-dependencies-stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/queue-skill-projection-root-0bc011114b344e45b1fea26123ca6bbc/host-dependencies-stdout.log",
+      "sha256": "168a0b324902404a155168b45ed4f81ec467a7cb249a591d9ae6ec83051a463d"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/queue-skill-projection-root-0bc011114b344e45b1fea26123ca6bbc/host-exits.json",
+      "sha256": "0bfcd422c3bc215a03433d28723fff2d2e5f897fc0a98aca78746efb4d53a3d1"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/queue-skill-projection-root-0bc011114b344e45b1fea26123ca6bbc/host-inputs.json",
+      "sha256": "4d57bc74fe2c2de79d6ddb415936b50997cdc8b01aeff73abadd8c3dae1c352e"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/queue-skill-projection-root-0bc011114b344e45b1fea26123ca6bbc/host-normal.ndjson",
+      "sha256": "c9e3636a3b5d866fbb7fbbf65bef32d53fdbe8c7b26580cd14f5710365431330"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/queue-skill-projection-root-0bc011114b344e45b1fea26123ca6bbc/host-race.ndjson",
+      "sha256": "0857ec55ba6e7a84913a6ad473a57bcb5a246ec1845a96ff74c4ce8295516061"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/queue-skill-projection-root-0bc011114b344e45b1fea26123ca6bbc/host-source-after.json",
+      "sha256": "630b7a45e7c2c16f0ebccf0305556de6ff5ba2f157211f4eec41855133ad7526"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/queue-skill-projection-root-0bc011114b344e45b1fea26123ca6bbc/host-source-before.json",
+      "sha256": "630b7a45e7c2c16f0ebccf0305556de6ff5ba2f157211f4eec41855133ad7526"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/queue-skill-projection-root-0bc011114b344e45b1fea26123ca6bbc/host-validation.json",
+      "sha256": "4146d8c72ff24bc78fa017fc26a34383e2962e4128468447c8ae2e778c5048ac"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/queue-skill-projection-root-0bc011114b344e45b1fea26123ca6bbc/host-version-command.json",
+      "sha256": "01118077f45124cc575bf82a846bff494779063d35b42e3bb692fffbd01655b8"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/queue-skill-projection-root-0bc011114b344e45b1fea26123ca6bbc/host-version-stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/queue-skill-projection-root-0bc011114b344e45b1fea26123ca6bbc/host-version-stdout.log",
+      "sha256": "e37270413fda49039b4f31dd90726df0e94c163cf9bca2f62fd40a47d12b5db1"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/queue-skill-projection-root-0bc011114b344e45b1fea26123ca6bbc/host-vet-command.json",
+      "sha256": "4ff5aff30c12fba5b199f767d781d41e50a2c0431e4d5f7be45f3e88b2136b49"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/queue-skill-projection-root-0bc011114b344e45b1fea26123ca6bbc/host-vet-stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/queue-skill-projection-root-0bc011114b344e45b1fea26123ca6bbc/host-vet-stdout.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/queue-skill-projection-root-0bc011114b344e45b1fea26123ca6bbc/host-vet.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/queue-skill-projection-root-0bc011114b344e45b1fea26123ca6bbc/openapi-validation.json",
+      "sha256": "d4ead892f6237e63d69ea6488706b7eb837655ebccfe532de9b26e3156d50ed2"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/queue-skill-projection-root-0bc011114b344e45b1fea26123ca6bbc/pet-build-command.json",
+      "sha256": "0cd985d94a22fa251bd2464744050b774707cbded8ebe16694b2020c831b8fb3"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/queue-skill-projection-root-0bc011114b344e45b1fea26123ca6bbc/pet-build-stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/queue-skill-projection-root-0bc011114b344e45b1fea26123ca6bbc/pet-build-stdout.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/queue-skill-projection-root-0bc011114b344e45b1fea26123ca6bbc/pet-dependencies-command.json",
+      "sha256": "36776475bdd73645b205a4a9100d64ee37738d325e7607f79b7137b80e716f9f"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/queue-skill-projection-root-0bc011114b344e45b1fea26123ca6bbc/pet-dependencies-stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/queue-skill-projection-root-0bc011114b344e45b1fea26123ca6bbc/pet-dependencies-stdout.log",
+      "sha256": "0b8e76b4edc35647c5c17999f2ef1543b7d97da7598912fa6d47741bb0bb200f"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/queue-skill-projection-root-0bc011114b344e45b1fea26123ca6bbc/pet-source-after.json",
+      "sha256": "1bcfcb7e0ef9d02aafec7eebbffbea1679ad17f91fa95eb234b7e8dd741893eb"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/queue-skill-projection-root-0bc011114b344e45b1fea26123ca6bbc/pet-source-before.json",
+      "sha256": "1bcfcb7e0ef9d02aafec7eebbffbea1679ad17f91fa95eb234b7e8dd741893eb"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/queue-skill-projection-root-0bc011114b344e45b1fea26123ca6bbc/pet-validation.json",
+      "sha256": "d6ea8c25f1d82a49899536b29d2ab2658741044db85465608a96bc9915357432"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/queue-skill-projection-root-0bc011114b344e45b1fea26123ca6bbc/pet-version-command.json",
+      "sha256": "dc3fde309f3d19fb93f4b284ab3ea15cc4eac9c62ba4d92b3b4a47ed02e7b8a2"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/queue-skill-projection-root-0bc011114b344e45b1fea26123ca6bbc/pet-version-stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/queue-skill-projection-root-0bc011114b344e45b1fea26123ca6bbc/pet-version-stdout.log",
+      "sha256": "af3e1395bc3f031810270675ec54cecf1d7d02a4bd28c1709efdda0c32e3f576"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/queue-skill-projection-root-0bc011114b344e45b1fea26123ca6bbc/pet-vet-command.json",
+      "sha256": "06e68f659236433f86b6a5813bf5325f560dbe7097d613557fe9cf6a5ec1a367"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/queue-skill-projection-root-0bc011114b344e45b1fea26123ca6bbc/pet-vet-stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/queue-skill-projection-root-0bc011114b344e45b1fea26123ca6bbc/pet-vet-stdout.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/queue-skill-projection-root-0bc011114b344e45b1fea26123ca6bbc/pre-cleanup-audit.json",
+      "sha256": "c662499ee7b6833d56e6c260079e95280267bac59cf1c3db63f13eff185e1689"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/queue-skill-projection-root-0bc011114b344e45b1fea26123ca6bbc/protected-audit.json",
+      "sha256": "df43b864a18b27ae3db505f0bd3d23bdc9ef6abb5c87bc7c9f99a14ef3e1cb1c"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/queue-skill-projection-root-0bc011114b344e45b1fea26123ca6bbc/root-vet.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/queue-skill-projection-root-0bc011114b344e45b1fea26123ca6bbc/schema-deps-install.log",
+      "sha256": "dce3002bb27abe5effd2c5650d79d8c92a4dbe07478577fa96b1ed485de636b8"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/queue-skill-projection-root-0bc011114b344e45b1fea26123ca6bbc/source_audit.py",
+      "sha256": "04bbdfa3e5c079c3160a84cc04512d8b0f0dfa2cba0b60a03b4b7e6fbc7773bb"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/queue-v2-protocol-bca3bd661aeb491cab385705bf514fe6/cleanup-manifest.json",
+      "sha256": "c3dccc0b3c6547517b3b14c83b6d1c5257b4410c31bf74fbdbee85685506fd12"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/queue-v2-protocol-bca3bd661aeb491cab385705bf514fe6/cleanup.json",
+      "sha256": "08599f8ba1a6c74dbcaeb906af7847609b99c625dc7e0d5201928a02806dfd21"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/queue-v2-protocol-bca3bd661aeb491cab385705bf514fe6/cross-review.json",
+      "sha256": "f3138c1a45c51705bf831ec7ae870f542a25405f4b56f9d48658961f4761c894"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/queue-v2-protocol-bca3bd661aeb491cab385705bf514fe6/final-audit.json",
+      "sha256": "b7f7cafb9cfa106be668b8db156f3a24ce4a88011a230401e911206b0bfaed9b"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/queue-v2-protocol-bca3bd661aeb491cab385705bf514fe6/normal.jsonl",
+      "sha256": "d267b8c4597c3a25a1443a3a181bcf4d4d336ff749dd822611d565d20359601b"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/queue-v2-protocol-bca3bd661aeb491cab385705bf514fe6/race.jsonl",
+      "sha256": "9cb7d27082cf1de199188b24646894130d28b3a4e727650d6cbc228ea6a597f0"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/queue-v2-protocol-bca3bd661aeb491cab385705bf514fe6/source-hashes.json",
+      "sha256": "73e7a8955fbcffc84c3c2a062558c7aac5eeedf5dcfbe53bfe4244d39400e806"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/queue-v2-protocol-bca3bd661aeb491cab385705bf514fe6/validation.json",
+      "sha256": "6afb79e2221fef9fdcca655c672644dac20d64506acbee8c01c5a74bc8c09fe1"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/queue-v2-protocol-bca3bd661aeb491cab385705bf514fe6/vet.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ]
+}

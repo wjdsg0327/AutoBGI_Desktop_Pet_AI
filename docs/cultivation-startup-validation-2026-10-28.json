@@ -1,0 +1,205 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-28",
+  "status": "source-implemented-isolated-validation-passed",
+  "overallSpecificationComplete": false,
+  "clientVersion": "0.2.5",
+  "clientRebuilt": false,
+  "productionAutoBGIBuiltOrStarted": false,
+  "realGameOrCredentialsUsed": false,
+  "productionCapabilities": {
+    "executionAvailable": false,
+    "inventoryVerified": false,
+    "completionEventsAvailable": false,
+    "safeSingleStartSourceFallback": true,
+    "productionConfigWrites": false,
+    "legacyRetryBehaviorChanged": false
+  },
+  "validation": {
+    "databaseCore": {
+      "topLevel": 15,
+      "subcases": 57,
+      "raceRepeats": 5,
+      "passEvents": 360,
+      "failures": 0,
+      "skips": 0,
+      "log": "AutoBGI_Desktop_Pet_AI/.validation/talent-start-domain-20261028/start-core-results-final.jsonl"
+    },
+    "runner": {
+      "topLevel": 11,
+      "subcases": 14,
+      "raceRepeats": 3,
+      "passEvents": 75,
+      "failures": 0,
+      "skips": 0,
+      "log": "AutoBGI_Desktop_Pet_AI/.validation/talent-start-domain-20261028/launch-results-final.jsonl"
+    },
+    "dailyFields": {
+      "topLevel": 6,
+      "subcases": 27,
+      "raceRepeats": 3,
+      "passEvents": 99,
+      "failures": 0,
+      "skips": 0,
+      "log": "AutoBGI_Desktop_Pet_AI/.validation/startup-daily-73fb81746f2049688f48186a33ec9c7d/results.jsonl"
+    },
+    "taskHooks": {
+      "topLevel": 8,
+      "subcases": 36,
+      "raceRepeats": 5,
+      "result": "passed",
+      "evidence": "subagent focused task validation output; fake executable files and memory process launcher"
+    },
+    "menu": {
+      "topLevel": 6,
+      "subcases": 6,
+      "raceRepeats": 5,
+      "result": "passed",
+      "evidence": "subagent explicit-file test compilation excludes menu init; isolated SQLite and fake paths"
+    },
+    "goVetAndBuild": {
+      "result": "passed",
+      "packages": [
+        "TalentPlanService",
+        "models",
+        "task",
+        "menu",
+        "bgiStatus",
+        "OneLong",
+        "characterDevelopment"
+      ]
+    },
+    "diffCheck": "passed",
+    "independentSourceReview": "no additional P1/P2 findings; explicit uncertain dispatch marker and recovery lock contract added",
+    "regressionFixed": "JSON decode previously reused input slice storage; decode now uses a fresh zero-value payload"
+  },
+  "sourceHashes": [
+    {
+      "path": "TalentPlanService/start_types.go",
+      "sha256": "17a49856b4174ef5f53894d50fd47f8828267010f60239c9d6202d158ae112d3"
+    },
+    {
+      "path": "TalentPlanService/start_prepare.go",
+      "sha256": "714e3ee914c40e75989557a598b92cc7b3ba5655475c328b6bf77d3a7ae83143"
+    },
+    {
+      "path": "TalentPlanService/start_store.go",
+      "sha256": "91c065c45a9246e16b156276961288b911a18bda2d6796ee6cbf4483e394815d"
+    },
+    {
+      "path": "TalentPlanService/start_validate.go",
+      "sha256": "d6d4211305c5a7a494d7d69b4bdb240ff902313b9143031892ad5f5d4a805aee"
+    },
+    {
+      "path": "TalentPlanService/start_events.go",
+      "sha256": "31c47b349264027dff1d9af1ad1f5fc405647bf691c778b1dee3273da5987bb8"
+    },
+    {
+      "path": "TalentPlanService/daily.go",
+      "sha256": "ab39e3acbd6c1ababcee851312125758eee4a5df383fb997a1fd757e3cc26dcc"
+    },
+    {
+      "path": "TalentPlanService/launch.go",
+      "sha256": "42d2e11e852372fbb0fd0fd851fb16c538832d586c6c9ec562d54430521127d7"
+    },
+    {
+      "path": "TalentPlanService/lifecycle.go",
+      "sha256": "8a42e2bbf643f953fba76244a62664d56c94222f5c19e4d93a54e8932ccd6af7"
+    },
+    {
+      "path": "models/TalentQueueStartModel.go",
+      "sha256": "fe6eaf33f3218bf8340add4bf083f6535e48ace4c7a0c1e7bb472e69a5b40976"
+    },
+    {
+      "path": "models/InitDB.go",
+      "sha256": "b6fd8b45279dd135d4567801ba8f0de20c53e733137791ada7af7211963f6e72"
+    },
+    {
+      "path": "task/startup_hooks.go",
+      "sha256": "d7c7edc7edd4518ac31db3db42d46f0fc004f9b0355b48a444c8e05f8e919fd7"
+    },
+    {
+      "path": "task/desktop_pet_start_windows.go",
+      "sha256": "5ef92f4e9ba167a60a016afb37d091319ad7a12efc8be271e3f3a6a7c15d1f77"
+    },
+    {
+      "path": "task/Task.go",
+      "sha256": "51ba92ad19df0d6b1a211aef5a8dba099e3584de1087994321236a2d623e3157"
+    },
+    {
+      "path": "menu/talent_queue_startup.go",
+      "sha256": "cd5482ae3383f5278c0f36348b06f84d01bed0b1b8c30d8a7d0a365ba00d0f64"
+    },
+    {
+      "path": "menu/menu.go",
+      "sha256": "8628cbef33fef5d0ad371066db60362b9551fae832a2875dcc03054ebda5b757"
+    }
+  ],
+  "preservedFiles": [
+    {
+      "path": "menu/web/index.html",
+      "sha256": "ca96ceb33080ee823d448d0a6da44029cf1aad63553d7a731209a193f93c23aa"
+    },
+    {
+      "path": "menu/web/version.txt",
+      "sha256": "28ae199272f193ac9368dc9f4abcd8bbe4631ea6eba15f167675ec53512b5c01"
+    },
+    {
+      "path": "menu/routes_integrations.go",
+      "sha256": "6b9646ea8ec1ad40304f0455177298ad263ead6646f88008c9a5e8e60eaaa20a"
+    },
+    {
+      "path": "abgi-updater.exe",
+      "sha256": "0279ba6eee199c3c1fd8fead6b360405bef5d68f07067b6ab95b26d6a6150b79"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/bin/AutoBGI-Pet.exe",
+      "sha256": "b0e13b9b854cc33d27bdc4e1f891f2084e2482768d88732ca5f8a7ec2e16637c"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/bin/AutoBGI-Pet-0.2.5-windows-amd64.zip",
+      "sha256": "354f01ccde989db8974c9966df713a16bd7941778e68aee1650b22fa55b9d2cf"
+    }
+  ],
+  "unrelatedVersionChanges": {
+    "firstObservedWriteTime": "2026-10-27T23:55:21+08:00",
+    "preserved": true,
+    "knownWriter": "build.bat and build-test.bat rewrite both version and HTML title; actual writer not identified",
+    "overwrittenByThisWork": false
+  },
+  "testSourcesRemoved": [
+    "task/startup_hooks_temporary_test.go",
+    "menu/talent_queue_startup_validation_test.go",
+    "AutoBGI_Desktop_Pet_AI/.validation/talent-start-domain-20261028/TalentPlanService/start_core_temporary_test.go",
+    "AutoBGI_Desktop_Pet_AI/.validation/talent-start-domain-20261028/TalentPlanService/runner_test.go",
+    "AutoBGI_Desktop_Pet_AI/.validation/startup-daily-73fb81746f2049688f48186a33ec9c7d/daily_test.go"
+  ],
+  "cleanup": {
+    "sourcesRemoved": true,
+    "originalTestsPreserved": true,
+    "blockedReason": "automatic approval review: blocked by policy",
+    "blockedTargetsRetried": false,
+    "retainedTargets": [
+      "C:/Users/oldwang/AppData/Local/Temp/autobgi-menu-startup-validation.test.exe",
+      "C:/Users/oldwang/AppData/Local/Temp/autobgi-startup-hooks-validation-20261028",
+      "D:/Documents/go/autobgi/AutoBGI_Desktop_Pet_AI/.validation/talent-start-domain-20261028/start-core-validation.test.exe"
+    ],
+    "copiedProductionSourcesAndLogsRetained": [
+      "AutoBGI_Desktop_Pet_AI/.validation/talent-start-domain-20261028",
+      "AutoBGI_Desktop_Pet_AI/.validation/startup-daily-73fb81746f2049688f48186a33ec9c7d"
+    ],
+    "olderBlockedTargets": "preserved as recorded in prior validation documents; not retried",
+    "portablePackageIncludesValidationFiles": false
+  },
+  "unverified": [
+    "trusted production inventory identity/source time/coverage/completion",
+    "verified material-ID to daily-domain mapping",
+    "Windows config CAS and cross-start ownership recovery",
+    "legacy startup commit integration",
+    "production recovery UI",
+    "outbox-to-desktop event delivery",
+    "real service/game acceptance",
+    "native DPI/sleep/focus matrix",
+    "whole-process memory target"
+  ]
+}

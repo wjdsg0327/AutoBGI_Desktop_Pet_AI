@@ -1,0 +1,424 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-28",
+  "version": "0.2.7",
+  "verifiedAt": "2026-10-28T01:23:31.7943872+08:00",
+  "scope": "durable cultivation material events, read-only history and client compensation",
+  "goalComplete": false,
+  "projection": {
+    "date": "2026-10-28",
+    "validation": "materials-projection-domain",
+    "toolchain": "go1.27.1",
+    "race": true,
+    "repeats": 3,
+    "parentTests": 8,
+    "subtests": 11,
+    "parentPassEvents": 24,
+    "subtestPassEvents": 33,
+    "failureEvents": 0,
+    "finalExitCode": 0,
+    "vetExitCode": 0,
+    "compiledFromWorkspace": true,
+    "executedFromIsolatedDirectory": true,
+    "fakeBetterGIAddress": true,
+    "realCredentialsAccessed": false,
+    "realGameStarted": false,
+    "tests": [
+      "read-only-empty-and-stable-generation",
+      "frozen-role-plan-and-FIFO",
+      "12-concurrent-drains",
+      "SQLite-insert-ACK-head-trigger-rollback",
+      "reopened-database-and-instance-isolation",
+      "297-events-256-41-batches-and-100-100-97-pages",
+      "projection-source-frozen-log-digest-gap-head-corruption",
+      "same-ID-same-body-and-different-body"
+    ],
+    "initialInvocation": {
+      "testsExecuted": 0,
+      "exitCode": 2,
+      "reason": "PowerShell native arguments needed quoting; corrected final invocation passed"
+    },
+    "testSourceSHA256": "119487020088CCDC2864ABFEA3A576437F88DABA2E3B09CF411AA06D8A319AE4",
+    "binarySHA256": "6B4E407261CFC76284742812B51A9435939C48E03F5C907944D7BCAC2C54EC9B",
+    "finalLogSHA256": "A6E14A06B5A6282CA2FFF4D25309497388BC0E6BF630A6A9FAD4D7ECD5C0D4B7",
+    "productionSHA256": {
+      "desktopPet/material_event_types.go": "7019AEA16A0C8EEC10208407167D7C3D65BCFA574530E507B7969D228AB1B80D",
+      "desktopPet/material_events.go": "BF9E7DF4641975D17AA8DAEF03B8AE28A396A17BEBDB08CB80DF3CCE73C3D38E",
+      "TalentPlanService/material_event_store.go": "B87DE893CBA4E19C86E31F0DCAAA415728422A88FC87F63C0D9B3512AF94F9F3",
+      "TalentPlanService/material_event_types.go": "5B7FEE3D745A81FFD829183CBA9356930E46113975EEA4FFA97DBF62656FFF8F",
+      "models/InitDB.go": "898E09490E341A1E28E9C27D23F3D67896D9BA7449EC45D29110BBBB42DB82DB",
+      "models/DesktopPetMaterialEventModel.go": "B245829B6F26D3AAAA8563C1774CE5B7C39EDD2B7BB806678156854FEF837378",
+      "TalentPlanService/start_events.go": "97A1257E4A99B9C383AF5C504978267ECCE582761963B9E1BD19EE425D61A8C4",
+      "desktopPet/http.go": "63B3B49E90EBF3D385DE59B56905C59E19374802C7CD6B9F0A12B245EF02832B"
+    },
+    "cleanupPending": false,
+    "cleanupBlocked": true,
+    "cleanupReason": "Automatic approval review rejected the deletion command: blocked by policy. No alternative deletion or retry attempted.",
+    "residualPaths": [
+      "TalentPlanService/material_events_validation_tmp_test.go",
+      "AutoBGI_Desktop_Pet_AI/.validation/material-projection-0dd8a757e0a645f8ab64805556da3d4f/projection-verification.exe"
+    ]
+  },
+  "worker": {
+    "date": "2026-10-28",
+    "toolchain": "go1.27.1 windows/amd64",
+    "command": "go test -race -count=3 -json ./menu/desktop_pet_materials_worker.go ./menu/desktop_pet_materials_worker_tmp_test.go",
+    "repeats": 3,
+    "topLevelCases": 4,
+    "subcases": 4,
+    "passedTestEvents": 24,
+    "failedEvents": 0,
+    "isolatedNamedFileCompilation": true,
+    "rootConfigurationInitialized": false,
+    "productionServiceOrGameStarted": false,
+    "concurrentCloseCallers": 24,
+    "sourceSHA256": "8970bd8b748e5bb5e390a84f21f7f1af09086931b7bd086e238a9998079ba8d5",
+    "testSourceSHA256": "b5f68c4ac7c0f5e2143134c855ad516c1c09d3611d09ec8504bb1d713cb74515",
+    "testSourceDeleted": false,
+    "cleanupBlockedByAutomaticApproval": true,
+    "cleanupReason": "blocked by policy",
+    "blockedTarget": "menu/desktop_pet_materials_worker_tmp_test.go"
+  },
+  "crossModule": {
+    "schemaVersion": 1,
+    "date": "2026-10-28",
+    "scope": "isolated domain outbox to real Gin HTTP to actual PetV1Adapter and client service persistence",
+    "status": "passed",
+    "rootToolchain": "go1.27.1 windows/amd64",
+    "clientToolchain": "go1.26.10 windows/amd64",
+    "race": true,
+    "repeats": 1,
+    "clientNamedPass": 36,
+    "clientTopLevel": 1,
+    "clientFirstLevel": 12,
+    "clientNested": 23,
+    "clientLeafCases": 32,
+    "hostNamedPass": 1,
+    "failures": 0,
+    "skips": 0,
+    "raceReports": 0,
+    "actualTransport": "loopback HTTP and SSE",
+    "actualDatabase": "isolated SQLite",
+    "readyEventsInPrimaryScope": 114,
+    "readyEventsInSecondaryScope": 2,
+    "dispatches": 0,
+    "realCredentialsRead": false,
+    "productionServiceConnected": false,
+    "nativeGuiStarted": false,
+    "rootHostTerminal": "session 51992 exited 0 after authenticated fixture stop",
+    "checks": [
+      "original role and stable plan survive delete-and-recreate under same config name",
+      "11 actual authentication and strict query rejection cases",
+      "initial history persists without notices",
+      "actual server.notice compatible SSE wake",
+      "actual root protocol restart changes SSE epoch and old cursor returns 410",
+      "explicit service invalidation treats replay gap as history",
+      "nonempty directory A-B-A restores real-time collection",
+      "empty directory A-B-A updates MRU and receives first live batch",
+      "114 primary events paginate as 100 then 14; latest baseline contains 100 and truncated=true",
+      "client backlog collects without notice burst",
+      "reopened client journal does not repeat historical notices",
+      "late profile, instance and fast sleep-resume replies rejected",
+      "actual local journal atomic-replace failure leaves cursor and notices unchanged",
+      "9 malformed real JSON responses rejected by actual PetV1Adapter"
+    ],
+    "limits": [
+      "business source is synthetic and does not verify real inventory or game cultivation",
+      "HTTP host uses a synthetic Provider mapping; actual menu worker is validated separately by root",
+      "service collection called directly with isolated state; public Connect and complete poll loop not exercised",
+      "cross-epoch transport rejection is actual; service replay suppression is invoked through explicit invalidation",
+      "no native UI, credentials, production service or game execution"
+    ],
+    "temporarySourceHashes": [
+      {
+        "sha256": "8d832292824e821b78fbfc110db3aa86d73b9a703ed37ede6076f77ce27de35e",
+        "path": "desktopPet/domain_material_bridge_temporary_test.go"
+      },
+      {
+        "sha256": "2163afbec6becdd0ba5bd88c8c4e9fc67310f2131753dbee16f75656fbea717a",
+        "path": "AutoBGI_Desktop_Pet_AI/internal/service/domain_material_bridge_temporary_test.go"
+      }
+    ],
+    "sourceSHA256": [
+      {
+        "sha256": "bf9e7df4641975d17aa8daef03b8ae28a396a17bebdb08cb80df3cce73c3d38e",
+        "path": "desktopPet/material_events.go"
+      },
+      {
+        "sha256": "7019aea16a0c8eec10208407167d7c3d65bcfa574530e507b7969d228ab1b80d",
+        "path": "desktopPet/material_event_types.go"
+      },
+      {
+        "sha256": "63b3b49e90ebf3d385de59b56905c59e19374802c7cd6b9f0a12b245ef02832b",
+        "path": "desktopPet/http.go"
+      },
+      {
+        "sha256": "b87de893cba4e19c86e31f0dcaaa415728422a88fc87f63c0d9b3512af94f9f3",
+        "path": "TalentPlanService/material_event_store.go"
+      },
+      {
+        "sha256": "5b7fee3d745a81ffd829183cba9356930e46113975eea4ffa97dbf62656fff8f",
+        "path": "TalentPlanService/material_event_types.go"
+      },
+      {
+        "sha256": "97a1257e4a99b9c383af5c504978267ecce582761963b9e1bd19ee425d61a8c4",
+        "path": "TalentPlanService/start_events.go"
+      },
+      {
+        "sha256": "91c065c45a9246e16b156276961288b911a18bda2d6796ee6cbf4483e394815d",
+        "path": "TalentPlanService/start_store.go"
+      },
+      {
+        "sha256": "b245829b6f26d3aaaa8563c1774ce5b7c39edd2b7bb806678156854fef837378",
+        "path": "models/DesktopPetMaterialEventModel.go"
+      },
+      {
+        "sha256": "585deff6aa7fc283f9696db3aabfa45f97dc762440371bd3c772ddcffad45602",
+        "path": "AutoBGI_Desktop_Pet_AI/internal/autobgi/materials_ready.go"
+      },
+      {
+        "sha256": "8433b226707a2118ba11c913c3c34e024f737da778e74d2e929222ea6ffa071f",
+        "path": "AutoBGI_Desktop_Pet_AI/internal/autobgi/petv1.go"
+      },
+      {
+        "sha256": "0201ecf455b1e2d2cbadcb956b2f53b1bccbcddaf1d23d3fa9ed20577daa2578",
+        "path": "AutoBGI_Desktop_Pet_AI/internal/service/materials_ready.go"
+      },
+      {
+        "sha256": "7fdbb3de7995cccd8121f07b0e5dee2295a7fc3c3866fee36e26e19f592a25de",
+        "path": "AutoBGI_Desktop_Pet_AI/internal/service/events.go"
+      },
+      {
+        "sha256": "35ef0726692c52d79aa989934ce2d0bd9747c670518455b2194863db9f0ccf7b",
+        "path": "AutoBGI_Desktop_Pet_AI/internal/service/poll.go"
+      },
+      {
+        "sha256": "88515c4a0ea5d7283826a1a7fc98fd5bddf12b1c14e7a5a2c66314ec8bbbb5fe",
+        "path": "AutoBGI_Desktop_Pet_AI/internal/service/service.go"
+      },
+      {
+        "sha256": "f97c91877d057f618c0beeabc51556e7f64ad2247611e63f0000688ebef4e883",
+        "path": "AutoBGI_Desktop_Pet_AI/internal/storage/materials_ready.go"
+      },
+      {
+        "sha256": "bd884ea584fa3b0eab3e56895e518bc04349d6af53d29e9286097e9ba85d29d5",
+        "path": "AutoBGI_Desktop_Pet_AI/internal/storage/journal.go"
+      }
+    ],
+    "logs": {
+      "host": "host-results.jsonl",
+      "client": "client-results.jsonl"
+    },
+    "cleanup": {
+      "temporarySourcesRemaining": [],
+      "temporarySourceCount": 0,
+      "executablesRemaining": [
+        "D:\\Documents\\go\\autobgi\\AutoBGI_Desktop_Pet_AI\\.validation\\materials-cross-domain-20261028\\domain-material-host.test.exe",
+        "D:\\Documents\\go\\autobgi\\AutoBGI_Desktop_Pet_AI\\.validation\\materials-cross-domain-20261028\\domain-material-client.test.exe"
+      ],
+      "executableCount": 2,
+      "automaticApproval": "blocked by policy",
+      "rejectedAction": "Delete the two exact newly created test executables in this validation directory",
+      "alternativeDeletionAttempted": false,
+      "directoriesDeleted": false,
+      "runtime": "retained synthetic SQLite and config evidence under .validation",
+      "previouslyBlockedTargets": "not touched",
+      "portableExcluded": true
+    },
+    "postCleanup": {
+      "clientVet": "passed under go1.26.10",
+      "clientRaceCompile": "passed for autobgi/service/storage, all report no test files",
+      "behaviorTestsRepeated": false,
+      "sourceHashesUnchanged": true,
+      "newImplementationFilesModifiedByVerifier": 0
+    }
+  },
+  "frontend": {
+    "execution": "actual Vue SFC compiled with @vue/compiler-sfc and rendered by actual Vue SSR through stdin",
+    "assertions": 20,
+    "result": "passed",
+    "temporaryTestFiles": 0,
+    "rawDiskReport": false,
+    "reportedOutput": {
+      "component": "src/components/MaterialEventHistory.vue",
+      "assertions": 20,
+      "temporaryTestFiles": 0,
+      "result": "passed"
+    },
+    "sourceSHA256": "0f4d5aa8bb599c5fa6a8e43c2f02c3aa0011609c6e267c12d3064857f5749cc3",
+    "nativeGUIVerified": false
+  },
+  "openAPI": {
+    "parser": "existing js-yaml from menu/web/node_modules",
+    "version": "3.1.0",
+    "paths": 13,
+    "schemas": 16,
+    "localReferences": 51,
+    "allLocalReferencesResolved": true,
+    "fullOpenAPIConformanceClaimed": false
+  },
+  "build": {
+    "desktopToolchain": "go1.26.10 windows/amd64",
+    "rootToolchain": "go1.27.1 windows/amd64",
+    "wails": "v3.0.0",
+    "runtime": "3.0.0",
+    "methods": 39,
+    "models": 42,
+    "viteModules": 87,
+    "desktopFullVet": "passed",
+    "desktopFullBuild": "passed",
+    "rootPackages": [
+      "desktopPet",
+      "menu",
+      "TalentPlanService",
+      "models"
+    ],
+    "rootVet": "passed",
+    "rootBuild": "passed",
+    "typescript": "passed",
+    "script": "scripts/build.ps1 without -Package",
+    "executableSHA256": "eb6e3cac7488137da8afe9543776e395e2119a3eb2226b43cf5eba385fd6b579",
+    "executableBytes": 12471296,
+    "fileVersion": "0.2.7.0",
+    "productVersion": "0.2.7",
+    "productionBuild": true,
+    "nativeGUIStartedThisRound": false
+  },
+  "sourceEvidence": {
+    "allBehaviorallyRecordedHashesMatchCurrent": true,
+    "recordedSources": [
+      {
+        "path": "menu/desktop_pet_materials_bridge.go",
+        "sha256": "0279eeb0513da793d00cb58fd98e87f5f6a77207f901e7fd75a4174523c5d380"
+      },
+      {
+        "path": "menu/desktop_pet_materials_worker.go",
+        "sha256": "8970bd8b748e5bb5e390a84f21f7f1af09086931b7bd086e238a9998079ba8d5"
+      },
+      {
+        "path": "menu/routes_desktop_pet.go",
+        "sha256": "19486c11043b5b82ba6de7bd87432c6547661d663f78f97550e327dc7fe9ce02"
+      },
+      {
+        "path": "menu/menu.go",
+        "sha256": "3a1e8fe1be05c72a11d092b7c37d7e40ba3034169b4cee418fbc8afa8d78bf7a"
+      },
+      {
+        "path": "TalentPlanService/material_event_store.go",
+        "sha256": "b87de893cba4e19c86e31f0dcaaa415728422a88fc87f63c0d9b3512af94f9f3"
+      },
+      {
+        "path": "TalentPlanService/material_event_types.go",
+        "sha256": "5b7fee3d745a81ffd829183cba9356930e46113975eea4ffa97dbf62656fff8f"
+      },
+      {
+        "path": "TalentPlanService/start_events.go",
+        "sha256": "97a1257e4a99b9c383af5c504978267ecce582761963b9e1bd19ee425d61a8c4"
+      },
+      {
+        "path": "models/DesktopPetMaterialEventModel.go",
+        "sha256": "b245829b6f26d3aaaa8563c1774ce5b7c39edd2b7bb806678156854fef837378"
+      },
+      {
+        "path": "models/InitDB.go",
+        "sha256": "898e09490e341a1e28e9c27d23f3d67896d9ba7449ec45d29110bbbb42db82db"
+      },
+      {
+        "path": "desktopPet/material_events.go",
+        "sha256": "bf9e7df4641975d17aa8daef03b8ae28a396a17bebdb08cb80df3cce73c3d38e"
+      },
+      {
+        "path": "desktopPet/material_event_types.go",
+        "sha256": "7019aea16a0c8eec10208407167d7c3d65bcfa574530e507b7969d228ab1b80d"
+      },
+      {
+        "path": "desktopPet/http.go",
+        "sha256": "63b3b49e90ebf3d385de59b56905c59e19374802c7cd6b9f0a12b245ef02832b"
+      },
+      {
+        "path": "AutoBGI_Desktop_Pet_AI/internal/autobgi/materials_ready.go",
+        "sha256": "585deff6aa7fc283f9696db3aabfa45f97dc762440371bd3c772ddcffad45602"
+      },
+      {
+        "path": "AutoBGI_Desktop_Pet_AI/internal/autobgi/types.go",
+        "sha256": "0c165c4093257e4ca2c34606a265bc47e59a668d1c0c12882daf184c22b3e275"
+      },
+      {
+        "path": "AutoBGI_Desktop_Pet_AI/internal/autobgi/petv1.go",
+        "sha256": "8433b226707a2118ba11c913c3c34e024f737da778e74d2e929222ea6ffa071f"
+      },
+      {
+        "path": "AutoBGI_Desktop_Pet_AI/internal/storage/materials_ready.go",
+        "sha256": "f97c91877d057f618c0beeabc51556e7f64ad2247611e63f0000688ebef4e883"
+      },
+      {
+        "path": "AutoBGI_Desktop_Pet_AI/internal/storage/journal.go",
+        "sha256": "bd884ea584fa3b0eab3e56895e518bc04349d6af53d29e9286097e9ba85d29d5"
+      },
+      {
+        "path": "AutoBGI_Desktop_Pet_AI/internal/service/materials_ready.go",
+        "sha256": "0201ecf455b1e2d2cbadcb956b2f53b1bccbcddaf1d23d3fa9ed20577daa2578"
+      },
+      {
+        "path": "AutoBGI_Desktop_Pet_AI/internal/service/types.go",
+        "sha256": "7eba78bfd58e54f22ab6e91f1c829278d759d5f7efa37c02f60cd334568c0af0"
+      },
+      {
+        "path": "AutoBGI_Desktop_Pet_AI/internal/service/service.go",
+        "sha256": "88515c4a0ea5d7283826a1a7fc98fd5bddf12b1c14e7a5a2c66314ec8bbbb5fe"
+      },
+      {
+        "path": "AutoBGI_Desktop_Pet_AI/internal/service/pause.go",
+        "sha256": "16b00a7916234400793cfc10d3acd7256ed9a96efc7555c9806b4427e1746d1c"
+      },
+      {
+        "path": "AutoBGI_Desktop_Pet_AI/internal/service/poll.go",
+        "sha256": "35ef0726692c52d79aa989934ce2d0bd9747c670518455b2194863db9f0ccf7b"
+      },
+      {
+        "path": "AutoBGI_Desktop_Pet_AI/internal/service/events.go",
+        "sha256": "7fdbb3de7995cccd8121f07b0e5dee2295a7fc3c3866fee36e26e19f592a25de"
+      },
+      {
+        "path": "AutoBGI_Desktop_Pet_AI/frontend/src/components/MaterialEventHistory.vue",
+        "sha256": "0f4d5aa8bb599c5fa6a8e43c2f02c3aa0011609c6e267c12d3064857f5749cc3"
+      },
+      {
+        "path": "AutoBGI_Desktop_Pet_AI/frontend/src/views/PanelView.vue",
+        "sha256": "3370e1ac36888aa068c05bde3bb38e017ace5b093d98b291f75509a02c4c0cdf"
+      }
+    ]
+  },
+  "evidence": {
+    "projectionResult": ".validation/material-projection-0dd8a757e0a645f8ab64805556da3d4f/result.json",
+    "projectionResultSHA256": "bf99cf38bebe6f8bac781e55403c64615bfad729d4728ad678b4ea2ced5f5925",
+    "workerResult": ".validation/materials-worker-20261028/validation.json",
+    "workerResultSHA256": "542fdccf6891d2289c628bbdfed45160918636660c97ddb0eb94e84660bee4a6",
+    "crossModuleResult": ".validation/materials-cross-domain-20261028/validation.json",
+    "crossModuleResultSHA256": "0ce2a423f696f34404916af93385d87e7f99f99b2f8de9abf9e0ffc3f1d4dd4d"
+  },
+  "limits": [
+    "materialsReadyEvents does not enable executionAvailable, inventoryVerified or completionEventsAvailable",
+    "production trusted inventory provider remains unavailable and production configuration CAS refuses writes",
+    "real game/account switching, native window interaction, mixed DPI, focus, sleep and endurance not validated in this round",
+    "historical 250 MB memory target remains unmet",
+    "server history retention is currently unbounded",
+    "public Connect/full poll loop not exercised by isolated cross-module collection tests"
+  ],
+  "cleanup": {
+    "allNewTemporaryTestSourcesDeleted": false,
+    "blockedByAutomaticApproval": true,
+    "reason": "blocked by policy",
+    "blockedTargets": [
+      "menu/desktop_pet_materials_worker_tmp_test.go",
+      "TalentPlanService/material_events_validation_tmp_test.go",
+      "AutoBGI_Desktop_Pet_AI/.validation/material-projection-0dd8a757e0a645f8ab64805556da3d4f/projection-verification.exe",
+      "AutoBGI_Desktop_Pet_AI/.validation/materials-cross-domain-20261028/domain-material-host.test.exe",
+      "AutoBGI_Desktop_Pet_AI/.validation/materials-cross-domain-20261028/domain-material-client.test.exe"
+    ],
+    "alternativeDeletionAttempted": false,
+    "portableExcluded": true,
+    "priorBlockedTargetsUntouched": true,
+    "desktopTemporaryTestSourcesRemaining": 0
+  }
+}

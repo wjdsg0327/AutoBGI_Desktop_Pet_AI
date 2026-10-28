@@ -1,0 +1,1040 @@
+{
+  "recordedAt": "2026-10-27T20:34:40.4182677+08:00",
+  "phase": "configured-panel-open",
+  "version": "0.2.1",
+  "executableSha256": "340d3f63e631bbbc5cb3e23b80ce40942f37851741f7939867132571f8250107",
+  "launchStyle": "Normal",
+  "scenario": "同一离线实例经第二次启动打开控制台；真实WebView UIA显示v0.2.1与隔离资料；两次截图超时，未执行界面输入",
+  "logicalProcessors": 12,
+  "elapsedSeconds": 67.989,
+  "sampleCount": 13,
+  "cpuSeconds": 3.0,
+  "averageTotalCpuPercent": 0.3987,
+  "averageWorkingSetMiB": 438.144,
+  "peakWorkingSetMiB": 445.391,
+  "peakPrivateCommittedMiB": 251.457,
+  "uniqueProcesses": [
+    {
+      "name": "msedgewebview2.exe",
+      "id": 17088,
+      "initialCpu": 0.953125,
+      "kind": "browser",
+      "maximumCpu": 1.21875
+    },
+    {
+      "name": "msedgewebview2.exe",
+      "id": 82892,
+      "initialCpu": 5.40625,
+      "kind": "gpu-process",
+      "maximumCpu": 6.40625
+    },
+    {
+      "name": "msedgewebview2.exe",
+      "id": 129164,
+      "initialCpu": 0.0625,
+      "kind": "utility",
+      "maximumCpu": 0.078125
+    },
+    {
+      "name": "AutoBGI-Pet.exe",
+      "id": 105016,
+      "initialCpu": 0.328125,
+      "kind": "host",
+      "maximumCpu": 0.359375
+    },
+    {
+      "name": "msedgewebview2.exe",
+      "id": 143052,
+      "initialCpu": 0.140625,
+      "kind": "utility",
+      "maximumCpu": 0.171875
+    },
+    {
+      "name": "msedgewebview2.exe",
+      "id": 90512,
+      "initialCpu": 0.03125,
+      "kind": "crashpad-handler",
+      "maximumCpu": 0.03125
+    },
+    {
+      "name": "msedgewebview2.exe",
+      "id": 144292,
+      "initialCpu": 0.28125,
+      "kind": "renderer",
+      "maximumCpu": 0.296875
+    },
+    {
+      "name": "msedgewebview2.exe",
+      "id": 15208,
+      "initialCpu": 5.21875,
+      "kind": "renderer",
+      "maximumCpu": 7.125
+    }
+  ],
+  "samples": [
+    {
+      "elapsedSeconds": 0.276,
+      "processes": 8,
+      "renderers": 2,
+      "workingSetBytes": 457109504.0,
+      "privateCommittedBytes": 259047424.0,
+      "handles": 3524.0,
+      "details": [
+        {
+          "pid": 105016,
+          "kind": "host",
+          "workingSetBytes": 32116736,
+          "privateCommittedBytes": 56778752,
+          "handles": 450,
+          "cpuSeconds": 0.328125
+        },
+        {
+          "pid": 17088,
+          "kind": "browser",
+          "workingSetBytes": 113639424,
+          "privateCommittedBytes": 34373632,
+          "handles": 1233,
+          "cpuSeconds": 0.953125
+        },
+        {
+          "pid": 90512,
+          "kind": "crashpad-handler",
+          "workingSetBytes": 11141120,
+          "privateCommittedBytes": 2936832,
+          "handles": 183,
+          "cpuSeconds": 0.03125
+        },
+        {
+          "pid": 82892,
+          "kind": "gpu-process",
+          "workingSetBytes": 81719296,
+          "privateCommittedBytes": 75923456,
+          "handles": 579,
+          "cpuSeconds": 5.40625
+        },
+        {
+          "pid": 143052,
+          "kind": "utility",
+          "workingSetBytes": 36102144,
+          "privateCommittedBytes": 11341824,
+          "handles": 316,
+          "cpuSeconds": 0.140625
+        },
+        {
+          "pid": 129164,
+          "kind": "utility",
+          "workingSetBytes": 20152320,
+          "privateCommittedBytes": 7729152,
+          "handles": 191,
+          "cpuSeconds": 0.0625
+        },
+        {
+          "pid": 15208,
+          "kind": "renderer",
+          "workingSetBytes": 78311424,
+          "privateCommittedBytes": 32186368,
+          "handles": 282,
+          "cpuSeconds": 5.21875
+        },
+        {
+          "pid": 144292,
+          "kind": "renderer",
+          "workingSetBytes": 83927040,
+          "privateCommittedBytes": 37777408,
+          "handles": 290,
+          "cpuSeconds": 0.28125
+        }
+      ]
+    },
+    {
+      "elapsedSeconds": 5.503,
+      "processes": 8,
+      "renderers": 2,
+      "workingSetBytes": 456237056.0,
+      "privateCommittedBytes": 258146304.0,
+      "handles": 3524.0,
+      "details": [
+        {
+          "pid": 105016,
+          "kind": "host",
+          "workingSetBytes": 32116736,
+          "privateCommittedBytes": 56778752,
+          "handles": 450,
+          "cpuSeconds": 0.328125
+        },
+        {
+          "pid": 17088,
+          "kind": "browser",
+          "workingSetBytes": 113623040,
+          "privateCommittedBytes": 34373632,
+          "handles": 1233,
+          "cpuSeconds": 0.953125
+        },
+        {
+          "pid": 90512,
+          "kind": "crashpad-handler",
+          "workingSetBytes": 11141120,
+          "privateCommittedBytes": 2936832,
+          "handles": 183,
+          "cpuSeconds": 0.03125
+        },
+        {
+          "pid": 82892,
+          "kind": "gpu-process",
+          "workingSetBytes": 81727488,
+          "privateCommittedBytes": 75923456,
+          "handles": 579,
+          "cpuSeconds": 5.46875
+        },
+        {
+          "pid": 143052,
+          "kind": "utility",
+          "workingSetBytes": 36102144,
+          "privateCommittedBytes": 11341824,
+          "handles": 316,
+          "cpuSeconds": 0.140625
+        },
+        {
+          "pid": 129164,
+          "kind": "utility",
+          "workingSetBytes": 20152320,
+          "privateCommittedBytes": 7729152,
+          "handles": 191,
+          "cpuSeconds": 0.0625
+        },
+        {
+          "pid": 15208,
+          "kind": "renderer",
+          "workingSetBytes": 78495744,
+          "privateCommittedBytes": 32460800,
+          "handles": 282,
+          "cpuSeconds": 5.296875
+        },
+        {
+          "pid": 144292,
+          "kind": "renderer",
+          "workingSetBytes": 82878464,
+          "privateCommittedBytes": 36601856,
+          "handles": 290,
+          "cpuSeconds": 0.28125
+        }
+      ]
+    },
+    {
+      "elapsedSeconds": 10.715,
+      "processes": 8,
+      "renderers": 2,
+      "workingSetBytes": 456339456.0,
+      "privateCommittedBytes": 258199552.0,
+      "handles": 3524.0,
+      "details": [
+        {
+          "pid": 105016,
+          "kind": "host",
+          "workingSetBytes": 32116736,
+          "privateCommittedBytes": 56778752,
+          "handles": 450,
+          "cpuSeconds": 0.328125
+        },
+        {
+          "pid": 17088,
+          "kind": "browser",
+          "workingSetBytes": 113623040,
+          "privateCommittedBytes": 34373632,
+          "handles": 1233,
+          "cpuSeconds": 0.953125
+        },
+        {
+          "pid": 90512,
+          "kind": "crashpad-handler",
+          "workingSetBytes": 11141120,
+          "privateCommittedBytes": 2936832,
+          "handles": 183,
+          "cpuSeconds": 0.03125
+        },
+        {
+          "pid": 82892,
+          "kind": "gpu-process",
+          "workingSetBytes": 81731584,
+          "privateCommittedBytes": 75923456,
+          "handles": 579,
+          "cpuSeconds": 5.484375
+        },
+        {
+          "pid": 143052,
+          "kind": "utility",
+          "workingSetBytes": 36102144,
+          "privateCommittedBytes": 11341824,
+          "handles": 316,
+          "cpuSeconds": 0.140625
+        },
+        {
+          "pid": 129164,
+          "kind": "utility",
+          "workingSetBytes": 20152320,
+          "privateCommittedBytes": 7729152,
+          "handles": 191,
+          "cpuSeconds": 0.0625
+        },
+        {
+          "pid": 15208,
+          "kind": "renderer",
+          "workingSetBytes": 78594048,
+          "privateCommittedBytes": 32514048,
+          "handles": 282,
+          "cpuSeconds": 5.359375
+        },
+        {
+          "pid": 144292,
+          "kind": "renderer",
+          "workingSetBytes": 82878464,
+          "privateCommittedBytes": 36601856,
+          "handles": 290,
+          "cpuSeconds": 0.28125
+        }
+      ]
+    },
+    {
+      "elapsedSeconds": 15.919,
+      "processes": 8,
+      "renderers": 2,
+      "workingSetBytes": 456548352.0,
+      "privateCommittedBytes": 258338816.0,
+      "handles": 3524.0,
+      "details": [
+        {
+          "pid": 105016,
+          "kind": "host",
+          "workingSetBytes": 32116736,
+          "privateCommittedBytes": 56778752,
+          "handles": 450,
+          "cpuSeconds": 0.328125
+        },
+        {
+          "pid": 17088,
+          "kind": "browser",
+          "workingSetBytes": 113639424,
+          "privateCommittedBytes": 34373632,
+          "handles": 1233,
+          "cpuSeconds": 0.953125
+        },
+        {
+          "pid": 90512,
+          "kind": "crashpad-handler",
+          "workingSetBytes": 11141120,
+          "privateCommittedBytes": 2936832,
+          "handles": 183,
+          "cpuSeconds": 0.03125
+        },
+        {
+          "pid": 82892,
+          "kind": "gpu-process",
+          "workingSetBytes": 81735680,
+          "privateCommittedBytes": 75923456,
+          "handles": 579,
+          "cpuSeconds": 5.515625
+        },
+        {
+          "pid": 143052,
+          "kind": "utility",
+          "workingSetBytes": 36102144,
+          "privateCommittedBytes": 11341824,
+          "handles": 316,
+          "cpuSeconds": 0.140625
+        },
+        {
+          "pid": 129164,
+          "kind": "utility",
+          "workingSetBytes": 20152320,
+          "privateCommittedBytes": 7729152,
+          "handles": 191,
+          "cpuSeconds": 0.0625
+        },
+        {
+          "pid": 15208,
+          "kind": "renderer",
+          "workingSetBytes": 78782464,
+          "privateCommittedBytes": 32653312,
+          "handles": 282,
+          "cpuSeconds": 5.4375
+        },
+        {
+          "pid": 144292,
+          "kind": "renderer",
+          "workingSetBytes": 82878464,
+          "privateCommittedBytes": 36601856,
+          "handles": 290,
+          "cpuSeconds": 0.28125
+        }
+      ]
+    },
+    {
+      "elapsedSeconds": 21.21,
+      "processes": 8,
+      "renderers": 2,
+      "workingSetBytes": 459341824.0,
+      "privateCommittedBytes": 260972544.0,
+      "handles": 3528.0,
+      "details": [
+        {
+          "pid": 105016,
+          "kind": "host",
+          "workingSetBytes": 32116736,
+          "privateCommittedBytes": 56778752,
+          "handles": 450,
+          "cpuSeconds": 0.328125
+        },
+        {
+          "pid": 17088,
+          "kind": "browser",
+          "workingSetBytes": 116105216,
+          "privateCommittedBytes": 36323328,
+          "handles": 1235,
+          "cpuSeconds": 1.109375
+        },
+        {
+          "pid": 90512,
+          "kind": "crashpad-handler",
+          "workingSetBytes": 11141120,
+          "privateCommittedBytes": 2936832,
+          "handles": 183,
+          "cpuSeconds": 0.03125
+        },
+        {
+          "pid": 82892,
+          "kind": "gpu-process",
+          "workingSetBytes": 81739776,
+          "privateCommittedBytes": 75923456,
+          "handles": 579,
+          "cpuSeconds": 5.609375
+        },
+        {
+          "pid": 143052,
+          "kind": "utility",
+          "workingSetBytes": 36171776,
+          "privateCommittedBytes": 11497472,
+          "handles": 316,
+          "cpuSeconds": 0.15625
+        },
+        {
+          "pid": 129164,
+          "kind": "utility",
+          "workingSetBytes": 20152320,
+          "privateCommittedBytes": 7729152,
+          "handles": 191,
+          "cpuSeconds": 0.0625
+        },
+        {
+          "pid": 15208,
+          "kind": "renderer",
+          "workingSetBytes": 79003648,
+          "privateCommittedBytes": 33181696,
+          "handles": 283,
+          "cpuSeconds": 5.640625
+        },
+        {
+          "pid": 144292,
+          "kind": "renderer",
+          "workingSetBytes": 82911232,
+          "privateCommittedBytes": 36601856,
+          "handles": 291,
+          "cpuSeconds": 0.28125
+        }
+      ]
+    },
+    {
+      "elapsedSeconds": 26.418,
+      "processes": 8,
+      "renderers": 2,
+      "workingSetBytes": 459538432.0,
+      "privateCommittedBytes": 260984832.0,
+      "handles": 3528.0,
+      "details": [
+        {
+          "pid": 105016,
+          "kind": "host",
+          "workingSetBytes": 32116736,
+          "privateCommittedBytes": 56778752,
+          "handles": 450,
+          "cpuSeconds": 0.328125
+        },
+        {
+          "pid": 17088,
+          "kind": "browser",
+          "workingSetBytes": 116105216,
+          "privateCommittedBytes": 36323328,
+          "handles": 1235,
+          "cpuSeconds": 1.109375
+        },
+        {
+          "pid": 90512,
+          "kind": "crashpad-handler",
+          "workingSetBytes": 11141120,
+          "privateCommittedBytes": 2936832,
+          "handles": 183,
+          "cpuSeconds": 0.03125
+        },
+        {
+          "pid": 82892,
+          "kind": "gpu-process",
+          "workingSetBytes": 81747968,
+          "privateCommittedBytes": 75923456,
+          "handles": 579,
+          "cpuSeconds": 5.640625
+        },
+        {
+          "pid": 143052,
+          "kind": "utility",
+          "workingSetBytes": 36171776,
+          "privateCommittedBytes": 11497472,
+          "handles": 316,
+          "cpuSeconds": 0.15625
+        },
+        {
+          "pid": 129164,
+          "kind": "utility",
+          "workingSetBytes": 20152320,
+          "privateCommittedBytes": 7729152,
+          "handles": 191,
+          "cpuSeconds": 0.0625
+        },
+        {
+          "pid": 15208,
+          "kind": "renderer",
+          "workingSetBytes": 79192064,
+          "privateCommittedBytes": 33193984,
+          "handles": 283,
+          "cpuSeconds": 5.828125
+        },
+        {
+          "pid": 144292,
+          "kind": "renderer",
+          "workingSetBytes": 82911232,
+          "privateCommittedBytes": 36601856,
+          "handles": 291,
+          "cpuSeconds": 0.28125
+        }
+      ]
+    },
+    {
+      "elapsedSeconds": 31.633,
+      "processes": 8,
+      "renderers": 2,
+      "workingSetBytes": 459702272.0,
+      "privateCommittedBytes": 261120000.0,
+      "handles": 3528.0,
+      "details": [
+        {
+          "pid": 105016,
+          "kind": "host",
+          "workingSetBytes": 32120832,
+          "privateCommittedBytes": 56782848,
+          "handles": 450,
+          "cpuSeconds": 0.328125
+        },
+        {
+          "pid": 17088,
+          "kind": "browser",
+          "workingSetBytes": 116117504,
+          "privateCommittedBytes": 36343808,
+          "handles": 1235,
+          "cpuSeconds": 1.140625
+        },
+        {
+          "pid": 90512,
+          "kind": "crashpad-handler",
+          "workingSetBytes": 11141120,
+          "privateCommittedBytes": 2936832,
+          "handles": 183,
+          "cpuSeconds": 0.03125
+        },
+        {
+          "pid": 82892,
+          "kind": "gpu-process",
+          "workingSetBytes": 81752064,
+          "privateCommittedBytes": 75923456,
+          "handles": 579,
+          "cpuSeconds": 5.671875
+        },
+        {
+          "pid": 143052,
+          "kind": "utility",
+          "workingSetBytes": 36126720,
+          "privateCommittedBytes": 11341824,
+          "handles": 316,
+          "cpuSeconds": 0.15625
+        },
+        {
+          "pid": 129164,
+          "kind": "utility",
+          "workingSetBytes": 20152320,
+          "privateCommittedBytes": 7729152,
+          "handles": 191,
+          "cpuSeconds": 0.0625
+        },
+        {
+          "pid": 15208,
+          "kind": "renderer",
+          "workingSetBytes": 79380480,
+          "privateCommittedBytes": 33460224,
+          "handles": 283,
+          "cpuSeconds": 5.921875
+        },
+        {
+          "pid": 144292,
+          "kind": "renderer",
+          "workingSetBytes": 82911232,
+          "privateCommittedBytes": 36601856,
+          "handles": 291,
+          "cpuSeconds": 0.28125
+        }
+      ]
+    },
+    {
+      "elapsedSeconds": 36.857,
+      "processes": 8,
+      "renderers": 2,
+      "workingSetBytes": 461078528.0,
+      "privateCommittedBytes": 262258688.0,
+      "handles": 3529.0,
+      "details": [
+        {
+          "pid": 105016,
+          "kind": "host",
+          "workingSetBytes": 32215040,
+          "privateCommittedBytes": 56709120,
+          "handles": 452,
+          "cpuSeconds": 0.359375
+        },
+        {
+          "pid": 17088,
+          "kind": "browser",
+          "workingSetBytes": 116133888,
+          "privateCommittedBytes": 36360192,
+          "handles": 1234,
+          "cpuSeconds": 1.140625
+        },
+        {
+          "pid": 90512,
+          "kind": "crashpad-handler",
+          "workingSetBytes": 11141120,
+          "privateCommittedBytes": 2936832,
+          "handles": 183,
+          "cpuSeconds": 0.03125
+        },
+        {
+          "pid": 82892,
+          "kind": "gpu-process",
+          "workingSetBytes": 81756160,
+          "privateCommittedBytes": 75923456,
+          "handles": 579,
+          "cpuSeconds": 5.78125
+        },
+        {
+          "pid": 143052,
+          "kind": "utility",
+          "workingSetBytes": 36126720,
+          "privateCommittedBytes": 11341824,
+          "handles": 316,
+          "cpuSeconds": 0.15625
+        },
+        {
+          "pid": 129164,
+          "kind": "utility",
+          "workingSetBytes": 20152320,
+          "privateCommittedBytes": 7729152,
+          "handles": 191,
+          "cpuSeconds": 0.0625
+        },
+        {
+          "pid": 15208,
+          "kind": "renderer",
+          "workingSetBytes": 80642048,
+          "privateCommittedBytes": 34656256,
+          "handles": 283,
+          "cpuSeconds": 6.140625
+        },
+        {
+          "pid": 144292,
+          "kind": "renderer",
+          "workingSetBytes": 82911232,
+          "privateCommittedBytes": 36601856,
+          "handles": 291,
+          "cpuSeconds": 0.28125
+        }
+      ]
+    },
+    {
+      "elapsedSeconds": 42.101,
+      "processes": 8,
+      "renderers": 2,
+      "workingSetBytes": 459616256.0,
+      "privateCommittedBytes": 260620288.0,
+      "handles": 3529.0,
+      "details": [
+        {
+          "pid": 105016,
+          "kind": "host",
+          "workingSetBytes": 32022528,
+          "privateCommittedBytes": 56512512,
+          "handles": 452,
+          "cpuSeconds": 0.359375
+        },
+        {
+          "pid": 17088,
+          "kind": "browser",
+          "workingSetBytes": 114688000,
+          "privateCommittedBytes": 34918400,
+          "handles": 1234,
+          "cpuSeconds": 1.140625
+        },
+        {
+          "pid": 90512,
+          "kind": "crashpad-handler",
+          "workingSetBytes": 11141120,
+          "privateCommittedBytes": 2936832,
+          "handles": 183,
+          "cpuSeconds": 0.03125
+        },
+        {
+          "pid": 82892,
+          "kind": "gpu-process",
+          "workingSetBytes": 81764352,
+          "privateCommittedBytes": 75923456,
+          "handles": 579,
+          "cpuSeconds": 5.828125
+        },
+        {
+          "pid": 143052,
+          "kind": "utility",
+          "workingSetBytes": 36126720,
+          "privateCommittedBytes": 11341824,
+          "handles": 316,
+          "cpuSeconds": 0.15625
+        },
+        {
+          "pid": 129164,
+          "kind": "utility",
+          "workingSetBytes": 20152320,
+          "privateCommittedBytes": 7729152,
+          "handles": 191,
+          "cpuSeconds": 0.0625
+        },
+        {
+          "pid": 15208,
+          "kind": "renderer",
+          "workingSetBytes": 80809984,
+          "privateCommittedBytes": 34656256,
+          "handles": 283,
+          "cpuSeconds": 6.359375
+        },
+        {
+          "pid": 144292,
+          "kind": "renderer",
+          "workingSetBytes": 82911232,
+          "privateCommittedBytes": 36601856,
+          "handles": 291,
+          "cpuSeconds": 0.28125
+        }
+      ]
+    },
+    {
+      "elapsedSeconds": 47.315,
+      "processes": 8,
+      "renderers": 2,
+      "workingSetBytes": 459808768.0,
+      "privateCommittedBytes": 260886528.0,
+      "handles": 3529.0,
+      "details": [
+        {
+          "pid": 105016,
+          "kind": "host",
+          "workingSetBytes": 32022528,
+          "privateCommittedBytes": 56512512,
+          "handles": 452,
+          "cpuSeconds": 0.359375
+        },
+        {
+          "pid": 17088,
+          "kind": "browser",
+          "workingSetBytes": 114688000,
+          "privateCommittedBytes": 34918400,
+          "handles": 1234,
+          "cpuSeconds": 1.140625
+        },
+        {
+          "pid": 90512,
+          "kind": "crashpad-handler",
+          "workingSetBytes": 11141120,
+          "privateCommittedBytes": 2936832,
+          "handles": 183,
+          "cpuSeconds": 0.03125
+        },
+        {
+          "pid": 82892,
+          "kind": "gpu-process",
+          "workingSetBytes": 81768448,
+          "privateCommittedBytes": 75923456,
+          "handles": 579,
+          "cpuSeconds": 5.875
+        },
+        {
+          "pid": 143052,
+          "kind": "utility",
+          "workingSetBytes": 36126720,
+          "privateCommittedBytes": 11341824,
+          "handles": 316,
+          "cpuSeconds": 0.15625
+        },
+        {
+          "pid": 129164,
+          "kind": "utility",
+          "workingSetBytes": 20152320,
+          "privateCommittedBytes": 7729152,
+          "handles": 191,
+          "cpuSeconds": 0.0625
+        },
+        {
+          "pid": 15208,
+          "kind": "renderer",
+          "workingSetBytes": 80998400,
+          "privateCommittedBytes": 34922496,
+          "handles": 283,
+          "cpuSeconds": 6.515625
+        },
+        {
+          "pid": 144292,
+          "kind": "renderer",
+          "workingSetBytes": 82911232,
+          "privateCommittedBytes": 36601856,
+          "handles": 291,
+          "cpuSeconds": 0.28125
+        }
+      ]
+    },
+    {
+      "elapsedSeconds": 52.526,
+      "processes": 8,
+      "renderers": 2,
+      "workingSetBytes": 459993088.0,
+      "privateCommittedBytes": 261029888.0,
+      "handles": 3529.0,
+      "details": [
+        {
+          "pid": 105016,
+          "kind": "host",
+          "workingSetBytes": 32022528,
+          "privateCommittedBytes": 56512512,
+          "handles": 452,
+          "cpuSeconds": 0.359375
+        },
+        {
+          "pid": 17088,
+          "kind": "browser",
+          "workingSetBytes": 114688000,
+          "privateCommittedBytes": 34918400,
+          "handles": 1234,
+          "cpuSeconds": 1.140625
+        },
+        {
+          "pid": 90512,
+          "kind": "crashpad-handler",
+          "workingSetBytes": 11141120,
+          "privateCommittedBytes": 2936832,
+          "handles": 183,
+          "cpuSeconds": 0.03125
+        },
+        {
+          "pid": 82892,
+          "kind": "gpu-process",
+          "workingSetBytes": 81772544,
+          "privateCommittedBytes": 75923456,
+          "handles": 579,
+          "cpuSeconds": 5.953125
+        },
+        {
+          "pid": 143052,
+          "kind": "utility",
+          "workingSetBytes": 36126720,
+          "privateCommittedBytes": 11341824,
+          "handles": 316,
+          "cpuSeconds": 0.15625
+        },
+        {
+          "pid": 129164,
+          "kind": "utility",
+          "workingSetBytes": 20152320,
+          "privateCommittedBytes": 7729152,
+          "handles": 191,
+          "cpuSeconds": 0.0625
+        },
+        {
+          "pid": 15208,
+          "kind": "renderer",
+          "workingSetBytes": 81178624,
+          "privateCommittedBytes": 35065856,
+          "handles": 283,
+          "cpuSeconds": 6.703125
+        },
+        {
+          "pid": 144292,
+          "kind": "renderer",
+          "workingSetBytes": 82911232,
+          "privateCommittedBytes": 36601856,
+          "handles": 291,
+          "cpuSeconds": 0.28125
+        }
+      ]
+    },
+    {
+      "elapsedSeconds": 57.747,
+      "processes": 8,
+      "renderers": 2,
+      "workingSetBytes": 460214272.0,
+      "privateCommittedBytes": 261304320.0,
+      "handles": 3529.0,
+      "details": [
+        {
+          "pid": 105016,
+          "kind": "host",
+          "workingSetBytes": 32022528,
+          "privateCommittedBytes": 56512512,
+          "handles": 452,
+          "cpuSeconds": 0.359375
+        },
+        {
+          "pid": 17088,
+          "kind": "browser",
+          "workingSetBytes": 114708480,
+          "privateCommittedBytes": 34922496,
+          "handles": 1234,
+          "cpuSeconds": 1.140625
+        },
+        {
+          "pid": 90512,
+          "kind": "crashpad-handler",
+          "workingSetBytes": 11141120,
+          "privateCommittedBytes": 2936832,
+          "handles": 183,
+          "cpuSeconds": 0.03125
+        },
+        {
+          "pid": 82892,
+          "kind": "gpu-process",
+          "workingSetBytes": 81776640,
+          "privateCommittedBytes": 75923456,
+          "handles": 579,
+          "cpuSeconds": 6.0625
+        },
+        {
+          "pid": 143052,
+          "kind": "utility",
+          "workingSetBytes": 36126720,
+          "privateCommittedBytes": 11341824,
+          "handles": 316,
+          "cpuSeconds": 0.15625
+        },
+        {
+          "pid": 129164,
+          "kind": "utility",
+          "workingSetBytes": 20152320,
+          "privateCommittedBytes": 7729152,
+          "handles": 191,
+          "cpuSeconds": 0.0625
+        },
+        {
+          "pid": 15208,
+          "kind": "renderer",
+          "workingSetBytes": 81375232,
+          "privateCommittedBytes": 35336192,
+          "handles": 283,
+          "cpuSeconds": 6.890625
+        },
+        {
+          "pid": 144292,
+          "kind": "renderer",
+          "workingSetBytes": 82911232,
+          "privateCommittedBytes": 36601856,
+          "handles": 291,
+          "cpuSeconds": 0.28125
+        }
+      ]
+    },
+    {
+      "elapsedSeconds": 62.987,
+      "processes": 8,
+      "renderers": 2,
+      "workingSetBytes": 467025920.0,
+      "privateCommittedBytes": 263671808.0,
+      "handles": 3543.0,
+      "details": [
+        {
+          "pid": 105016,
+          "kind": "host",
+          "workingSetBytes": 32014336,
+          "privateCommittedBytes": 56479744,
+          "handles": 450,
+          "cpuSeconds": 0.359375
+        },
+        {
+          "pid": 17088,
+          "kind": "browser",
+          "workingSetBytes": 115286016,
+          "privateCommittedBytes": 35196928,
+          "handles": 1230,
+          "cpuSeconds": 1.21875
+        },
+        {
+          "pid": 90512,
+          "kind": "crashpad-handler",
+          "workingSetBytes": 11141120,
+          "privateCommittedBytes": 2936832,
+          "handles": 183,
+          "cpuSeconds": 0.03125
+        },
+        {
+          "pid": 82892,
+          "kind": "gpu-process",
+          "workingSetBytes": 82223104,
+          "privateCommittedBytes": 76013568,
+          "handles": 587,
+          "cpuSeconds": 6.40625
+        },
+        {
+          "pid": 143052,
+          "kind": "utility",
+          "workingSetBytes": 36548608,
+          "privateCommittedBytes": 11419648,
+          "handles": 322,
+          "cpuSeconds": 0.171875
+        },
+        {
+          "pid": 129164,
+          "kind": "utility",
+          "workingSetBytes": 20832256,
+          "privateCommittedBytes": 7938048,
+          "handles": 197,
+          "cpuSeconds": 0.078125
+        },
+        {
+          "pid": 15208,
+          "kind": "renderer",
+          "workingSetBytes": 86048768,
+          "privateCommittedBytes": 37085184,
+          "handles": 283,
+          "cpuSeconds": 7.125
+        },
+        {
+          "pid": 144292,
+          "kind": "renderer",
+          "workingSetBytes": 82931712,
+          "privateCommittedBytes": 36601856,
+          "handles": 291,
+          "cpuSeconds": 0.296875
+        }
+      ]
+    }
+  ],
+  "cpuObservationSeconds": 62.711,
+  "method": "暖机后每5秒采样当前隔离根进程及其WebView2父子链；每个PID+启动时间的累计CPU最大值减首样本基线；除首末样本间隔及逻辑核数；WS逐进程相加含共享页重复计数；采样间退出进程尾部CPU可能漏计；privateCommitted不是私有驻留工作集"
+}

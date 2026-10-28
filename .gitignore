@@ -1,0 +1,18 @@
+# 忽略可重复生成的依赖、构建产物与本机工具，不忽略依赖锁文件。
+/.tools/
+/bin/
+/frontend/node_modules/
+/frontend/dist/
+# 隔离运行资料、原始验证日志和被审批保留的二进制不作为项目源码提交。
+/.validation/
+*.syso
+*.log
+# 主仓库忽略所有 docs；桌宠的契约、验收记录和许可证属于交付源码，必须保留。
+!/docs/
+!/docs/**
+# 主仓库还可能忽略构建目录，Windows 清单和版本元数据需要随源码分发。
+!/build/
+!/build/windows/
+!/build/windows/*.manifest
+!/build/windows/*.json
+.idea

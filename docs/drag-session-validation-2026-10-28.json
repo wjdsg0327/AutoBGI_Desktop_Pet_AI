@@ -1,0 +1,205 @@
+{
+  "version": "0.2.13",
+  "date": "2026-10-28",
+  "status": "passed-with-cleanup-blocked",
+  "completeSpecificationAchieved": false,
+  "nativeAcceptancePerformed": false,
+  "productionServiceOrGameExecuted": false,
+  "performance250MBPassed": false,
+  "toolchain": "go1.26.10 windows/amd64",
+  "native": {
+    "rounds": 3,
+    "uniqueTopLevel": 18,
+    "uniqueNamed": 59,
+    "uniqueLeaf": 50,
+    "namedPasses": 177,
+    "leafPasses": 150,
+    "failures": 0,
+    "raceReports": 0,
+    "leafCases": [
+      "TestCanonicalLayout",
+      "TestHostApplyFailureCanRecover",
+      "TestHostApplyHighestPending",
+      "TestHostApplySerialDrain/ignore",
+      "TestHostApplySerialDrain/size",
+      "TestHostApplySerialDrain/visible",
+      "TestHostBeginReentryAndPendingCorrection/invalid-reset",
+      "TestHostBeginReentryAndPendingCorrection/new-begin",
+      "TestHostBeginReentryAndPendingCorrection/pending-correction",
+      "TestHostBeginReentryAndPendingCorrection/reset",
+      "TestHostEndReentry/new-begin",
+      "TestHostEndReentry/policy",
+      "TestHostEndReentry/reset",
+      "TestHostEnvironmentChanges/dpi",
+      "TestHostEnvironmentChanges/empty",
+      "TestHostEnvironmentChanges/generation",
+      "TestHostEnvironmentChanges/id",
+      "TestHostEnvironmentChanges/primary",
+      "TestHostEnvironmentChanges/size",
+      "TestHostEnvironmentChanges/workarea",
+      "TestHostMoveReentry/layout",
+      "TestHostMoveReentry/new-begin",
+      "TestHostMoveReentry/policy",
+      "TestHostMoveReentry/reset",
+      "TestHostNormalAndNoFramePersistence",
+      "TestHostPendingPolicyAndApplyReentry",
+      "TestHostPowerABA",
+      "TestHostPreferenceABA/clickthrough",
+      "TestHostPreferenceABA/quiet",
+      "TestHostPreferenceABA/scale",
+      "TestHostPreferenceABA/visible",
+      "TestHostSupersession",
+      "TestHostUnrelatedApplyKeepsDrag/always-on-top",
+      "TestHostUnrelatedApplyKeepsDrag/bubble",
+      "TestHostUnrelatedApplyKeepsDrag/same",
+      "TestRandomTokens",
+      "TestRawEnvironmentMessages/display",
+      "TestRawEnvironmentMessages/dpi",
+      "TestRawEnvironmentMessages/other-message",
+      "TestRawEnvironmentMessages/other-setting",
+      "TestRawEnvironmentMessages/workarea",
+      "TestStateConcurrentFinish",
+      "TestStateEnvironmentAndTokenIsolation/empty",
+      "TestStateEnvironmentAndTokenIsolation/generation",
+      "TestStateEnvironmentAndTokenIsolation/height",
+      "TestStateEnvironmentAndTokenIsolation/inf",
+      "TestStateEnvironmentAndTokenIsolation/layout",
+      "TestStateEnvironmentAndTokenIsolation/nan",
+      "TestStateEnvironmentAndTokenIsolation/scale",
+      "TestStateEnvironmentAndTokenIsolation/width"
+    ],
+    "actualHostFunctions": 28,
+    "source": ".validation/drag-session-domain-a1503d737c7b4cd6a9b28e5f39123ac3/validation.json",
+    "evidenceSha256": "cf76e3da53f7d17aefaf71e39e1a5fce5ffb30aaef22ac302ae6e7088dd81995",
+    "boundaries": [
+      "Wails UI dispatch replaced only by direct inline calls; no native UI thread proof",
+      "Native window/screen/Event and notification bodies are minimal memory substitutes",
+      "Production service getter and preference change comparison copied exactly except receiver type rename",
+      "Actual production Apply/drag/recovery/power methods extracted; source snippets hashed",
+      "Persistence savePosition records memory only; no real config/position/credentials accessed",
+      "Synthetic setter updates memory; actual service save/reconcile separately validated by server_protocol",
+      "Complete actual Apply drain covers reentry through fake native callbacks, not actual Windows nested pumping",
+      "Raw hook dynamically tested with synthetic message values; actual HostWindowsOptions wiring only source reviewed",
+      "Only received raw environment messages and observed snapshots invalidate; unbroadcast or unobserved ABA is not claimed detectable",
+      "Any app window DPI message conservatively cancels pet drag; mixed-DPI crossing may require pointer release and new press"
+    ]
+  },
+  "service": {
+    "uniqueNamed": 20,
+    "uniqueLeaf": 17,
+    "runs": [
+      "normal",
+      "race"
+    ],
+    "failures": 0,
+    "source": ".validation/drag-policy-service-ca52802b25134236b69955b5486388a5/validation.json",
+    "evidenceSha256": "e36e227f4c0cf87a3e27ea2a7d14754a1deb63b419f5376faff684da227d7fd4",
+    "boundaries": [
+      "No service.New/storage.New or real user configuration/credential reads",
+      "No actual AutoBGI/BetterGI/game, GUI, network request, display change or power event",
+      "Actual service.go, drag_policy.go, storage and profile sources compiled through overlay",
+      "Only platform startup_windows.go replaced by pure atomic memory stub to intercept existing unconditional Save-failure rollback",
+      "Existing protected notification test file not modified/deleted and not selected by test run expression",
+      "No production files or frozen 0.2.12 release/doc/evidence artifacts modified",
+      "No native interaction or packaged EXE validation claimed"
+    ]
+  },
+  "frontend": {
+    "controllerPassed": 32,
+    "actualVueMountedPassed": 21,
+    "totalPassed": 53,
+    "failed": 0,
+    "source": ".validation/drag-session-client-d6a3c34d-06aa-4b58-bb87-f32b78e04084/client-validation.json",
+    "evidenceSha256": "b50a5219e8179a8c81ed2244cbb2ee0e0b6c1755ef410a8f27dbc3227e9ef4cb",
+    "boundary": "Production PetView.vue compiled and mounted with installed Vue; synthetic renderer and injected desktop/store dependencies; PetCanvas receives actual action/visible props through a boundary stub.",
+    "nativeAcceptance": "Not performed: real browser pointer capture, rendering animation, Wails runtime, Windows DPI/hotplug, GUI and disk persistence."
+  },
+  "build": {
+    "status": "passed",
+    "productionInputsStable": 127,
+    "goVetPassed": true,
+    "goBuildPassed": true,
+    "script": "scripts/build.ps1",
+    "scriptPackageSwitch": false,
+    "toolchain": "go1.26.10 windows/amd64",
+    "wails": "v3.0.0",
+    "methods": 47,
+    "models": 49,
+    "viteModules": 92,
+    "executable": {
+      "path": "bin/AutoBGI-Pet.exe",
+      "bytes": 12656640,
+      "sha256": "23af3113a9d843bb930dd0119945f1e6fe5b806bc737811a3a04f02d1e115e05",
+      "fileVersion": "0.2.13.0",
+      "productVersion": "0.2.13",
+      "guiExecuted": false
+    },
+    "nativeExecutionPerformed": false
+  },
+  "cleanup": {
+    "frontendCreatedTestSources": false,
+    "service": "three temporary files removed successfully in one exact attempt",
+    "native": {
+      "state": "single-exact-cleanup-rejected-before-execution",
+      "reason": "Automatic approval review rejected the exact PowerShell file cleanup before execution: blocked by policy",
+      "retryProhibited": true,
+      "files": [
+        {
+          "path": ".validation/drag-session-domain-a1503d737c7b4cd6a9b28e5f39123ac3/host_actual.go",
+          "sha256": "9c8520dd1c0bfa3c8a415c2e398b139389ca0064d270ab8b92168e3a40e63ef5",
+          "exists": true
+        },
+        {
+          "path": ".validation/drag-session-domain-a1503d737c7b4cd6a9b28e5f39123ac3/policy_actual.go",
+          "sha256": "ccf853ae4c91fb478577fd961596d5d5d0d2291fef760506084028574cf64e81",
+          "exists": true
+        },
+        {
+          "path": ".validation/drag-session-domain-a1503d737c7b4cd6a9b28e5f39123ac3/session_validation_test.go",
+          "sha256": "5d9ff18a51c7ecba4e11cffc96594437ee68b1288b99f37bed4e8e937e4f3d19",
+          "exists": true
+        },
+        {
+          "path": ".validation/drag-session-domain-a1503d737c7b4cd6a9b28e5f39123ac3/source_drag_state.go",
+          "sha256": "c14bf3bc9d4b95f98bdae5b6cab1840355b7d307562bf4b8a6a99eb4c08d3aa0",
+          "exists": true
+        },
+        {
+          "path": ".validation/drag-session-domain-a1503d737c7b4cd6a9b28e5f39123ac3/source_drag_windows.go",
+          "sha256": "2704bd85bbe08cc47570aff2c331d2f0d84fe761c263973e34a63b674171e854",
+          "exists": true
+        },
+        {
+          "path": ".validation/drag-session-domain-a1503d737c7b4cd6a9b28e5f39123ac3/source_geometry.go",
+          "sha256": "e34e51a75c87c0fc1886cc9027a0762ba6003f95d044ade34e70853b8bf69c42",
+          "exists": true
+        },
+        {
+          "path": ".validation/drag-session-domain-a1503d737c7b4cd6a9b28e5f39123ac3/source_monitor_state.go",
+          "sha256": "12968b3df658e40696b7664f23826d3b0684a6098a6772a340a5dc108933931d",
+          "exists": true
+        },
+        {
+          "path": ".validation/drag-session-domain-a1503d737c7b4cd6a9b28e5f39123ac3/source_power.go",
+          "sha256": "ce58807155afddb9283c9c176fd192dc64e340c78521544fc1851c58e2ca083b",
+          "exists": true
+        },
+        {
+          "path": ".validation/drag-session-domain-a1503d737c7b4cd6a9b28e5f39123ac3/support.go",
+          "sha256": "bd71fc814ae91fae6fc3049d579d95b787196865bda1639a43bea7e5921bfe84",
+          "exists": true
+        }
+      ]
+    },
+    "historicalProtectedTargetsUntouched": true,
+    "normalBuildValidationSourcesIncluded": false,
+    "portablePackageExcludesValidation": true
+  },
+  "otherIncomplete": [
+    "可信库存身份、覆盖及官方材料映射",
+    "生产培养配置提交与外部写入条件所有权",
+    "可靠游戏任务终态",
+    "真实 Windows 多屏、DPI、触摸、穿透、焦点及休眠验收",
+    "250 MB 内存目标与长期耐久"
+  ]
+}

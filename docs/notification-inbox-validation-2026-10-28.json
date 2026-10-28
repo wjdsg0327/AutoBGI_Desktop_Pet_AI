@@ -1,0 +1,193 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-28",
+  "version": "0.2.9",
+  "status": "controlled-validation-passed",
+  "toolchain": "Go 1.26.10 windows/amd64; Wails/runtime 3.0.0",
+  "build": {
+    "goVet": "passed",
+    "goBuild": "passed",
+    "wailsMethods": 41,
+    "wailsModels": 46,
+    "viteModules": 90,
+    "typescript": "passed",
+    "windowsFileVersion": "0.2.9.0",
+    "productVersion": "0.2.9",
+    "production": true,
+    "trimpath": true,
+    "callerToolchainEnvironmentRestored": true,
+    "exeSha256": "24feef582dd3929f607ea1da478717002c233d1b3f97073e7c2637621afc17f7"
+  },
+  "storage": {
+    "rounds": 3,
+    "uniqueTopLevel": 15,
+    "uniqueNamed": 72,
+    "uniqueLeaf": 67,
+    "namedPasses": 216,
+    "leafPasses": 201,
+    "failures": 0,
+    "races": 0,
+    "evidence": ".validation/notification-storage-domain-20261028/validation.json"
+  },
+  "service": {
+    "rounds": 3,
+    "uniqueTopLevel": 11,
+    "uniqueNamed": 15,
+    "uniqueLeaf": 13,
+    "namedPasses": 45,
+    "failures": 0,
+    "evidence": ".validation/notification-service-20261028.json"
+  },
+  "independentReview": {
+    "namedPasses": 19,
+    "leafCases": 17,
+    "failures": 0,
+    "sourceFilesStable": 10,
+    "result": "passed",
+    "evidence": ".validation/notification-server-review-1cf6d7bf-5b72-46f6-80de-bfb28084aaef/review-result.json"
+  },
+  "frontend": {
+    "checks": 10,
+    "result": "passed",
+    "method": "Actual Vue/Pinia custom renderer via Node stdin",
+    "evidence": ".validation/durable-notification-20261028/frontend-validation.json"
+  },
+  "cleanup": {
+    "storageTestDeleted": true,
+    "independentOverlayDeleted": true,
+    "frontendTestSourceCreated": false,
+    "serviceTestDeleted": false,
+    "serviceTest": "internal/service/notification_inbox_20261028_validation_tmp_test.go",
+    "serviceTestTag": "notification_inbox_validation",
+    "serviceTestOrdinaryBuildExcluded": true,
+    "serviceDeletionAttempts": 1,
+    "serviceDeletionRejection": "blocked by policy",
+    "rootCombinedCommandRejected": true,
+    "rootTargetCreated": false,
+    "rootTarget": "AutoBGI_Desktop_Pet_AI/internal/notification/durable_quiet_validation_test.go",
+    "alternativeDeletionAttempted": false,
+    "priorProtectedTargetsTouched": false
+  },
+  "boundaries": {
+    "nativeWindowsUIValidated": false,
+    "productionAutoBGIRun": false,
+    "gameControlRun": false,
+    "realAccountsOrCredentialsUsed": false,
+    "realAutoBGIServiceNetworkUsed": false,
+    "processKillOrPowerLossValidated": false,
+    "memory250MBTargetPassed": false,
+    "reliableGameCompletionEventsAvailable": false,
+    "verifiedInventoryAvailable": false,
+    "productionCultivationCASAvailable": false
+  },
+  "sourceHashes": [
+    {
+      "path": "internal/storage/journal.go",
+      "sha256": "20e1e7b57aa0f86c2682db223bd37a5e1a4433d18c9861ba19f5755f66e89375"
+    },
+    {
+      "path": "internal/storage/notifications.go",
+      "sha256": "318d1eddf4d514c456a71887de41e949eb25fdc165d20c3186d02e0a2ba9f6d0"
+    },
+    {
+      "path": "internal/storage/notification_json.go",
+      "sha256": "efa67e46a36cd837e11ea91ead33ec60ace2f9138d9b2056c551bd733d64278e"
+    },
+    {
+      "path": "internal/service/types.go",
+      "sha256": "925beff887807858887a0f299f8caf86a1b6354fd1c66a660289596425e71ab1"
+    },
+    {
+      "path": "internal/service/service.go",
+      "sha256": "16bfd6f23ee6266bfa5bb6bdc348dce49049191ee445c8b6ead2f6a03ad1b5d7"
+    },
+    {
+      "path": "internal/service/notifications.go",
+      "sha256": "29d0c09e0480779a3b6a86a57fe51757ccb9d703acc685de06607dbca79987e5"
+    },
+    {
+      "path": "internal/service/commands.go",
+      "sha256": "0bbdd27ff6e915ec2aa6677fb9b848cf00d7691fd20c5af9694996f5ebf69bb1"
+    },
+    {
+      "path": "internal/service/events.go",
+      "sha256": "954451e5ef7c666fca0263e48726ffa3e4e94e623560b727579ccd54421b2f12"
+    },
+    {
+      "path": "internal/service/poll.go",
+      "sha256": "6b00bfd6eb0c1f38ce50eabb1577a31ba12bf94b9642b10eefbb4101726914ed"
+    },
+    {
+      "path": "internal/service/materials_ready.go",
+      "sha256": "8b10c0d5eecf5fe630be4c5e70ca22f9b2d52bdf73f13139d26fd1b11f3d455e"
+    },
+    {
+      "path": "internal/notification/center.go",
+      "sha256": "7c44b0c6ea79666b76029195d27f5ed62fdf9a551b1c300500142fa9d3b7fa75"
+    },
+    {
+      "path": "internal/desktop/bubble_state.go",
+      "sha256": "54f375e30e348114556230da89930ca72c0ec37ad8db3d650d433ee3c577163b"
+    },
+    {
+      "path": "internal/desktop/power.go",
+      "sha256": "38f739e6972a221574b1726cceef47bc3d82c01192f40dc61708cee3821fcb63"
+    },
+    {
+      "path": "frontend/src/bridge.ts",
+      "sha256": "16a73c78a1201c8ac4a709e4a7f097fee57226829487c544b0db9beec472f8c9"
+    },
+    {
+      "path": "frontend/src/stores/app.ts",
+      "sha256": "cfcc209762ced454d4a043806f291fb7f9dd2ef729f9e4aa02667d7f04f4c56a"
+    },
+    {
+      "path": "frontend/src/components/NotificationHistory.vue",
+      "sha256": "6b9ab393303ceb4ac7f68670d26c3fde4055872d7fafbaf7133648d562461ca3"
+    },
+    {
+      "path": "frontend/src/views/PanelView.vue",
+      "sha256": "acfa70625c6c2086ca6d48f67a1f6ccad1eac0a1a834cbdb938f6f8c0207276f"
+    },
+    {
+      "path": "frontend/bindings/autobgi-pet/internal/service/models.ts",
+      "sha256": "463c2a0d2c2631526e70f5c056ad037adf5b5a71e3caa89a8c5b960756ec981a"
+    },
+    {
+      "path": "frontend/bindings/autobgi-pet/internal/service/service.ts",
+      "sha256": "7c7e03e4f13f85482bcfb179140a0120971fc609de3c4ed4c3b0cf4b4c22b2a5"
+    },
+    {
+      "path": "scripts/build.ps1",
+      "sha256": "b13e1e18a257b65b81de98cad2112934e44b8968f1a7a702c225a2e809178a53"
+    },
+    {
+      "path": "scripts/dev.ps1",
+      "sha256": "779916252e812e7546c1de99dde41add6f32a908e28503f90505086ca339291f"
+    },
+    {
+      "path": "build/windows/info.json",
+      "sha256": "c99f3d289d7830a218e0d130ac364ee303f8f05b90ccc67ed2aeef390b9582b7"
+    },
+    {
+      "path": "frontend/package.json",
+      "sha256": "c9d459f3f921de96c491e2d9042995189323179c7ca16cdde6d575ec128a5bc0"
+    },
+    {
+      "path": "frontend/package-lock.json",
+      "sha256": "994212269b56a617bd386da1e2378e6a9b505cbc85f3e36efe9e1bab2f3db458"
+    },
+    {
+      "path": "README.md",
+      "sha256": "8b272049a9cc80866e9811ab6b0430dcb93dff46f91915dfcfa4eac411cab10c"
+    },
+    {
+      "path": "docs/acceptance.md",
+      "sha256": "62dc24a3b0c4629e1c3ecd4aa6fffcdc59c7185c01a54190b6e95b2d780ed1b1"
+    },
+    {
+      "path": "docs/notification-inbox-2026-10-28.md",
+      "sha256": "6bce95fb44efc0ef361ccdcf5386df403cad77d60a9f426e0f9c02dc2d1f2596"
+    }
+  ]
+}

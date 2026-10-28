@@ -1,0 +1,228 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-27",
+  "status": "source-implemented-isolated-validation-passed",
+  "overallSpecificationComplete": false,
+  "clientVersion": "0.2.5",
+  "clientRebuilt": false,
+  "productionAutoBGIBuiltOrStarted": false,
+  "scope": "AutoBGI companion server configuration lifecycle",
+  "validation": {
+    "database": {
+      "topLevel": 16,
+      "subcases": 72,
+      "raceRepeats": 5,
+      "passEvents": 440,
+      "failures": 0,
+      "skips": 0
+    },
+    "windowsFileAndSQLite": {
+      "topLevel": 8,
+      "subcases": 28,
+      "raceRepeats": 5,
+      "passEvents": 180,
+      "failures": 0,
+      "skips": 0,
+      "log": "C:\\Users\\oldwang\\AppData\\Local\\Temp\\autobgi-lifecycle-file-f5e31f8f66284dd5b283fd7224cafd25\\file-results.txt"
+    },
+    "legacyWriters": {
+      "groups": 5,
+      "raceRepeats": 5,
+      "passEvents": 25
+    },
+    "jsonAliasRegression": {
+      "groups": 2,
+      "raceRepeats": 5,
+      "passEvents": 10
+    },
+    "menuHTTP": {
+      "topLevel": 4,
+      "subcases": 21,
+      "race": true,
+      "passed": true
+    },
+    "pendingEmptyList": {
+      "topLevel": 1,
+      "subcases": 3,
+      "raceRepeats": 5,
+      "passed": true
+    },
+    "vueRuntime": {
+      "tests": 25,
+      "failures": 0,
+      "oldSupersededAssertionsExcluded": true
+    },
+    "existingNodeHelpers": {
+      "tests": 5,
+      "passed": true
+    },
+    "frontendBuild": {
+      "modules": 4136,
+      "finalSource": true,
+      "output": "isolated temporary directory",
+      "existingLargeChunkWarning": true
+    },
+    "finalChecks": [
+      "go vet ./TalentPlanService ./models ./bgiStatus ./OneLong ./characterDevelopment ./menu",
+      "go build ./TalentPlanService ./models ./bgiStatus ./OneLong ./characterDevelopment ./menu",
+      "git diff --check"
+    ]
+  },
+  "isolation": {
+    "preseededFakeAbsoluteBetterGIAddressBeforeFirstExecution": true,
+    "realCredentialsRead": false,
+    "realGameOrBetterGIControlled": false,
+    "systemNetworkOrSleepChanged": false,
+    "mavenExecuted": false
+  },
+  "cleanup": {
+    "newTestSourcesDeleted": true,
+    "originalTestsPreserved": true,
+    "standaloneTemporaryGoHelpersDeleted": true,
+    "rootExecutable": "C:\\Users\\oldwang\\AppData\\Local\\Temp\\autobgi-lifecycle-file-f5e31f8f66284dd5b283fd7224cafd25\\file-lifecycle.test.exe",
+    "rootExecutableRetained": true,
+    "rootLocationPointer": "AutoBGI_Desktop_Pet_AI/bin/lifecycle-validation-current.txt",
+    "aliasExecutableRetained": "C:\\Users\\oldwang\\AppData\\Local\\Temp\\autobgi-lifecycle-alias-review.test.exe",
+    "directoryCleanupBlocked": [
+      "AutoBGI_Desktop_Pet_AI/.validation/talent-lifecycle-domain",
+      "C:\\Users\\oldwang\\AppData\\Local\\Temp\\autobgi-writer-lifecycle-validation-client",
+      "C:\\Users\\oldwang\\AppData\\Local\\Temp\\autobgi-lifecycle-menu-validation-20261027",
+      "C:\\Users\\oldwang\\AppData\\Local\\Temp\\autobgi-lifecycle-pending-validation-20261027",
+      "C:\\Users\\oldwang\\AppData\\Local\\Temp\\autobgi-ntrelative-experiment-2703756419",
+      "C:\\Users\\oldwang\\AppData\\Local\\Temp\\autobgi-ntrelative-experiment-1423442386",
+      "C:\\Users\\oldwang\\AppData\\Local\\Temp\\autobgi-ntrelative-experiment-2833058151",
+      "C:\\Users\\oldwang\\AppData\\Local\\Temp\\autobgi-ntrelative-experiment-228092114",
+      "C:\\Users\\oldwang\\AppData\\Local\\Temp\\autobgi-ntrelative-experiment-2411996424",
+      "C:\\Users\\oldwang\\AppData\\Local\\Temp\\autobgi-ntrelative-experiment-817405120",
+      "C:\\Users\\oldwang\\AppData\\Local\\Temp\\autobgi-ntrelative-experiment-2320705324",
+      "C:\\Users\\oldwang\\AppData\\Local\\Temp\\autobgi-ntrelative-experiment-247501422"
+    ],
+    "reason": "Automatic approval review: blocked by policy; no more specific reason supplied",
+    "equivalentRemovalRetried": false,
+    "previousRejectedTargetsUntouched": true,
+    "includedInPortableZip": false
+  },
+  "limitations": [
+    "Local Windows volumes only; UNC and reparse directories fail closed",
+    "Process interruption and recoverable IO/database failures validated; abrupt power loss and filesystem rollback not guaranteed",
+    "External recreation of old names remains possible; monotonic tombstones prevent inheriting the migrated queue",
+    "Native process dispatch is not part of this lifecycle transaction",
+    "Verified inventory, cultivation startup commit, daily-field conditional restore and completion producers remain incomplete"
+  ],
+  "sourceHashes": [
+    {
+      "path": "TalentPlanService/lifecycle.go",
+      "sha256": "1bb227ed68a1ba85afc3a4b9f14a41e97f92d421b123dd8357d7e1d8b0cab678"
+    },
+    {
+      "path": "TalentPlanService/lifecycle_types.go",
+      "sha256": "5216dd62f3063506a1855b62b1779a088fc220bc5d7e10bc85b420df6c192968"
+    },
+    {
+      "path": "TalentPlanService/store.go",
+      "sha256": "05b70ccf193329b7e225fae4b133492bf5a4f73a14bc6e247c1090afed8926e3"
+    },
+    {
+      "path": "models/TalentQueueLifecycleModel.go",
+      "sha256": "64ce989fe085b4c39a21872d5d3bff1ba1e5235b2e4739817853a827c2c1eed7"
+    },
+    {
+      "path": "models/InitDB.go",
+      "sha256": "47d2cbd142d14ced346a1bb86f6cb60fb05f7ecee9b5688883d4f6c1a4d84189"
+    },
+    {
+      "path": "bgiStatus/one_dragon_lifecycle_windows.go",
+      "sha256": "7f775e962d58273929608e47e5368557bdc4c37abd96bcb1c43af89424c7a43f"
+    },
+    {
+      "path": "bgiStatus/talent_queue_lifecycle.go",
+      "sha256": "52c568d35d6a2d079eca0e1bfa1e73adcb09d45d9dc786471a31bd7471815b1a"
+    },
+    {
+      "path": "bgiStatus/OneDragon.go",
+      "sha256": "1fc96532a3f4abf4c52b9c3fa46d6c5eb915209187d2d9dd6cc33a2653e10ae2"
+    },
+    {
+      "path": "bgiStatus/BetterGIService.go",
+      "sha256": "a24591a215e460f7dc2955cea7d177f360546ff92e0c65709b267ff8b4d923a4"
+    },
+    {
+      "path": "bgiStatus/OneDragonResume.go",
+      "sha256": "a47537dcd2b1adb83c7317dbb239eb1a4ebb443b5ee45a50e4f12d3e0c030cbd"
+    },
+    {
+      "path": "bgiStatus/OneDragonGroupProgress.go",
+      "sha256": "e5102c18b77a4f8c7d5ac9bcb4f1c2a78c48a8ed36c32a8125040a03f5fb2178"
+    },
+    {
+      "path": "bgiStatus/OneDragonLog.go",
+      "sha256": "3af43383fcefc713f874a04a80661188e9aa6088023a311c57c9f60836a8b3d6"
+    },
+    {
+      "path": "OneLong/OneDragon.go",
+      "sha256": "c80ad5be61fe9316d359b208c084ccc85a604702591b043679fef4c712c7339c"
+    },
+    {
+      "path": "OneLong/ChaBaoOneDragon.go",
+      "sha256": "e685e1f4a4dfee789d69208f46b463617ded6be695e3c60c1e4e6d237a40b96e"
+    },
+    {
+      "path": "OneLong/oneLong.go",
+      "sha256": "c9841b46ceba803242bb01ecdb2b20a94c0ea68f6832e37b405ca6e668035e51"
+    },
+    {
+      "path": "characterDevelopment/characterPlan.go",
+      "sha256": "5ced2e07576539cff1323d2294b761306f20bb96351921d258e7339a5802218f"
+    },
+    {
+      "path": "menu/talent_queue_lifecycle.go",
+      "sha256": "43df7fa4baa8f9e9f9fe7de34a075fef5d6cd4fdc896a6a39e5bccdcb1e2b689"
+    },
+    {
+      "path": "menu/routes_talent_queue.go",
+      "sha256": "1fd3974cb1bf9d5c1cb908f9c306e5431a7c7ba145482a4c69774b14cdfbe47f"
+    },
+    {
+      "path": "menu/web/src/views/BgiConfig.vue",
+      "sha256": "df7b54d8606ae5d8801e7f6c2cdc1b8b71e2001cd634177af5cc1f034b4a8ae6"
+    },
+    {
+      "path": "menu/web/src/components/TalentQueueEditor.vue",
+      "sha256": "1814af35d9e2bb6a1354788acedf5d474ab88a650618174b350d739df3968a62"
+    },
+    {
+      "path": "menu/web/src/utils/api/plans.js",
+      "sha256": "8e620a53c6fc988e5fed8aaf282c08e2d24df091241e1739b35cb0c92ae0d5c9"
+    }
+  ],
+  "portableArtifacts": [
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/bin/AutoBGI-Pet.exe",
+      "sha256": "b0e13b9b854cc33d27bdc4e1f891f2084e2482768d88732ca5f8a7ec2e16637c",
+      "rebuilt": false
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/bin/AutoBGI-Pet-0.2.5-windows-amd64.zip",
+      "sha256": "354f01ccde989db8974c9966df713a16bd7941778e68aee1650b22fa55b9d2cf",
+      "rebuilt": false
+    }
+  ],
+  "preservedFiles": [
+    {
+      "path": "abgi-updater.exe",
+      "sha256": "0279ba6eee199c3c1fd8fead6b360405bef5d68f07067b6ab95b26d6a6150b79"
+    },
+    {
+      "path": "menu/routes_integrations.go",
+      "sha256": "6b9646ea8ec1ad40304f0455177298ad263ead6646f88008c9a5e8e60eaaa20a"
+    },
+    {
+      "path": "menu/web/index.html",
+      "sha256": "eaac84812b78a8d98b627f5993a8f43031e96588c246581b038de184d1728910"
+    },
+    {
+      "path": "menu/web/version.txt",
+      "sha256": "cd850eac690d0865560c6a20ff3468e2bc700d6594f372a8f53faf628c14783a"
+    }
+  ]
+}

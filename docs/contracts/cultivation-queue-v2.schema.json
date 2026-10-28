@@ -1,0 +1,844 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:autobgi:desktop-pet:v1:cultivation-queue-v2-response",
+  "title": "AutoBGI 桌宠正式培养队列技能目标第二版只读响应",
+  "description": "同时声明 cultivationQueue 与 cultivationQueueSkillTargets 时，显式请求 GET /api/desktop-pet/v1/cultivation-queue?presetId=preset-<32位小写十六进制>&schemaVersion=2。只接受两个参数各一次，顺序可互换，原始拼写不得编码。缺省版本继续使用独立第一版合同。必须使用 apiKey 请求头；绑定只描述用户保存的意图，不提供可信面板、库存或执行授权。",
+  "$comment": "本文件校验静态形状、范围和来源条件。标准 JSON Schema 不比较不同字段的动态值：队首等于第一条保存 ID、条目/角色/名称/材料 ID 唯一、addedAt<=updatedAt、sourceTime<=fetchedAt、当前面板与目标及正需求一致，由 desktopPet/cultivation_queue.go 和桌宠 Go 客户端再次校验。服务端还约束 UTF-8 字节长度、真实预设白名单、实例/执行目录/文件版本一致及数据 JSON 最多 2 MiB。日期按 Go RFC3339Nano 校验，不得将未知时间替换为当前时间。使用校验器时必须启用 date-time 格式断言。 第二版为独立合同；每项必须包含 targetSkills:null 或完整绑定对象，三项实际技能编号必须互异且按已保存 A/E/Q 顺序。客户端必须按请求能力冻结预期版本，任何方向的版本不匹配均拒绝，不降级、重试或丢字段。",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "code",
+    "message",
+    "requestId",
+    "serverTime",
+    "data"
+  ],
+  "properties": {
+    "code": {
+      "type": "string",
+      "description": "成功为 OK；失败使用下方固定业务错误码。"
+    },
+    "message": {
+      "$ref": "#/$defs/message"
+    },
+    "requestId": {
+      "$ref": "#/$defs/id32",
+      "description": "服务端生成的请求标识，不回显客户端输入。"
+    },
+    "serverTime": {
+      "$ref": "#/$defs/timestamp",
+      "description": "本次响应的服务端时间，不代表面板、材料或库存的源时间。"
+    },
+    "data": {
+      "description": "成功为完整队列结果，失败固定为 null。"
+    }
+  },
+  "oneOf": [
+    {
+      "description": "HTTP 200 成功响应。",
+      "properties": {
+        "code": {
+          "const": "OK"
+        },
+        "message": {
+          "const": ""
+        },
+        "data": {
+          "$ref": "#/$defs/queue"
+        }
+      }
+    },
+    {
+      "description": "HTTP 400 参数错误、401 鉴权失败、404 预设不存在、409 上下文变化、501 能力未实现、503 数据不可用；内部未分类错误使用 HTTP 500。",
+      "properties": {
+        "code": {
+          "enum": [
+            "INVALID_QUERY",
+            "INVALID_ARGUMENT",
+            "AUTH_INVALID",
+            "PRESET_NOT_FOUND",
+            "CONTEXT_CHANGED",
+            "UNSUPPORTED_CAPABILITY",
+            "DATA_UNAVAILABLE",
+            "INTERNAL_ERROR"
+          ]
+        },
+        "message": {
+          "$ref": "#/$defs/nonemptyMessage"
+        },
+        "data": {
+          "type": "null"
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "id32": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{32}$",
+      "description": "固定 32 位小写十六进制稳定身份。"
+    },
+    "hash64": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$",
+      "description": "固定 64 位小写十六进制摘要，不公开磁盘路径。"
+    },
+    "timestamp": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 64,
+      "format": "date-time",
+      "description": "真实 RFC3339 时间，可含纳秒和时区偏移；零时间不合法。"
+    },
+    "nullableTimestamp": {
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "$ref": "#/$defs/timestamp"
+        }
+      ],
+      "description": "来源未提供时必须为 null，不能推测或补造。"
+    },
+    "text": {
+      "type": "string",
+      "allOf": [
+        {
+          "pattern": "^[^\\u0000-\\u001f\\u007f-\\u009f]*$"
+        },
+        {
+          "pattern": "^(?:\\S(?:[\\s\\S]*\\S)?)?$"
+        }
+      ],
+      "description": "有效 UTF-8 展示文字，不含控制字符和首尾空白。"
+    },
+    "message": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/text"
+        }
+      ],
+      "maxLength": 512,
+      "description": "固定安全业务说明，不含凭据、磁盘路径或底层错误；UTF-8 最多 2048 字节。"
+    },
+    "nonemptyMessage": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/message"
+        }
+      ],
+      "minLength": 1,
+      "description": "非空的固定安全业务说明。"
+    },
+    "presetName": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/text"
+        },
+        {
+          "pattern": "^[^<>:\"/\\\\|?*]*$"
+        },
+        {
+          "not": {
+            "anyOf": [
+              {
+                "pattern": "^-"
+              },
+              {
+                "pattern": "[.]$"
+              },
+              {
+                "pattern": "[.][jJ][sS][oO][nN]$"
+              }
+            ]
+          }
+        }
+      ],
+      "minLength": 1,
+      "maxLength": 128,
+      "description": "由真实一条龙白名单解析的展示名，不能由请求提供；UTF-8 最多 512 字节。"
+    },
+    "revision": {
+      "type": "string",
+      "maxLength": 19,
+      "pattern": "^(?:0|[1-9][0-9]{0,17}|[1-8][0-9]{18}|9[0-1][0-9]{17}|92[0-1][0-9]{16}|922[0-2][0-9]{15}|9223[0-2][0-9]{14}|92233[0-6][0-9]{13}|922337[0-1][0-9]{12}|92233720[0-2][0-9]{10}|922337203[0-5][0-9]{9}|9223372036[0-7][0-9]{8}|92233720368[0-4][0-9]{7}|922337203685[0-3][0-9]{6}|9223372036854[0-6][0-9]{5}|92233720368547[0-6][0-9]{4}|922337203685477[0-4][0-9]{3}|9223372036854775[0-7][0-9]{2}|922337203685477580[0-6]|9223372036854775807)$",
+      "description": "0..9223372036854775807 的规范十进制字符串，无正负号和前导零；超过 JavaScript 安全整数也不得转为 number。"
+    },
+    "unboundRole": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "uid",
+        "region"
+      ],
+      "properties": {
+        "uid": {
+          "const": "",
+          "description": "未绑定时为空。"
+        },
+        "region": {
+          "const": "",
+          "description": "未绑定时为空。"
+        }
+      },
+      "description": "仅禁用计划可以没有游戏身份，不能从桌宠查询角色补全。"
+    },
+    "boundRole": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "uid",
+        "region"
+      ],
+      "properties": {
+        "uid": {
+          "type": "string",
+          "pattern": "^[0-9]{1,32}$",
+          "description": "正式计划绑定的游戏 UID。"
+        },
+        "region": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9_-]{1,32}$",
+          "description": "正式计划绑定的区服代码。"
+        }
+      },
+      "description": "UID 与区服必须同时存在，与 queryRoleId、扫描档案和当前选中账号无关。"
+    },
+    "talentTargets": {
+      "type": "array",
+      "minItems": 3,
+      "maxItems": 3,
+      "items": {
+        "type": "integer",
+        "minimum": 1,
+        "maximum": 10
+      },
+      "description": "明确保存的普通攻击 A、元素战技 E、元素爆发 Q 目标，顺序固定。"
+    },
+    "currentTalents": {
+      "type": "array",
+      "minItems": 3,
+      "maxItems": 3,
+      "items": {
+        "type": "integer",
+        "minimum": 1,
+        "maximum": 15
+      },
+      "description": "实际面板 A/E/Q，保留角色加成后的值，不能静默截成目标上限。"
+    },
+    "fingerprint": {
+      "type": "string",
+      "pattern": "^(?:sha256|panel-sha256):[0-9a-f]{64}$",
+      "description": "sha256 绑定完整官方计算请求；panel-sha256 仅表示已知面板满足目标，不表示已执行培养。"
+    },
+    "material": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "materialId",
+        "name",
+        "required",
+        "owned",
+        "missing",
+        "excluded"
+      ],
+      "properties": {
+        "materialId": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 2147483647,
+          "description": "真实材料编号；同一条目内不可重复。"
+        },
+        "name": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/text"
+            }
+          ],
+          "minLength": 1,
+          "maxLength": 128,
+          "description": "官方需求材料展示名，UTF-8 最多 512 字节。"
+        },
+        "required": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991,
+          "description": "明确目标的完整需求，必须是 JavaScript 可精确表达的整数。"
+        },
+        "owned": {
+          "type": "null",
+          "description": "未取得可信归属库存，本版始终为 null，包括已知需求为零时。"
+        },
+        "missing": {
+          "type": "null",
+          "description": "未核验库存前不能计算缺口，本版始终为 null。"
+        },
+        "excluded": {
+          "type": "boolean",
+          "description": "只有摩拉 202、智识之冕 104319 标识为排除项；此标志不授权完成判定。"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "materialId": {
+                "enum": [
+                  202,
+                  104319
+                ]
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "excluded": {
+                "const": true
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "excluded": {
+                "const": false
+              }
+            }
+          }
+        }
+      ]
+    },
+    "entry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "characterId",
+        "name",
+        "addedAt",
+        "targetLevel",
+        "targetTalents",
+        "currentLevel",
+        "currentTalents",
+        "panelUpdatedAt",
+        "requirementsAvailable",
+        "requirementSource",
+        "requestFingerprint",
+        "requirementsSourceTime",
+        "requirementsFetchedAt",
+        "materials",
+        "warning",
+        "targetSkills"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id32",
+          "description": "正式存储生成且不复用的条目 ID。"
+        },
+        "characterId": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 2147483647,
+          "description": "真实角色编号，不能以名称猜测缓存归属。"
+        },
+        "name": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/text"
+            }
+          ],
+          "minLength": 1,
+          "maxLength": 64,
+          "description": "正式保存的角色名称，UTF-8 最多 256 字节；忽略大小写和空白后不得重复。"
+        },
+        "addedAt": {
+          "$ref": "#/$defs/timestamp",
+          "description": "最初保存时间，不能晚于 plan.updatedAt。"
+        },
+        "targetLevel": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100,
+          "description": "用户明确保存的角色目标等级。"
+        },
+        "targetTalents": {
+          "$ref": "#/$defs/talentTargets"
+        },
+        "currentLevel": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100
+            }
+          ],
+          "description": "没有匹配身份的真实面板时为 null，与 currentTalents 同时未知或同时存在。"
+        },
+        "currentTalents": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/$defs/currentTalents"
+            }
+          ]
+        },
+        "panelUpdatedAt": {
+          "$ref": "#/$defs/nullableTimestamp",
+          "description": "实际面板源时间；即使当前值或需求已知，缺少真实时间仍为 null。"
+        },
+        "requirementsAvailable": {
+          "type": "boolean",
+          "description": "只表示精确请求需求可展示，不能表示执行、库存或完成可用。"
+        },
+        "requirementSource": {
+          "enum": [
+            "",
+            "official-calculator-cache",
+            "panel-already-met"
+          ],
+          "description": "不可用为空；官方精确缓存与面板满足目标使用独立来源。"
+        },
+        "requestFingerprint": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/$defs/fingerprint"
+            }
+          ]
+        },
+        "requirementsSourceTime": {
+          "$ref": "#/$defs/nullableTimestamp",
+          "description": "官方需求真实源时间；官方未提供时为 null，不得以接收时间代替。"
+        },
+        "requirementsFetchedAt": {
+          "$ref": "#/$defs/nullableTimestamp",
+          "description": "缓存实际 HTTP 接收时间，旧缓存未知时为 null；不得早于已知源时间。"
+        },
+        "materials": {
+          "type": "array",
+          "maxItems": 128,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/material"
+          },
+          "description": "最多 128 种材料，始终是数组；缓存不可用和面板达标时为空数组。"
+        },
+        "warning": {
+          "$ref": "#/$defs/message",
+          "description": "逐条固定业务说明，没有说明时保留空字符串。"
+        },
+        "targetSkills": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/$defs/targetSkills"
+            }
+          ],
+          "description": "旧未绑定计划显式为 null；绑定只能来自同一冻结计划，不按当前面板或名称补造。"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "currentLevel": {
+                "type": "null"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "currentTalents": {
+                "type": "null"
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "currentTalents": {
+                "$ref": "#/$defs/currentTalents"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "requirementsAvailable": {
+                "const": false
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "requirementSource": {
+                "const": ""
+              },
+              "requirementsSourceTime": {
+                "type": "null"
+              },
+              "requirementsFetchedAt": {
+                "type": "null"
+              },
+              "materials": {
+                "maxItems": 0
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "currentLevel": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 100
+              },
+              "currentTalents": {
+                "$ref": "#/$defs/currentTalents"
+              },
+              "requestFingerprint": {
+                "$ref": "#/$defs/fingerprint"
+              },
+              "requirementSource": {
+                "enum": [
+                  "official-calculator-cache",
+                  "panel-already-met"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "requirementSource": {
+                "const": "official-calculator-cache"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "requirementsAvailable": {
+                "const": true
+              },
+              "requestFingerprint": {
+                "type": "string",
+                "pattern": "^sha256:[0-9a-f]{64}$"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "requirementSource": {
+                "const": "panel-already-met"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "requirementsAvailable": {
+                "const": true
+              },
+              "requestFingerprint": {
+                "type": "string",
+                "pattern": "^panel-sha256:[0-9a-f]{64}$"
+              },
+              "requirementsSourceTime": {
+                "type": "null"
+              },
+              "requirementsFetchedAt": {
+                "type": "null"
+              },
+              "materials": {
+                "maxItems": 0
+              }
+            },
+            "description": "服务端和客户端还逐字段比较实际等级及 A/E/Q 均达到目标。"
+          }
+        }
+      ]
+    },
+    "plan": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "revision",
+        "enabled",
+        "role",
+        "updatedAt",
+        "entries"
+      ],
+      "properties": {
+        "revision": {
+          "$ref": "#/$defs/revision"
+        },
+        "enabled": {
+          "type": "boolean",
+          "description": "保存的配置意图；本版即使 true 也不能执行。"
+        },
+        "role": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/unboundRole"
+            },
+            {
+              "$ref": "#/$defs/boundRole"
+            }
+          ]
+        },
+        "updatedAt": {
+          "$ref": "#/$defs/nullableTimestamp",
+          "description": "首次未保存为 null；持久计划和删除墓碑保留真实保存时间。"
+        },
+        "entries": {
+          "type": "array",
+          "maxItems": 32,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/entry"
+          },
+          "description": "正式 FIFO 保存顺序，最多 32 个角色；不能根据材料缓存或面板自动跳过。"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "revision": {
+                "const": "0"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "enabled": {
+                "const": false
+              },
+              "role": {
+                "$ref": "#/$defs/unboundRole"
+              },
+              "updatedAt": {
+                "type": "null"
+              },
+              "entries": {
+                "maxItems": 0
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "updatedAt": {
+                "$ref": "#/$defs/timestamp"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "enabled": {
+                "const": true
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "role": {
+                "$ref": "#/$defs/boundRole"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "queue": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion",
+        "instanceId",
+        "scope",
+        "presetId",
+        "presetName",
+        "executionContext",
+        "plan",
+        "status",
+        "currentEntryId",
+        "executionAvailable",
+        "completionEventsAvailable",
+        "inventoryVerified",
+        "warnings"
+      ],
+      "properties": {
+        "schemaVersion": {
+          "const": 2,
+          "description": "独立只读队列正文版本。"
+        },
+        "instanceId": {
+          "$ref": "#/$defs/id32",
+          "description": "当前协议的持久实例身份，必须与已协商 capabilities 一致。"
+        },
+        "scope": {
+          "const": "instance-config-queue",
+          "description": "实例执行目录与已保存一条龙配置的正式队列范围。"
+        },
+        "presetId": {
+          "type": "string",
+          "pattern": "^preset-[0-9a-f]{32}$",
+          "description": "当前 task-presets 发布的真实预设身份，不能由路径或名称替代。"
+        },
+        "presetName": {
+          "$ref": "#/$defs/presetName"
+        },
+        "executionContext": {
+          "$ref": "#/$defs/hash64"
+        },
+        "plan": {
+          "$ref": "#/$defs/plan"
+        },
+        "status": {
+          "enum": [
+            "empty",
+            "disabled",
+            "blocked"
+          ],
+          "description": "empty 为无条目；非空禁用为 disabled，非空启用仍为 blocked。"
+        },
+        "currentEntryId": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/$defs/id32"
+            }
+          ],
+          "description": "非空时必须等于第一条保存条目的 ID，只表示队首，不能表示当前执行或完成。"
+        },
+        "executionAvailable": {
+          "const": false,
+          "description": "尚无可信执行事务，本版固定 false。"
+        },
+        "completionEventsAvailable": {
+          "const": false,
+          "description": "本能力不发布培养完成事件，本版固定 false。"
+        },
+        "inventoryVerified": {
+          "const": false,
+          "description": "库存归属和来源链尚未核验，本版固定 false。"
+        },
+        "warnings": {
+          "type": "array",
+          "maxItems": 32,
+          "items": {
+            "$ref": "#/$defs/nonemptyMessage"
+          },
+          "description": "安全展示说明，始终为数组，最多 32 条；不可输出路径、凭据和原始异常。"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "plan": {
+                "properties": {
+                  "entries": {
+                    "maxItems": 0
+                  }
+                }
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "status": {
+                "const": "empty"
+              },
+              "currentEntryId": {
+                "type": "null"
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "currentEntryId": {
+                "$ref": "#/$defs/id32"
+              }
+            },
+            "if": {
+              "properties": {
+                "plan": {
+                  "properties": {
+                    "enabled": {
+                      "const": true
+                    }
+                  }
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "status": {
+                  "const": "blocked"
+                }
+              }
+            },
+            "else": {
+              "properties": {
+                "status": {
+                  "const": "disabled"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "targetSkills": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "element",
+        "skillIds"
+      ],
+      "properties": {
+        "element": {
+          "type": "string",
+          "enum": [
+            "anemo",
+            "geo",
+            "electro",
+            "dendro",
+            "hydro",
+            "pyro",
+            "cryo"
+          ],
+          "description": "保存时明确选择的元素，使用规范小写名称。"
+        },
+        "skillIds": {
+          "type": "array",
+          "minItems": 3,
+          "maxItems": 3,
+          "uniqueItems": true,
+          "items": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 9007199254740991
+          },
+          "description": "实际技能编号，按已保存的 A/E/Q 排列，不能替换为计算器技能组编号。"
+        }
+      },
+      "$comment": "不公开候选、选择摘要、推测技能名或可信来源证明。"
+    }
+  }
+}

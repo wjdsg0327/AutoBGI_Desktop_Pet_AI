@@ -1,0 +1,891 @@
+# 桌宠协议的机器可读核心契约；示例值仅描述格式，不代表当前实例已有任务结果。
+openapi: 3.1.0
+info:
+  title: AutoBGI Desktop Pet API
+  version: "1.0"
+  description: 实例范围的快照、只读查询角色与扫描数据，以及持久幂等单次启动协议。
+servers:
+  - url: /api/desktop-pet/v1
+security:
+  - ApiKey: []
+paths:
+  /capabilities:
+    get:
+      summary: 读取实际能力与稳定实例标识
+      responses:
+        "200":
+          description: 能力对象；accounts=false，命令仅oneLong.start
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/Envelope"
+                  - properties:
+                      data:
+                        $ref: "#/components/schemas/Capabilities"
+        default:
+          $ref: "#/components/responses/Error"
+  /snapshot:
+    get:
+      summary: 原子读取快照和对应事件游标
+      responses:
+        "200":
+          description: 进程读取失败时running=null，task终态保持unknown
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/Envelope"
+                  - properties:
+                      data:
+                        $ref: "#/components/schemas/Snapshot"
+        default:
+          $ref: "#/components/responses/Error"
+  /task-presets:
+    get:
+      summary: 读取当前可启动的真实JSON配置白名单
+      responses:
+        "200":
+          description: 预设数组，ID不可由客户端解析或构造
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/Envelope"
+                  - properties:
+                      data:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/Preset"
+        default:
+          $ref: "#/components/responses/Error"
+  # 两份完整独立合同保持旧字段集；缺省第一版，明确协商才返回第二版。
+  /cultivation-queue:
+    get:
+      summary: 只读正式保存的队列及明确协商的技能目标
+      description: >-
+        cultivationQueue 为基础能力；cultivationQueueSkillTargets 为第二版附加能力。
+        省略 schemaVersion 返回原 schema 1；仅字面量 schemaVersion=2 返回 schema 2。
+        参数各一次，第二版顺序可互换，拒绝编码拼写、未知项或重复项。
+        客户端冻结预期版本，任意方向的响应版本不匹配均拒绝，无自动降级。
+      parameters:
+        - name: presetId
+          in: query
+          required: true
+          schema:
+            type: string
+            pattern: "^preset-[0-9a-f]{32}$"
+          description: 来自当前真实预设列表的身份，不能提交配置名、路径或查询角色。
+        - name: schemaVersion
+          in: query
+          required: false
+          schema:
+            type: integer
+            const: 2
+          description: 仅明确的第二版；省略仍为第一版，不能显式提交 1。
+      responses:
+        "200":
+          description: >-
+            同一冻结计划快照。第二版每项提供目标技能对象或显式 null；
+            保存意图不提供可信面板、库存或执行授权。
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: "./contracts/cultivation-queue.schema.json"
+                  - $ref: "./contracts/cultivation-queue-v2.schema.json"
+        "501":
+          description: 对应读取能力未实现，失败 data 为 null，不返回另一版正文。
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Envelope"
+        default:
+          $ref: "#/components/responses/Error"
+  /accounts:
+    get:
+      summary: 当前实例范围不支持运行账号列表
+      responses:
+        "400":
+          $ref: "#/components/responses/Error"
+  /commands:
+    post:
+      summary: 持久登记并单次派发明确的一条龙启动请求
+      description: 最大64KiB。相同UUID和相同请求返回原回执；不同负载409；过期410。
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Command"
+      responses:
+        "202":
+          description: 原始或最新回执；succeeded只表示启动动作已提交
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/Envelope"
+                  - properties:
+                      data:
+                        $ref: "#/components/schemas/Receipt"
+        default:
+          $ref: "#/components/responses/Error"
+  /commands/{commandId}:
+    get:
+      summary: 只读查询原命令回执，绝不重新派发
+      parameters:
+        - name: commandId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: 七天结果查询窗口内的回执
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/Envelope"
+                  - properties:
+                      data:
+                        $ref: "#/components/schemas/Receipt"
+        default:
+          $ref: "#/components/responses/Error"
+  /events:
+    get:
+      summary: 鉴权的SSE快照及命令事件流
+      description: 每15秒保活；旧epoch或过期游标410；轮换密钥后关闭旧连接。
+      parameters:
+        - name: Last-Event-ID
+          in: header
+          schema:
+            type: string
+            maxLength: 128
+      responses:
+        "200":
+          description: id与event分别等于Event.eventId和Event.type，data为完整Event
+          content:
+            text/event-stream:
+              schema:
+                type: string
+        "410":
+          $ref: "#/components/responses/Error"
+        default:
+          $ref: "#/components/responses/Error"
+  /scan-accounts:
+    get:
+      summary: 列出真实存在的扫描目录，不能据此切换游戏身份
+      responses:
+        "200":
+          description: scanner-records范围，items含scanAccountId和label
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Envelope"
+        default:
+          $ref: "#/components/responses/Error"
+  # 材料历史使用持久业务水位；SSE 仅发送兼容的 server.notice 唤醒。
+  /cultivation-material-events:
+    get:
+      summary: 读取已终结培养事务的材料条件记录
+      description: 无参数时返回最近100条并建立基线。增量必须完整提供after、generation和executionContext；GET不接收或确认outbox。
+      parameters:
+        - name: after
+          in: query
+          schema:
+            $ref: "#/components/schemas/MaterialEventCursor"
+        - name: generation
+          in: query
+          schema:
+            type: string
+            pattern: "^[0-9a-f]{32}$"
+        - name: executionContext
+          in: query
+          schema:
+            type: string
+            pattern: "^[0-9a-f]{64}$"
+      responses:
+        "200":
+          description: 原发生时间与冻结计划身份；材料满足不代表游戏升级或任务完成
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/Envelope"
+                  - properties:
+                      data:
+                        $ref: "#/components/schemas/MaterialEventsResult"
+        "410":
+          description: RESYNC_REQUIRED，重新建立历史基线且不补弹历史气泡
+        default:
+          $ref: "#/components/responses/Error"
+  # 目标达标单独保存接收代次和连续水位，不能复用材料历史游标或声明本次游戏成功。
+  /cultivation-target-events:
+    get:
+      summary: 读取可信面板已达培养目标的独立历史
+      description: 无参数时返回当前目标流最近100条并建立基线。增量必须将after、generation和executionContext各提供一次，不接受额外选择器；GET不接收、确认或修复outbox。occurredAt是队列终态提交时间，observedAt是可信面板源时间，二者均不是本次游戏培养完成时间。
+      parameters:
+        - name: after
+          in: query
+          schema:
+            $ref: "#/components/schemas/TargetEventCursor"
+        - name: generation
+          in: query
+          schema:
+            type: string
+            pattern: "^[0-9a-f]{32}$"
+        - name: executionContext
+          in: query
+          schema:
+            type: string
+            pattern: "^[0-9a-f]{64}$"
+      responses:
+        "200":
+          description: 独立目标流的冻结身份和原始观察时间，不表示库存可信或游戏执行完成
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/Envelope"
+                  - properties:
+                      data:
+                        $ref: "#/components/schemas/TargetEventsResult"
+        "400":
+          description: INVALID_QUERY，首读必须无参数，续页必须完整使用三个规范字段
+        "410":
+          description: RESYNC_REQUIRED，执行目录、代次或水位变化后重新建立历史基线
+        "501":
+          description: UNSUPPORTED_CAPABILITY，宿主没有提供独立目标达标历史读取能力
+        default:
+          $ref: "#/components/responses/Error"
+  /query-roles:
+    get:
+      summary: 读取已有米游社绑定缓存的只读查询角色
+      description: 不接受任何查询参数；不读Cookie、不触发网络刷新或游戏登录切换。
+      responses:
+        "200":
+          description: 默认角色只能映射原有默认值，未知缓存时间为null
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/Envelope"
+                  - properties:
+                      data:
+                        $ref: "#/components/schemas/QueryRolesResult"
+        default:
+          $ref: "#/components/responses/Error"
+  /backpack:
+    get:
+      summary: 读取显式选择目录的最新扫描结果
+      parameters:
+        - $ref: "#/components/parameters/RequiredScanAccount"
+      responses:
+        "200":
+          description: 包含scannedAt、version、timezone与识别条目；缺席材料数量未知
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Envelope"
+        default:
+          $ref: "#/components/responses/Error"
+  /earnings:
+    get:
+      summary: 读取所选绑定角色或兼容默认角色的正式摩拉总账
+      parameters:
+        - $ref: "#/components/parameters/OptionalQueryRole"
+        - name: date
+          in: query
+          schema:
+            type: string
+            format: date
+      responses:
+        "200":
+          description: 日期沿用服务本地日归档；显式角色同UID跨区服时503，不能区分账本归属
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/Envelope"
+                  - properties:
+                      data:
+                        $ref: "#/components/schemas/EarningsResult"
+        default:
+          $ref: "#/components/responses/Error"
+  /cultivation-plans:
+    get:
+      summary: 只读配置计划、已有角色面板和精确匹配的本地需求缓存
+      description: 实例共享计划；显式角色只改变面板与需求查询，扫描尚未绑定角色，owned和missing全部为null。
+      parameters:
+        - $ref: "#/components/parameters/OptionalQueryRole"
+        - name: scanAccountId
+          in: query
+          schema:
+            type: string
+      responses:
+        "200":
+          description: queueAvailable=false，completionEventsAvailable=false，未知owned和missing为null
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/Envelope"
+                  - properties:
+                      data:
+                        $ref: "#/components/schemas/CultivationPlansResult"
+        default:
+          $ref: "#/components/responses/Error"
+components:
+  securitySchemes:
+    ApiKey:
+      type: apiKey
+      in: header
+      name: apiKey
+      description: 仅请求头认证，不接受URL token或JWT替代。
+  parameters:
+    OptionalQueryRole:
+      name: queryRoleId
+      in: query
+      schema:
+        type: string
+        pattern: "^mys-role:[a-z][a-z0-9_]{1,31}:[1-9][0-9]{8,9}$"
+        maxLength: 52
+      description: 省略保留默认角色语义；显式空值或非法格式400，合法但不在缓存404，缓存不可用503。不是执行accountId。
+    RequiredScanAccount:
+      name: scanAccountId
+      in: query
+      required: true
+      allowEmptyValue: true
+      schema:
+        type: string
+      description: 扫描存储目录ID；空字符串显式选择旧版根目录，不代表执行账号。
+  responses:
+    Error:
+      description: 401认证、400参数、404对象、409冲突、410过期或503数据不可用。
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Envelope"
+  schemas:
+    Envelope:
+      type: object
+      required: [code, message, requestId, serverTime, data]
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+        requestId:
+          type: string
+        serverTime:
+          type: string
+          format: date-time
+        data: {}
+    Capabilities:
+      type: object
+      required: [apiVersion, instanceId, accountScope, executionScope, features, commands, commandPolicy]
+      properties:
+        apiVersion:
+          const: "1.0"
+        instanceId:
+          type: string
+        accountScope:
+          const: instance
+        executionScope:
+          const: instance
+        features:
+          type: object
+          properties:
+            accounts:
+              const: false
+            queryRoles:
+              type: boolean
+              description: 扁平能力字段，缺席视为不支持；与游戏执行账户无关。
+            cultivationQueue:
+              type: boolean
+              description: 正式保存队列的独立只读能力，缺席视为不支持。
+            # 第二版只公开保存意图，客户端还必须独立核对基础队列能力。
+            cultivationQueueSkillTargets:
+              type: boolean
+              description: 明确实现 schema 2 的宿主可选能力，缺席不得请求或推断技能绑定。
+            materialsReadyEvents:
+              type: boolean
+              description: 只读材料结果历史；与培养执行、库存核验及游戏完成能力无关。
+            # 缺席表示旧服务不支持；该字段不会改变三个执行相关能力标记。
+            targetsMetEvents:
+              type: boolean
+              description: 只读可信面板目标达标历史，使用独立端点、接收代次和连续序号；与本次游戏执行完成无关。
+          additionalProperties:
+            type: boolean
+        commands:
+          type: array
+          items:
+            const: oneLong.start
+        commandPolicy:
+          type: object
+          properties:
+            idempotencyRetentionSeconds:
+              const: 86400
+            resultRetentionSeconds:
+              const: 604800
+    # 角色归属必须同时核对 UID 与区服，昵称只用于纯文本展示。
+    DomainRole:
+      type: object
+      required: [uid, region, nickname]
+      properties:
+        uid:
+          type: string
+        region:
+          type: string
+        nickname:
+          type: string
+    QueryRole:
+      allOf:
+        - $ref: "#/components/schemas/DomainRole"
+        - type: object
+          required: [queryRoleId]
+          properties:
+            uid:
+              type: string
+              pattern: "^[1-9][0-9]{8,9}$"
+            region:
+              type: string
+              pattern: "^[a-z][a-z0-9_]{1,31}$"
+            queryRoleId:
+              type: string
+              pattern: "^mys-role:[a-z][a-z0-9_]{1,31}:[1-9][0-9]{8,9}$"
+              description: 必须与本条region和uid精确对应，不能规范化或构造别名。
+    QueryRolesResult:
+      type: object
+      required: [scope, source, updatedAt, defaultQueryRoleId, items, warnings]
+      properties:
+        scope:
+          const: query-roles
+        source:
+          const: mihoyo-binding-cache
+        updatedAt:
+          type: [string, "null"]
+          format: date-time
+          description: 已知缓存修改或原刷新时间；不能用接口请求时间替代。
+        defaultQueryRoleId:
+          type: [string, "null"]
+          description: 非null时必须是items真实成员；原默认身份无效则保持null。
+        items:
+          type: array
+          minItems: 1
+          maxItems: 200
+          items:
+            $ref: "#/components/schemas/QueryRole"
+        warnings:
+          type: array
+          items:
+            type: string
+    EarningsResult:
+      type: object
+      required: [scope, queryRoleId, currentRole, date, timezone, timeZone, businessDate, resetTime, available, unit, total, elite, small, chest, source, updatedAt, warnings]
+      properties:
+        scope:
+          enum: [instance-configured-role, query-role]
+        queryRoleId:
+          type: [string, "null"]
+          description: 显式请求时必须原样回显且currentRole匹配；省略角色参数时null。
+        currentRole:
+          $ref: "#/components/schemas/DomainRole"
+        date:
+          type: string
+          format: date
+        timezone:
+          type: string
+        timeZone:
+          type: string
+        businessDate:
+          type: "null"
+        resetTime:
+          type: "null"
+        available:
+          const: true
+        unit:
+          const: mora
+        total:
+          type: [integer, "null"]
+        elite:
+          type: [integer, "null"]
+        small:
+          type: [integer, "null"]
+        chest:
+          type: [integer, "null"]
+        source:
+          const: morale-income-book
+        updatedAt:
+          type: [string, "null"]
+          format: date-time
+        warnings:
+          type: array
+          items:
+            type: string
+    CultivationPlansResult:
+      type: object
+      required: [scope, queryRoleId, currentRole, selectedScanAccountId, scannedAt, queueAvailable, completionEventsAvailable, plans, warnings]
+      properties:
+        scope:
+          enum: [instance, instance-plans-query-role]
+        queryRoleId:
+          type: [string, "null"]
+          description: 显式请求必须回显所选角色；计划仍属于整个实例。
+        currentRole:
+          oneOf:
+            - $ref: "#/components/schemas/DomainRole"
+            - type: "null"
+        selectedScanAccountId:
+          type: [string, "null"]
+        scannedAt:
+          type: [string, "null"]
+          format: date-time
+        queueAvailable:
+          const: false
+        completionEventsAvailable:
+          const: false
+        plans:
+          type: array
+          items:
+            type: object
+            description: 配置计划，status为configured；显式角色时所有材料owned和missing必须null。
+        warnings:
+          type: array
+          items:
+            type: string
+    Snapshot:
+      type: object
+      required: [instanceId, instanceDisplayName, accountId, scope, stateVersion, eventCursor, sourceTime, process, task]
+      properties:
+        instanceId:
+          type: string
+        instanceDisplayName:
+          type: [string, "null"]
+        accountId:
+          type: "null"
+        scope:
+          const: instance
+        stateVersion:
+          type: string
+        eventCursor:
+          type: string
+        sourceTime:
+          type: string
+          format: date-time
+        process:
+          type: object
+          properties:
+            running:
+              type: [boolean, "null"]
+        task:
+          $ref: "#/components/schemas/Task"
+    Task:
+      type: object
+      properties:
+        id:
+          type: "null"
+        state:
+          const: unknown
+        groupName:
+          type: [string, "null"]
+        routeName:
+          type: [string, "null"]
+        scriptName:
+          type: [string, "null"]
+        progressText:
+          type: [string, "null"]
+        scriptProgressText:
+          type: [string, "null"]
+        etaText:
+          type: [string, "null"]
+        etaAt:
+          type: [string, "null"]
+          format: date-time
+    Preset:
+      type: object
+      required: [id, name, scope, impact, version]
+      properties:
+        id:
+          type: string
+          description: 当前实现为preset-加32位十六进制；客户端只能原样回传。
+        name:
+          type: string
+        scope:
+          const: instance
+        impact:
+          type: string
+        version:
+          type: string
+          description: 配置内容SHA-256。
+    Command:
+      type: object
+      additionalProperties: false
+      required: [commandId, type, params, expectedStateVersion]
+      properties:
+        commandId:
+          type: string
+          format: uuid
+        type:
+          const: oneLong.start
+        accountId:
+          type: "null"
+        params:
+          type: object
+          additionalProperties: false
+          required: [presetId]
+          properties:
+            presetId:
+              type: string
+              minLength: 1
+        expectedStateVersion:
+          type: string
+          minLength: 1
+    Receipt:
+      type: object
+      required: [commandId, status, taskId, acceptedAt, dedupeExpiresAt, resultExpiresAt, message]
+      properties:
+        commandId:
+          type: string
+          format: uuid
+        status:
+          enum: [accepted, executing, succeeded, failed, rejected, unknown]
+        taskId:
+          type: "null"
+        acceptedAt:
+          type: string
+          format: date-time
+        dedupeExpiresAt:
+          type: string
+          format: date-time
+        resultExpiresAt:
+          type: string
+          format: date-time
+        message:
+          type: string
+    Event:
+      type: object
+      required: [schemaVersion, eventId, instanceId, accountId, taskId, type, occurredAt, data]
+      properties:
+        schemaVersion:
+          const: 1
+        eventId:
+          type: string
+        instanceId:
+          type: string
+        accountId:
+          type: "null"
+        taskId:
+          type: "null"
+        type:
+          enum: [snapshot.updated, command.updated, server.notice]
+        occurredAt:
+          type: string
+          format: date-time
+        data:
+          oneOf:
+            - $ref: "#/components/schemas/Snapshot"
+            - $ref: "#/components/schemas/Receipt"
+            - type: "null"
+    # 新端点自身采用版本一，旧材料结果和字符串水位合同保持原样。
+    TargetEventCursor:
+      type: string
+      pattern: "^(0|[1-9][0-9]{0,18})$"
+      description: 目标流自己的规范十进制水位，不得大于9223372036854775807；不能复用材料流水位。
+    TargetEventsResult:
+      type: object
+      additionalProperties: false
+      required: [schemaVersion, instanceId, executionContext, generation, cursor, hasMore, truncated, events]
+      properties:
+        schemaVersion:
+          const: 1
+        instanceId:
+          type: string
+          pattern: "^[0-9a-f]{32}$"
+        executionContext:
+          type: string
+          pattern: "^[0-9a-f]{64}$"
+        generation:
+          type: string
+          pattern: "^[0-9a-f]{32}$"
+          description: 独立目标历史接收范围的持久代次，与材料历史及SSE代次无关。
+        cursor:
+          $ref: "#/components/schemas/TargetEventCursor"
+        hasMore:
+          type: boolean
+        truncated:
+          type: boolean
+          description: 首读只截取最近100条时为true，增量读取必须为false。
+        events:
+          type: array
+          maxItems: 100
+          description: 非空值升序集合；相邻sequence必须连续且最后一条与cursor一致。
+          items:
+            $ref: "#/components/schemas/TargetMetEvent"
+    TargetMetEvent:
+      type: object
+      additionalProperties: false
+      required: [sequence, businessEventId, operationId, executionContext, planId, configName, role, kind, entryId, characterId, characterName, planRevision, occurredAt, observedAt]
+      properties:
+        sequence:
+          $ref: "#/components/schemas/TargetEventCursor"
+        businessEventId:
+          type: string
+          pattern: "^[0-9a-f]{64}$"
+        operationId:
+          type: string
+          pattern: "^[0-9a-f]{32}$"
+        executionContext:
+          type: string
+          pattern: "^[0-9a-f]{64}$"
+        planId:
+          type: string
+          pattern: "^[0-9a-f]{32}$"
+        configName:
+          type: string
+          maxLength: 128
+          description: 原终态的配置显示名，不转换为当前预设或可执行文件路径。
+        role:
+          type: object
+          additionalProperties: false
+          required: [uid, region]
+          properties:
+            uid:
+              type: string
+              pattern: "^[0-9]{1,32}$"
+            region:
+              type: string
+              pattern: "^[A-Za-z0-9_-]{1,32}$"
+        kind:
+          enum: [talent.entry.targets-met, talent.queue.targets-met]
+        entryId:
+          type: string
+          description: 条目事件为32位小写十六进制，队列事件为空。
+        characterId:
+          type: integer
+          minimum: 0
+          maximum: 2147483647
+          description: 队列事件为零，条目事件为正整数官方角色编号。
+        characterName:
+          type: string
+          maxLength: 64
+        planRevision:
+          $ref: "#/components/schemas/TargetEventCursor"
+        occurredAt:
+          type: string
+          format: date-time
+          maxLength: 64
+          description: 原队列终态提交时间，不是角色培养完成时间。
+        observedAt:
+          type: string
+          format: date-time
+          maxLength: 64
+          description: 可信面板源时间，必须非零且不晚于occurredAt，不能以获取或通知时间补写。
+      # 条目与整队列事件分别约束身份，避免用一种形状冒充另一种事实。
+      oneOf:
+        - properties:
+            kind:
+              const: talent.entry.targets-met
+            entryId:
+              pattern: "^[0-9a-f]{32}$"
+            characterId:
+              minimum: 1
+            characterName:
+              minLength: 1
+        - properties:
+            kind:
+              const: talent.queue.targets-met
+            entryId:
+              const: ""
+            characterId:
+              const: 0
+            characterName:
+              const: ""
+    # 字符串水位避免 JavaScript 精度丢失，后端另行限制到有符号64位整数。
+    MaterialEventCursor:
+      type: string
+      pattern: "^(0|[1-9][0-9]{0,18})$"
+      description: 规范十进制且不得大于9223372036854775807。
+    MaterialEventsResult:
+      type: object
+      additionalProperties: false
+      required: [schemaVersion, instanceId, executionContext, generation, cursor, hasMore, truncated, events]
+      properties:
+        schemaVersion:
+          const: 1
+        instanceId:
+          type: string
+          pattern: "^[0-9a-f]{32}$"
+        executionContext:
+          type: string
+          pattern: "^[0-9a-f]{64}$"
+        generation:
+          type: string
+          pattern: "^[0-9a-f]{32}$"
+        cursor:
+          $ref: "#/components/schemas/MaterialEventCursor"
+        hasMore:
+          type: boolean
+        truncated:
+          type: boolean
+          description: 首次只返回最近一页时为true，不表示数据库源事件丢失。
+        events:
+          type: array
+          maxItems: 100
+          items:
+            $ref: "#/components/schemas/MaterialReadyEvent"
+    MaterialReadyEvent:
+      type: object
+      additionalProperties: false
+      required: [sequence, businessEventId, operationId, executionContext, planId, configName, role, kind, entryId, characterId, characterName, planRevision, occurredAt]
+      properties:
+        sequence:
+          $ref: "#/components/schemas/MaterialEventCursor"
+        businessEventId:
+          type: string
+          pattern: "^[0-9a-f]{64}$"
+        operationId:
+          type: string
+          pattern: "^[0-9a-f]{32}$"
+        executionContext:
+          type: string
+          pattern: "^[0-9a-f]{64}$"
+        planId:
+          type: string
+          pattern: "^[0-9a-f]{32}$"
+        configName:
+          type: string
+          maxLength: 128
+          description: 事件发生时的名称，不作为当前预设身份或文件路径使用。
+        role:
+          type: object
+          additionalProperties: false
+          required: [uid, region]
+          properties:
+            uid:
+              type: string
+              maxLength: 32
+            region:
+              type: string
+              maxLength: 32
+        kind:
+          enum: [talent.entry.materials-ready, talent.queue.materials-ready]
+        entryId:
+          type: string
+          description: 条目事件为32位十六进制，队列事件为空。
+        characterId:
+          type: integer
+          minimum: 0
+          maximum: 2147483647
+          description: 队列事件为零，条目事件使用原角色编号。
+        characterName:
+          type: string
+          maxLength: 64
+        planRevision:
+          $ref: "#/components/schemas/MaterialEventCursor"
+        occurredAt:
+          type: string
+          format: date-time

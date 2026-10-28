@@ -1,0 +1,123 @@
+{
+  "schemaVersion": 1,
+  "phase": "0.2.14-independent-inventory-observation",
+  "recordedAt": "2026-10-28T05:05:05.9516277+08:00",
+  "completeDevelopmentSpecification": false,
+  "collectionCore": {
+    "race": {
+      "failed": 0,
+      "topLevel": 9,
+      "subtests": 43
+    },
+    "normal": {
+      "failed": 0,
+      "topLevel": 9,
+      "subtests": 43
+    }
+  },
+  "clearScriptInterop": {
+    "clearScript": "7.4.5",
+    "nodePassed": 77,
+    "compileWarnings": [
+      "CS1701",
+      "CS1701"
+    ],
+    "dotnet": "8.0.32",
+    "v8Passed": 119,
+    "failed": 0
+  },
+  "collectorStatic": {
+    "failures": 0,
+    "warnings": 1,
+    "reason": "Minimum released BetterGI version is unverified; bgi_version is intentionally omitted.",
+    "strictModePassed": false
+  },
+  "host": {
+    "normal": {
+      "failed": 0,
+      "topLevel": 12,
+      "subtests": 43
+    },
+    "race": {
+      "failed": 0,
+      "warnings": 0,
+      "topLevel": 12,
+      "subtests": 43
+    },
+    "sha256": "38581d554d0cc688b1d43c0d3681382aa0436115ec9ccab0b15a6a16cf0e638b",
+    "rootIdentityMismatchRejected": true,
+    "usesExactProductionOverlay": true,
+    "source": "menu/talent_inventory_collection.go"
+  },
+  "clients": {
+    "goLeafCases": 102,
+    "petTypeCheck": "passed",
+    "actualSFCAndAPICases": 28,
+    "renderer": "in-memory, synthetic data",
+    "goTopLevel": 4,
+    "failed": 0
+  },
+  "integration": {
+    "officialWebBuild": "passed, Vite 4140 modules",
+    "rootGo": "1.27.1",
+    "petAllPackageVet": "passed",
+    "rootHostBuild": "passed, compiled only",
+    "petGo": "1.26.10",
+    "fullMenuTestExecutableRun": false,
+    "rootHostVet": "passed"
+  },
+  "capabilities": {
+    "inventoryVerified": false,
+    "requirementsOwnedAndMissingRemainNull": true,
+    "executionAvailable": false,
+    "completionEventsAvailable": false
+  },
+  "cleanup": {
+    "collectionCoreArtifacts": "3 removed in one attempt",
+    "clientProtectedArtifacts": 15,
+    "clearScriptTestArtifacts": "6 removed in one attempt",
+    "protectedReason": "Automatic approval rejected each unique cleanup before execution: blocked by policy.",
+    "rootProtectedCompileExecutables": 2,
+    "protectedFilesInValidationOnly": true,
+    "protectedFilesExcludedFromProductionAndPackage": true,
+    "willNotRetryProtectedTargets": true,
+    "hostProtectedArtifacts": 13
+  },
+  "liveAcceptance": {
+    "productionAutoBGI": false,
+    "game": false,
+    "memory250MBPassed": false,
+    "focusDPIAndMultiMonitor": false,
+    "nativePetGUI": false,
+    "eightHourEndurance": false,
+    "betterGI": false
+  },
+  "evidence": [
+    {
+      "kind": "collection-core",
+      "workspacePath": ".validation/collection-core-59d2a843/validation.json",
+      "sha256": "9c65c606f06a83ab36b8631e0c6c0d593d204b3dde165a2f772b7ddfa8341b5d"
+    },
+    {
+      "kind": "clearscript-interop",
+      "workspacePath": "AutoBGI_Desktop_Pet_AI/.validation/clearscript-interop-c4e9b571/validation.json",
+      "sha256": "320900696ddae92a3ce7b2cdfdccf0073a6cf54224b445a940678552befab219"
+    },
+    {
+      "kind": "client-protocol-and-ui",
+      "workspacePath": "AutoBGI_Desktop_Pet_AI/.validation/inventory-client-20261028-9c51bd28/client-validation.json",
+      "sha256": "004b01151c30d2956a4d2c58b1f69e161e42afa1f5330ebbdeb162c4bec11ce1"
+    },
+    {
+      "kind": "ui-behaviour",
+      "workspacePath": "AutoBGI_Desktop_Pet_AI/.validation/inventory-client-20261028-9c51bd28/ui-validation.json",
+      "sha256": "66acf5252cdab119202c9756ad949d01ba77f5556227c66b1b9876ebfceeec38"
+    },
+    {
+      "kind": "host-root-identity-final",
+      "workspacePath": "AutoBGI_Desktop_Pet_AI/.validation/inventory-host-domain-88d4e2b5cb5447369a2f8bfc76084625/root-identity-verification.json",
+      "sha256": "b12b11f2d435ee1a42e32d649b46a6585e3f3e33f57421104d5d3a98c31e5a93"
+    }
+  ],
+  "finalReleaseAuditWorkspacePath": "AutoBGI_Desktop_Pet_AI/.validation/inventory-release-20261028/final-release-audit.json"
+}

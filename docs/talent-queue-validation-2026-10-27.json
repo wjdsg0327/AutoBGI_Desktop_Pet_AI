@@ -1,0 +1,92 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-27",
+  "stage": "cultivation-queue-server-preparation",
+  "goalComplete": false,
+  "desktopRelease": "0.2.4",
+  "desktopReleaseRebuilt": false,
+  "executionAvailable": false,
+  "providerVerified": false,
+  "automaticQueueRemoval": false,
+  "completionEventsAvailable": false,
+  "validation": {
+    "persistence": {
+      "race": true,
+      "cases": 47,
+      "isolatedSQLite": true
+    },
+    "targetedCalculator": {
+      "race": true,
+      "runs": 60,
+      "mockHTTP": true
+    },
+    "evaluator": {
+      "race": true,
+      "synthesisCombinations": 936,
+      "cases": 77
+    },
+    "lifecycle": {
+      "race": true,
+      "cases": 20
+    },
+    "httpAPI": {
+      "tests": 6,
+      "race": true
+    },
+    "vueComponent": {
+      "passed": 22,
+      "skipped": 0
+    },
+    "existingBgiHelpers": {
+      "passed": 5,
+      "filesPreserved": true
+    },
+    "goVet": "passed",
+    "goBuild": "passed",
+    "diffCheck": "passed",
+    "frontendBuild": {
+      "status": "passed",
+      "output": "C:\\Users\\oldwang\\AppData\\Local\\Temp\\autobgi-queue-web-4cd6e3f44381415c91ffa80457bf4e81",
+      "seconds": 23.15,
+      "modules": 4136,
+      "existingDistPreserved": true,
+      "warning": "existing large chunks"
+    }
+  },
+  "isolationIncident": {
+    "description": "An unseeded temporary config allowed legacy registry discovery and Cookie stdout; no value retained in this record.",
+    "occurred": true,
+    "mitigation": "Cookie stdout removed; subsequent test main.json preseeded with an absolute fake BetterGI directory; synthetic Cookie stdout regression passed."
+  },
+  "cleanup": {
+    "bulkRuntimeCleanup": "blocked by policy; not retried",
+    "newTestExecutablesRemoved": true,
+    "newTestSourcesRemoved": true,
+    "retainedRuntimeDirectories": [
+      "C:\\Users\\oldwang\\AppData\\Local\\Temp\\autobgi-queue-http-594ce6f966ea41f48d3c97f5eb88b172",
+      "C:\\Users\\oldwang\\AppData\\Local\\Temp\\autobgi-queue-safe-bcc44acb9f8c4aa38d5ede9c2f0a7bd2"
+    ]
+  },
+  "sourceSHA256": {
+    "CharacterPlanService/CalculatorRemote.go": "917dcb561dbc3392c9fd51c9b4aec4af123fed2acb482b579204ce688abbc1c7",
+    "CharacterPlanService/ReadOnly.go": "5032ae8a4533ae976676377b7b87970cb135b754ed060881d4d373bf2757bb78",
+    "CharacterPlanService/Targeted.go": "db42055743d3c1c5b719c0e3867ed55da780cdecf2babf65f917402e836b48de",
+    "TalentPlanService/types.go": "84c1fa1cc619b5d6f8e7c724ef96dbbab886f95de4a35ec714985900af91529a",
+    "TalentPlanService/store.go": "028003dbe4aad13a2f76a42caa9ad127d5715b81529cd21dca507398dea4c920",
+    "TalentPlanService/evaluate.go": "46c92b1c91c7826c6eee9217a5e081e11943b3995efab3eb8e60a94a4c076068",
+    "models/TalentQueueModel.go": "3ea9bbbcfe56954fb3fa757e7742a999fa8b8a01913c8de9ffbd0fa8a54afe13",
+    "models/InitDB.go": "cfb03bc31fd002993a14c3d80971f059f56c66df438371dfdb1c64211868375b",
+    "bgiStatus/OneDragon.go": "a892b42f610a43e7e8e0070352458e267102336a0316a760b53cb2e9b5ec3cf9",
+    "bgiStatus/BetterGIService.go": "9f8730b47861c6b0f7e77eb0a8433ec3f6855d8c499d339174c01987000abf6f",
+    "bgiStatus/talent_queue_lifecycle.go": "341d0f97c4528f8b7c48141a0b1fc233e7a7caaeb7f8ce0a2e3954bccafa0e28",
+    "config/Config.go": "0e07257d22223712b2baf2d68af207b4440295abd575c9c47c968905f58a7975",
+    "config/execution_directory.go": "816af10f8b280573f0469a2dc0edcc3e4602d5594a258369aa9fe0e8a780cea8",
+    "config/BgiConfg.go": "418ecd070c8095a1e3bff5caa597e21fea2ad5ceb5ecdb549612242b52d44328",
+    "menu/routes_tasks.go": "db30a5c5391a2ee674318f8f100572b097420e6651ae3a7094ae3f62e6beebd0",
+    "menu/routes_talent_queue.go": "1c7329324a95644cc813ed5ae4b3ee9bcb42359d2171d5cf13d3e39eaaaf4400",
+    "menu/talent_queue_json.go": "092dd42556de781b0b2af88ed6312a84c7b33ffb948882875726b1ae845cf371",
+    "menu/web/src/utils/api/plans.js": "c79131598303e75e5cc06bde28e1ff65947a4728d216bdc4aab94399ac05e04e",
+    "menu/web/src/views/BgiConfig.vue": "04ac0139b2038ba2991e13e7f69aa4d8c979b909df477b4467f9476991083dc3",
+    "menu/web/src/components/TalentQueueEditor.vue": "9dd7a597de55bbbac5edeae89688c00e1c6571f7ff30db7e3de6728b129f62de"
+  }
+}

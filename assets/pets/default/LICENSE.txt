@@ -1,0 +1,7 @@
+叶芽 / ABGI 小助手原创几何角色素材
+
+Copyright 2026 AutoBGI Desktop Pet contributors.
+
+这些由 cmd/assetgen 自主绘制的 PNG 和动作元数据以 CC0 1.0 Universal
+公开领域贡献方式提供，不包含原神、BetterGI、Morrow 或其他项目的角色素材。
+许可全文：https://creativecommons.org/publicdomain/zero/1.0/legalcode

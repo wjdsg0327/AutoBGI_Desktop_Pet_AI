@@ -1,0 +1,166 @@
+{
+  "date": "2026-10-27",
+  "version": "0.2.5",
+  "scope": "正式培养队列服务端只读适配、桌宠消费与展示",
+  "server": {
+    "tests": 9,
+    "leafCases": 64,
+    "race": true
+  },
+  "client": {
+    "adapterGroups": 6,
+    "serviceGroups": 6,
+    "raceRepeats": 5
+  },
+  "vue": {
+    "tests": 26,
+    "passed": 26,
+    "skipped": 0,
+    "host": "真实SFC与Vue内存宿主"
+  },
+  "crossModule": {
+    "transport": "真实Gin与PetV1Adapter HTTP",
+    "database": "隔离SQLite",
+    "presets": 3,
+    "entryStates": 5,
+    "raceRepeats": 3,
+    "queueMutated": false,
+    "dispatches": 0,
+    "largeRevision": "9007199254740993",
+    "maxQuantity": "9007199254740991"
+  },
+  "schema": {
+    "draft": "2020-12",
+    "metaValidation": true,
+    "validEnvelopes": 13,
+    "invalidVariants": 44,
+    "decimalBoundaries": 3005,
+    "realGinResponseValidated": true
+  },
+  "checks": {
+    "desktopGoToolchain": "go1.26.10",
+    "wails": "3.0.0",
+    "generatedMethods": 39,
+    "generatedModels": 40,
+    "viteModules": 84,
+    "desktopVet": true,
+    "rootAffectedVetBuild": true,
+    "typecheck": true,
+    "productionBuild": true,
+    "testAfterCleanup": "所有桌宠包无测试源，仅复核编译，不计行为测试",
+    "independentReview": "未发现可确认的新缺陷",
+    "nativeGUI": "本轮未执行",
+    "productionAutoBGI": "未连接",
+    "realCredentials": "本轮未读取",
+    "gameControl": "本轮未发出",
+    "systemNetworkSleep": "本轮未改变"
+  },
+  "limitations": [
+    "可信库存生产者尚未开放",
+    "启动准备与提交、每日字段恢复尚未开放",
+    "培养完成事件及配置迁移事务尚未开放",
+    "原生DPI、焦点、长时间运行及性能仍有未验收项"
+  ],
+  "cleanup": {
+    "newTestSourcesRemaining": 0,
+    "newVueHelpersRemaining": 0,
+    "rootBridgeTestExecutablesRemaining": 4,
+    "directory": "C:\\Users\\oldwang\\AppData\\Local\\Temp\\queue-bridge-760246f56ae84f3c9bf0fffd7440aa1a",
+    "binaryNames": [
+      "pet-adapter.test.exe",
+      "menu-queue.test.exe",
+      "pet-adapter-race.test.exe",
+      "menu-queue-race.test.exe"
+    ],
+    "automaticReview": "blocked by policy",
+    "alternativeDeletionAttempted": false,
+    "excludedFromPortable": true,
+    "previouslyBlockedDirectoriesPreserved": true
+  },
+  "sourceSHA256": [
+    {
+      "path": "menu/routes_talent_queue.go",
+      "sha256": "4cd9b026105fb51c541ab043463ecbfc755054e1aec49242c456467c9de13741"
+    },
+    {
+      "path": "menu/desktop_pet_cultivation_queue.go",
+      "sha256": "85a9743c79e3d7582e878d669868db998873f400ef930bf2550e4e050dd0ccc3"
+    },
+    {
+      "path": "desktopPet/http.go",
+      "sha256": "2b4f5fa7f602faca0f7afd9620bac9393dfb79ff0202dcfe09b0b27b590f9775"
+    },
+    {
+      "path": "desktopPet/cultivation_queue_types.go",
+      "sha256": "040dc2d29bd14197a232fcd3b5508a0af244310431f53b71a9ff163d0db64d9e"
+    },
+    {
+      "path": "desktopPet/cultivation_queue.go",
+      "sha256": "e125a23122d743d4a7757b86fa29b6c5b2e8e8753da4003881b437578c87e94b"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/internal/autobgi/types.go",
+      "sha256": "6e9c660cddbb1687eb84d798da45a80e31ba029798674501d90ed2ea2047860a"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/internal/autobgi/petv1.go",
+      "sha256": "73f591a7f32cd13ece73b300c36cdc8ee92c1175bea035ef95f357bdffe98e92"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/internal/autobgi/cultivation_queue.go",
+      "sha256": "734a8db75fc77df3052201df36ca93d6335cd351775650033f4ef8a84573e93f"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/internal/service/cultivation_queue.go",
+      "sha256": "31d57bda6b07f775bf41fd0be208633c8235cbdbdf1d2cfe02788803f3a9ea4a"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/frontend/src/bridge.ts",
+      "sha256": "f0cfdcedfda94588c2f6a0e3657a70928376760fb658e0a053924cf8d9c04e14"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/frontend/src/components/CultivationQueue.vue",
+      "sha256": "227edb0370596a351472678da17f608527efd40d65c99fab8672d55c7fbe4528"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/frontend/src/components/DomainSummary.vue",
+      "sha256": "524569f148e6ad4aa73fdf33422aaf7f45365a709470769671c9825c9b5e5899"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/frontend/src/views/PanelView.vue",
+      "sha256": "3b07b5ce9ea800064d5af4d7c0578f56934d4a5de52558de8e9b403dc4a99ade"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/frontend/bindings/autobgi-pet/internal/autobgi/models.ts",
+      "sha256": "f39ec02ef0b96d8ac7865c095c6d8322defc9abb52eeb5d2150d0fd208fdff0e"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/frontend/bindings/autobgi-pet/internal/service/models.ts",
+      "sha256": "bc31a1b9a11b5c5e57e0fc438d52d980695585a496fb248bab4dffd7dba6782b"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/frontend/bindings/autobgi-pet/internal/service/service.ts",
+      "sha256": "9d6f3b5143d2106f4414a59893637ee83c3dc0fe21ed6cb5770e1ec7653ba838"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/build/windows/info.json",
+      "sha256": "fe47af1cd8532571ffa6b44c1340e1899d77fb991d8ea3433f2a8b5ab1b35b3e"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/frontend/package.json",
+      "sha256": "2f9b211843305792430cfeb53cc35a4f12cefca809063524da46810639bfcfe6"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/frontend/package-lock.json",
+      "sha256": "50f7af4afcf029e260795792009fb5771ed458f9072400a14b7a49ae159c647c"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/docs/contracts/cultivation-queue.schema.json",
+      "sha256": "51795fb04ef0588d0b7a731a625c533c21e41c0fae96e0058d470718284d5c15"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/docs/contracts/cultivation-queue.example.json",
+      "sha256": "f2d4f53464bc50327543e0ed84c4667cdc236259817ec7a23560cc4929fc0036"
+    }
+  ]
+}

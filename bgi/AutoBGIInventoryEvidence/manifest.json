@@ -1,0 +1,11 @@
+{
+  "manifest_version": 1,
+  "name": "AutoBGIInventoryEvidence",
+  "version": "1.0.0",
+  "description": "读取固定请求，在采集前后核对游戏 UID，复用 BetterGI 背包计数并写入结构化观察回执。区服未被观察，回执不自报可信或防伪。",
+  "tags": ["背包", "AutoBGI"],
+  "authors": [{ "name": "AutoBGI" }],
+  "main": "main.js",
+  "library": ["."],
+  "saved_files": ["local/"]
+}

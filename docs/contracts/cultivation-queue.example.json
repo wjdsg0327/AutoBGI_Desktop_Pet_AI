@@ -1,0 +1,89 @@
+{
+  "code": "OK",
+  "message": "",
+  "requestId": "11111111111111111111111111111111",
+  "serverTime": "2026-10-27T12:00:00Z",
+  "data": {
+    "schemaVersion": 1,
+    "instanceId": "22222222222222222222222222222222",
+    "scope": "instance-config-queue",
+    "presetId": "preset-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "presetName": "合成示例预设",
+    "executionContext": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+    "plan": {
+      "revision": "9007199254740993",
+      "enabled": true,
+      "role": { "uid": "100000001", "region": "cn_gf01" },
+      "updatedAt": "2026-10-27T11:00:00Z",
+      "entries": [
+        {
+          "id": "cccccccccccccccccccccccccccccccc",
+          "characterId": 10000001,
+          "name": "合成角色甲",
+          "addedAt": "2026-10-27T10:00:00Z",
+          "targetLevel": 90,
+          "targetTalents": [8, 9, 10],
+          "currentLevel": 80,
+          "currentTalents": [6, 8, 9],
+          "panelUpdatedAt": null,
+          "requirementsAvailable": true,
+          "requirementSource": "official-calculator-cache",
+          "requestFingerprint": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+          "requirementsSourceTime": null,
+          "requirementsFetchedAt": "2026-10-27T10:30:00Z",
+          "materials": [
+            { "materialId": 1001, "name": "合成材料", "required": 20, "owned": null, "missing": null, "excluded": false },
+            { "materialId": 202, "name": "合成摩拉", "required": 9007199254740991, "owned": null, "missing": null, "excluded": true },
+            { "materialId": 104319, "name": "合成智识之冕", "required": 1, "owned": null, "missing": null, "excluded": true }
+          ],
+          "warning": "合成需求命中示例；没有可核验的库存或面板源时间"
+        },
+        {
+          "id": "dddddddddddddddddddddddddddddddd",
+          "characterId": 10000002,
+          "name": "合成角色乙",
+          "addedAt": "2026-10-27T10:05:00Z",
+          "targetLevel": 80,
+          "targetTalents": [6, 8, 8],
+          "currentLevel": null,
+          "currentTalents": null,
+          "panelUpdatedAt": null,
+          "requirementsAvailable": false,
+          "requirementSource": "",
+          "requestFingerprint": null,
+          "requirementsSourceTime": null,
+          "requirementsFetchedAt": null,
+          "materials": [],
+          "warning": "合成缓存缺失示例；当前等级、天赋与完整目标需求未知"
+        },
+        {
+          "id": "ffffffffffffffffffffffffffffffff",
+          "characterId": 10000003,
+          "name": "合成角色丙",
+          "addedAt": "2026-10-27T10:10:00Z",
+          "targetLevel": 90,
+          "targetTalents": [10, 10, 10],
+          "currentLevel": 90,
+          "currentTalents": [10, 13, 13],
+          "panelUpdatedAt": "2026-10-27T09:00:00Z",
+          "requirementsAvailable": true,
+          "requirementSource": "panel-already-met",
+          "requestFingerprint": "panel-sha256:9999999999999999999999999999999999999999999999999999999999999999",
+          "requirementsSourceTime": null,
+          "requirementsFetchedAt": null,
+          "materials": [],
+          "warning": "合成面板达标示例；不代表已执行，不移除队列条目"
+        }
+      ]
+    },
+    "status": "blocked",
+    "currentEntryId": "cccccccccccccccccccccccccccccccc",
+    "executionAvailable": false,
+    "completionEventsAvailable": false,
+    "inventoryVerified": false,
+    "warnings": [
+      "本文件全部为合成合同示例，不含生产输入，不可作为真实账号、缓存或执行证据",
+      "正式队列仅只读展示，库存、执行和完成事件能力均未开放"
+    ]
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "date": "2026-10-27",
+  "version": "0.2.4",
+  "isolatedConfiguration": true,
+  "profilesCreated": 0,
+  "realServiceConnected": false,
+  "startup": "process-alive-and-native-accessibility",
+  "versionLabel": "v0.2.4",
+  "browserPreviewWarning": false,
+  "visualVerification": "not-completed",
+  "captureError": "window capture timed out: timed out waiting on channel",
+  "inputError": "coordinate input geometry is unavailable",
+  "dialogsVerified": false,
+  "skinPNGDecodeVerified": false,
+  "systemNetworkChanged": false,
+  "realCredentialsRead": false,
+  "firstStartVisibility": "not-verified-hidden-start",
+  "secondInstance": "one-window-returned-by-tool",
+  "testProcessStopRequested": true,
+  "runtimeDirectoryRetained": "bin/native-024-2080dc478d044cd9bffa87b1f7f8ea0f",
+  "cleanup": "blocked by policy",
+  "excludedFromArchive": true
+}

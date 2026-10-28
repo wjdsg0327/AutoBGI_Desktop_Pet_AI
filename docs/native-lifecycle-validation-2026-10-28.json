@@ -1,0 +1,259 @@
+{
+  "date": "2026-10-28",
+  "version": "0.2.6",
+  "scope": "desktop_presentation_command_clock_and_native_activation_guard",
+  "frontend": {
+    "storeGroups": 5,
+    "sfcAssertions": 36,
+    "storeAssertions": 22,
+    "nativeGUIVerified": false,
+    "execution": "real Vue SFC and Pinia, in-memory controlled clock and bridge, stdin only",
+    "testSourcesCreated": 0,
+    "sfcGroups": 7
+  },
+  "presentationGo": {
+    "schemaVersion": 1,
+    "verifiedAt": "2026-10-28T00:54:53+08:00",
+    "purpose": "面板独立显隐与原生展示广播的隔离调用链验证",
+    "toolchain": "go version go1.26.10 windows/amd64",
+    "toolchainExecutable": "C:\\env\\goenv\\gopath\\pkg\\mod\\golang.org\\toolchain@v0.0.1-go1.26.10.windows-amd64\\bin\\go.exe",
+    "toolchainEnvironment": {
+      "CGO_ENABLED": "1",
+      "GOARCH": "amd64",
+      "GOOS": "windows",
+      "GOROOT": "C:\\env\\goenv\\gopath\\pkg\\mod\\golang.org\\toolchain@v0.0.1-go1.26.10.windows-amd64",
+      "GOTOOLCHAIN": "go1.26.10",
+      "GOTOOLDIR": "C:\\env\\goenv\\gopath\\pkg\\mod\\golang.org\\toolchain@v0.0.1-go1.26.10.windows-amd64\\pkg\\tool\\windows_amd64",
+      "GOVERSION": "go1.26.10"
+    },
+    "command": "GOTOOLCHAIN=go1.26.10 GOROOT=<installed-go1.26.10> go test -race -count=3 -run=^TestPanelPresentationDomain$ -json ./internal/desktop",
+    "finalRun": {
+      "repeats": 3,
+      "topLevelGroups": 1,
+      "leafCases": 6,
+      "passedTestEvents": 21,
+      "failedEvents": 0,
+      "skippedEvents": 0,
+      "raceMessages": 0,
+      "cases": [
+        "TestPanelPresentationDomain/并发广播提供唯一版本且读取无副作用",
+        "TestPanelPresentationDomain/初始化读取不发事件和无别名",
+        "TestPanelPresentationDomain/广播与初始化快照互不污染",
+        "TestPanelPresentationDomain/角色隐藏时控制台独立显隐",
+        "TestPanelPresentationDomain/休眠与唤醒保持面板事实",
+        "TestPanelPresentationDomain/重复面板事实不制造事件"
+      ],
+      "concurrentPresentationEventsPerRepeat": 256,
+      "supersededRunsIncluded": false
+    },
+    "isolation": {
+      "realWailsApplicationEventBus": true,
+      "noNetworkTransport": true,
+      "zeroValueBusinessService": true,
+      "actualSetPanelVisibleRefreshAndSleepPaths": true,
+      "applicationRunInvoked": false,
+      "nativeWindowsCreated": 0,
+      "configurationOrCredentialsRead": false,
+      "nativeIsVisibleOrForegroundBehaviorCovered": false,
+      "frontendRevisionAcceptanceCovered": false
+    },
+    "sourceEvidence": {
+      "comparedInternalFiles": 58,
+      "allHashesMatchCurrentProduction": true,
+      "criticalSources": [
+        {
+          "path": "internal\\service\\service.go",
+          "matches": true,
+          "sha256": "9D0DC405EFB5B77EAAD3DD40A829328E36D5FCB6AF3FD8604D62A31FD803007B"
+        },
+        {
+          "path": "internal\\service\\pause.go",
+          "matches": true,
+          "sha256": "A39C6415F64E27ECF6429200C76BBD515F109E9E2700C9ED72B28BC15ED33948"
+        },
+        {
+          "path": "internal\\desktop\\style_windows.go",
+          "matches": true,
+          "sha256": "4A910E80ADF275F946AE59BE4D1B6182A2880B5C56816061A5EC8101B7421CE9"
+        },
+        {
+          "path": "internal\\desktop\\power_windows.go",
+          "matches": true,
+          "sha256": "C3489F4BCCF956A82ED587C1A012E421FE4AAC11CAE3CE53E7693A916895D764"
+        },
+        {
+          "path": "internal\\desktop\\power.go",
+          "matches": true,
+          "sha256": "79FA9139F50075F9D493DA274F7293B96AF5AB50150E56DECFCD09C133A2DC52"
+        },
+        {
+          "path": "internal\\desktop\\panel.go",
+          "matches": true,
+          "sha256": "450273F40FC5F141AA55720958449A0D8A9D26349A31ACC9C60FBA034E0E5178"
+        },
+        {
+          "path": "internal\\desktop\\desktop.go",
+          "matches": true,
+          "sha256": "4A32BA4B460A1DE00E58907118EC0B9382E0AD39310AFA9A325A21B49888703E"
+        },
+        {
+          "path": "internal\\desktop\\bubble_state.go",
+          "matches": true,
+          "sha256": "3661BD803F3C823E8D186031626469484C6915AA3C605BF68DA1BB9452D7AF45"
+        },
+        {
+          "path": "internal\\desktop\\activation_windows.go",
+          "matches": true,
+          "sha256": "FB548830DFE9EF90355A03C27D24A423205B0DFD2C73DFD77D5BCB3DC67EC1D6"
+        }
+      ],
+      "removedTemporaryTestSHA256": "3DFE3F93B305C3D6EFBEC3CC6117AB4849F388FB4BB8C911E87C0B3DF3EA3199",
+      "reconstructedTestMatchesPreviousSource": true
+    },
+    "cleanup": {
+      "temporaryTestSourceRemoved": true,
+      "productionFilesModified": false,
+      "directoryOrExecutableDeletionAttempted": false,
+      "newCleanupRejections": 0
+    },
+    "stdout": ".validation/panel-presentation-domain-20261028/panel-presentation-results.jsonl",
+    "stdoutSHA256": "DB79671DF01ADAFE7E587DD63D7D8A5F6CB55617777F56A482B5821926A4E7AE"
+  },
+  "activationGo": {
+    "kind": "windows_activation_guard_target_toolchain",
+    "date": "2026-10-28",
+    "status": "passed",
+    "toolchain": {
+      "selection": "GOTOOLCHAIN=go1.26.10",
+      "actualGoVersion": "go version go1.26.10 windows/amd64",
+      "actualRuntimeVersion": "go1.26.10",
+      "runtimeConfirmations": 5
+    },
+    "finalRunOnly": {
+      "command": "go test -race -run=^TestHostActivation -count=5 -json ./internal/desktop",
+      "invocations": 1,
+      "repeatCount": 5,
+      "topLevelTestsPerRepeat": 8,
+      "subtestsPerRepeat": 8,
+      "topLevelPassEvents": 40,
+      "subtestPassEvents": 40,
+      "failEvents": 0,
+      "race": true,
+      "ordinaryMessageTypes": 11,
+      "concurrentWorkers": 12,
+      "iterationsPerWorker": 100,
+      "activationQueriesPerConcurrentRun": 2400,
+      "forwardedInputsPerConcurrentRun": 1200
+    },
+    "checks": {
+      "goVetDesktopPackage": "passed using go1.26.10",
+      "goBuildDesktopPackage": "passed using go1.26.10",
+      "targetedDiffCheck": "passed",
+      "productionSourceHashesUnchanged": true,
+      "temporaryTestSourceRemoved": true,
+      "standaloneBinaryCreated": false
+    },
+    "retainedPriorArtifacts": {
+      "location": "../activation-df95b5c1da014d50b5d15442f1412ef4",
+      "confirmedPriorToolchain": "go1.27.1",
+      "countsIncludedInFinal": false,
+      "priorBinaryAndLogTouched": false
+    },
+    "evidence": {
+      "eventsFile": "activation-events.jsonl",
+      "eventsSHA256": "A4950B239FFB0F4068956FD34F646957393E4AA89F0B22826DAB2DD46D729F19"
+    },
+    "sourceHashesSHA256": {
+      "internal/desktop/style_windows.go": "4A910E80ADF275F946AE59BE4D1B6182A2880B5C56816061A5EC8101B7421CE9",
+      "internal/desktop/activation_windows.go": "FB548830DFE9EF90355A03C27D24A423205B0DFD2C73DFD77D5BCB3DC67EC1D6",
+      "internal/desktop/power_windows.go": "C3489F4BCCF956A82ED587C1A012E421FE4AAC11CAE3CE53E7693A916895D764"
+    },
+    "limitations": [
+      "仅验证假 HWND、合成消息及注入的样式解析器。",
+      "未创建原生 UI，未改变系统悬停设置，未实测游戏焦点。",
+      "未修改生产源码，未重新操作此前被拒绝清理的二进制及日志。"
+    ]
+  },
+  "build": {
+    "executableSHA256": "f5a625a9a92af09a10f269029cbc00411bd33c664321aad2c189ff59d2306aa1",
+    "bindingModels": 40,
+    "viteModules": 84,
+    "wails": "v3.0.0",
+    "toolchain": "go1.26.10",
+    "executable": "bin/AutoBGI-Pet.exe",
+    "goVetAllPackages": "passed",
+    "productionBuild": "passed",
+    "fileVersion": "0.2.6.0",
+    "typecheck": "passed",
+    "portableFilename": "AutoBGI-Pet-0.2.6-windows-amd64.zip",
+    "productVersion": "0.2.6",
+    "archiveChecksum": "bin/AutoBGI-Pet-0.2.6-windows-amd64.zip.sha256",
+    "bindingMethods": 39
+  },
+  "nativeSmoke": {
+    "date": "2026-10-28",
+    "productVersion": "0.2.6",
+    "fileVersion": "0.2.6.0",
+    "executableSHA256": "f5a625a9a92af09a10f269029cbc00411bd33c664321aad2c189ff59d2306aa1",
+    "isolatedConfiguration": true,
+    "profilesCreated": 0,
+    "productionConnected": false,
+    "finalProcessID": 146068,
+    "secondInstanceExitCode": 0,
+    "originalInstanceAliveAfterSecond": true,
+    "nativeAccessibility": {
+      "versionLabel": "v0.2.6",
+      "previewWarning": false,
+      "disconnected": true,
+      "hasSettings": true
+    },
+    "visualVerified": false,
+    "initialVisibilityVerified": false,
+    "earlierScreenshotFailures": 2,
+    "captureError": "window capture timed out: timed out waiting on channel",
+    "earlierInputFailure": "coordinate input geometry is unavailable",
+    "realCredentialsRead": false,
+    "systemSettingsChanged": false,
+    "runtimeDirectory": "D:\\Documents\\go\\autobgi\\AutoBGI_Desktop_Pet_AI\\.validation\\native-20261028-8349c761c6c94c9ba000099b75dfcf08"
+  },
+  "limits": [
+    "No native image, input, mixed-DPI, click-through, hover-setting or real game focus verification",
+    "No new 10-minute resource acceptance or 8-hour endurance test; historical 250 MB working-set target remains unmet",
+    "No Wails fork, WebView2 COM layout access, artificial working-set trimming, or bubble Close/recreate memory claim",
+    "No production AutoBGI, real credentials, BGI/Genshin execution, network/sleep/display/system-setting mutation",
+    "Cultivation inventory, real file CAS and completion delivery gates remain closed"
+  ],
+  "cleanup": {
+    "retriedBlockedTargets": false,
+    "validationExcludedFromPortable": true,
+    "newTestSourcesRemoved": true,
+    "blockedDeletionTargets": [
+      ".validation/activation-df95b5c1da014d50b5d15442f1412ef4/activation-verification.exe",
+      ".validation/activation-df95b5c1da014d50b5d15442f1412ef4/activation-verification.log",
+      ".validation/native-20261028-8349c761c6c94c9ba000099b75dfcf08"
+    ],
+    "retainedEvidenceRoot": ".validation",
+    "blockedDeletionReason": "blocked by policy"
+  },
+  "sourceHashesSHA256": {
+    "internal/desktop/desktop.go": "4a32ba4b460a1de00e58907118ec0b9382e0ad39310afa9a325a21b49888703e",
+    "internal/desktop/panel.go": "450273f40fc5f141aa55720958449a0d8a9d26349a31acc9c60fba034e0e5178",
+    "internal/desktop/activation_windows.go": "fb548830dfe9ef90355a03c27d24a423205b0dfd2c73dfd77d5bcb3dc67ec1d6",
+    "internal/desktop/style_windows.go": "4a910e80adf275f946ae59be4d1b6182a2880b5c56816061a5ec8101b7421ce9",
+    "internal/desktop/power_windows.go": "c3489f4bccf956a82ed587c1a012e421fe4aac11cae3ce53e7693a916895d764",
+    "frontend/src/stores/app.ts": "629949af9eb302effc772e9e033c3bf19224dc0aa6f7016f9900aabe51947339",
+    "frontend/src/components/CommandPanel.vue": "93a311d69b879f7de041bd20c9a195a41b569d2a4d0466e77f66f626b4beb725",
+    "frontend/src/views/PanelView.vue": "874a42865a6d5fabf3dac7655cc7648d28586bedee8109fd7d3273fb97d1c617",
+    "frontend/package.json": "c8abd73c4e6628c51221a8752e92e36ae2ac708c5ab27b69c355d4276d7072ea",
+    "frontend/package-lock.json": "8bbf667fa561cd769e952356b3b561657b7f46412dad2810810538d41e6e0d14",
+    "build/windows/info.json": "64add0a4a544f356989c601d0ec1544b3c50b5759f97decb6b94965f78ce6b69",
+    "build/windows/app.manifest": "3ca741d3e30ea489dda4a466b4bbecb939f75635ca4cb26e216cc679f91666e0"
+  },
+  "evidenceRecords": {
+    "presentation": ".validation/panel-presentation-domain-20261028/validation.json",
+    "presentationSHA256": "97f2affb6c58da71bffb65cb865bcbf77c1754e88a87e96ba9813872834fdaf1",
+    "activation": ".validation/activation-go12610-3edd7e741f5846e4843bbe9afc6effa8/result.json",
+    "activationSHA256": "409345c806b51ae763d5221b9cb9cb8bb932c2ac4585d40c617eceb0912bd63a",
+    "nativeSmoke": ".validation/native-lifecycle-smoke-20261028.json"
+  }
+}

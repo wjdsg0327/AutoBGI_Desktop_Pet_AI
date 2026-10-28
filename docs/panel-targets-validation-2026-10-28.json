@@ -1,0 +1,372 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-28",
+  "scope": "Internal panel-targets all-queue evaluator and versioned startup persistence after frozen desktop 0.2.14",
+  "fullSpecificationComplete": false,
+  "release": {
+    "desktopVersion": "0.2.14",
+    "desktopRebuilt": false,
+    "webRebuilt": false,
+    "productionHostLaunched": false,
+    "frozenArtifactsAndAuditsMatched": 8,
+    "frozenAudit": "AutoBGI_Desktop_Pet_AI/.validation/panel-targets-root-e0a4d0ee3f1e4cdeb0767d38af8d3d62/protected-release-audit.json"
+  },
+  "contract": {
+    "mode": "panel-targets",
+    "fullQueueOnly": true,
+    "inventoryRequired": false,
+    "mixedInputsAllowed": false,
+    "targetSkillBindingRequired": true,
+    "baseTalentsExcludeBonuses": true,
+    "panelRecordSchema": 2,
+    "legacyMaterialsRecordSchema": 1,
+    "legacyPlanBytesAndFingerprintPreserved": true,
+    "emptyDailyPatchOnly": true,
+    "fileCASForPanelMode": false,
+    "materialsReadyEventsForPanelMode": 0,
+    "targetsMetNotificationImplemented": false
+  },
+  "capabilities": {
+    "executionAvailable": false,
+    "inventoryVerified": false,
+    "completionEventsAvailable": false,
+    "productionStartSource": "unavailable",
+    "productionArtifactWrapperRegistered": false,
+    "targetSkillSelectionAPIAndUI": false,
+    "trustedPanelProvider": false,
+    "cachedDisplayPanelAccepted": false,
+    "resourceLedgerImplemented": false
+  },
+  "validation": {
+    "isolated": {
+      "toolchain": "go version go1.27.1 windows/amd64",
+      "productionSources": 21,
+      "actualModelCopies": 5,
+      "sourcesStillMatch": true,
+      "runs": [
+        {
+          "name": "normal-final",
+          "command": "go test -count=1 -mod=mod -json ./TalentPlanService",
+          "exitCode": 0,
+          "topLevelCount": 18,
+          "subtestCount": 132,
+          "totalNamedTests": 150,
+          "leafCount": 137,
+          "passCount": 150,
+          "failCount": 0,
+          "skippedCount": 0,
+          "dataRaceCount": 0,
+          "packageElapsed": 0.797
+        },
+        {
+          "name": "race-final",
+          "command": "go test -race -count=1 -mod=mod -json ./TalentPlanService",
+          "exitCode": 0,
+          "topLevelCount": 18,
+          "subtestCount": 132,
+          "totalNamedTests": 150,
+          "leafCount": 137,
+          "passCount": 150,
+          "failCount": 0,
+          "skippedCount": 0,
+          "dataRaceCount": 0,
+          "packageElapsed": 3.651
+        }
+      ],
+      "vet": {
+        "command": "go vet -mod=mod ./TalentPlanService",
+        "exitCode": 0,
+        "stdoutBytes": 0,
+        "stderrBytes": 0
+      },
+      "legacyControl": [
+        {
+          "name": "evaluate.go",
+          "beforePath": "D:\\Documents\\go\\autobgi\\AutoBGI_Desktop_Pet_AI\\.validation\\panel-targets-root-e0a4d0ee3f1e4cdeb0767d38af8d3d62\\before\\evaluate.go",
+          "beforeHash": "46C92B1C91C7826C6EEE9217A5E081E11943B3995EFAB3EB8E60A94A4C076068",
+          "isolatedHash": "2DBCA8EFB33B3FBB5B4C7972ACD14142C6358FF81212C99718641D0079F9DB38",
+          "packageOnlyDifference": true
+        },
+        {
+          "name": "types.go",
+          "beforePath": "D:\\Documents\\go\\autobgi\\AutoBGI_Desktop_Pet_AI\\.validation\\panel-targets-root-e0a4d0ee3f1e4cdeb0767d38af8d3d62\\before\\types.go",
+          "beforeHash": "84C1FA1CC619B5D6F8E7C724EF96DBBAB886F95DE4A35EC714985900AF91529A",
+          "isolatedHash": "1CA54E5A3773AF4E23C6C0316167FCCA60E724D57C288C30D9698C915FD9F8B0",
+          "packageOnlyDifference": true
+        }
+      ],
+      "firstRuns": {
+        "normalExit": 0,
+        "raceExit": 1,
+        "raceFailingSubtests": [
+          "TestPanelTargetsPersistentRecovery/prepared",
+          "TestPanelTargetsPersistentRecovery/dispatching",
+          "TestPanelTargetsPersistentRecovery/dispatched"
+        ],
+        "cause": "test harness reused deterministic SQLite paths across separate test processes",
+        "fix": "only validation fixture filename now includes os.Getpid()",
+        "productionDefectFound": false,
+        "authoritativePassingRuns": "normal-final and race-final only"
+      },
+      "boundary": "models.DB declaration only; no production models initialization",
+      "fullEvidence": "AutoBGI_Desktop_Pet_AI/.validation/panel-targets-tests-90e72edc15994581b882fea39821641f/evidence.json"
+    },
+    "hostBuild": {
+      "date": "2026-10-28",
+      "goVersion": "go version go1.27.1 windows/amd64",
+      "productionInputs": 592,
+      "sourceStable": true,
+      "changedInputs": [],
+      "vetPassed": true,
+      "buildPassed": true,
+      "executableRun": false,
+      "executablePath": "D:\\Documents\\go\\autobgi\\AutoBGI_Desktop_Pet_AI\\.validation\\panel-targets-root-e0a4d0ee3f1e4cdeb0767d38af8d3d62\\AutoBGI-panel-host.exe",
+      "executableSHA256": "a1511873332179ea639a5ad50a8a44eb67db31d7d11100255f43f03b2a8152e0",
+      "executableBytes": 124465173,
+      "testsIncludedInProductionInputList": false,
+      "validationDirectoriesIncluded": false,
+      "webRebuiltThisStage": false
+    },
+    "currentBuildInputs": {
+      "checked": 592,
+      "matched": 592,
+      "changed": [],
+      "testsAndValidationInputsIncluded": false
+    },
+    "independentReadOnlyReviews": {
+      "reviewers": [
+        "domain",
+        "server_protocol"
+      ],
+      "confirmedFindings": 0,
+      "sourcesMatched": true,
+      "evidence": "AutoBGI_Desktop_Pet_AI/.validation/panel-targets-root-e0a4d0ee3f1e4cdeb0767d38af8d3d62/review-summary.json"
+    },
+    "formatting": {
+      "date": "2026-10-28",
+      "method": "git -c core.autocrlf=false diff --no-index --check /dev/null for each actual untracked production source",
+      "passed": true,
+      "files": [
+        {
+          "path": "TalentPlanService/types.go",
+          "exitCode": 1,
+          "noWhitespaceErrors": true
+        },
+        {
+          "path": "TalentPlanService/store.go",
+          "exitCode": 1,
+          "noWhitespaceErrors": true
+        },
+        {
+          "path": "TalentPlanService/evaluate.go",
+          "exitCode": 1,
+          "noWhitespaceErrors": true
+        },
+        {
+          "path": "TalentPlanService/panel_evaluate.go",
+          "exitCode": 1,
+          "noWhitespaceErrors": true
+        },
+        {
+          "path": "TalentPlanService/start_prepare.go",
+          "exitCode": 1,
+          "noWhitespaceErrors": true
+        },
+        {
+          "path": "TalentPlanService/start_validate.go",
+          "exitCode": 1,
+          "noWhitespaceErrors": true
+        },
+        {
+          "path": "TalentPlanService/start_events.go",
+          "exitCode": 1,
+          "noWhitespaceErrors": true
+        }
+      ],
+      "gofmtPassed": true,
+      "globalGitConfigChanged": false
+    }
+  },
+  "cleanup": {
+    "attemptsPerGroup": 1,
+    "groups": [
+      {
+        "owner": "panel_tests",
+        "targets": 41,
+        "remaining": 41,
+        "commandExecuted": false,
+        "result": "AutoBGI_Desktop_Pet_AI/.validation/panel-targets-tests-90e72edc15994581b882fea39821641f/cleanup-result.json"
+      },
+      {
+        "owner": "root",
+        "targets": 3,
+        "remaining": 3,
+        "commandExecuted": false,
+        "result": "AutoBGI_Desktop_Pet_AI/.validation/panel-targets-root-e0a4d0ee3f1e4cdeb0767d38af8d3d62/cleanup-result.json"
+      }
+    ],
+    "totalNewProtectedFiles": 44,
+    "remainingNewTestSources": 1,
+    "reason": "Automatic approval review: blocked by policy",
+    "noRetry": true,
+    "noAlternativeMutation": true,
+    "historicalProtectedFilesUntouched": true,
+    "productionInputsExcludeValidation": true
+  },
+  "sources": [
+    {
+      "path": "TalentPlanService/types.go",
+      "sha256": "2bd7e80a7a9cb7373b5e57823086d8a190837bdae486c77ae399767bf6939882"
+    },
+    {
+      "path": "TalentPlanService/store.go",
+      "sha256": "b4ee95aee21204921492acc9a678591e6b868b60c8814d45a0e4c8d3162d72bc"
+    },
+    {
+      "path": "TalentPlanService/evaluate.go",
+      "sha256": "5416be48a9ccaaaad45e9d96f955797f5030270391951cdbcf7f3c88961f8185"
+    },
+    {
+      "path": "TalentPlanService/panel_evaluate.go",
+      "sha256": "efb3c4ed622438370ffbdb1ccc014e6aa1ad2ad23f01ea1f293324918c4cd3f0"
+    },
+    {
+      "path": "TalentPlanService/start_prepare.go",
+      "sha256": "236423d05668111352fb837167b1b9d27a4311d72d3055ab222b29a417f97694"
+    },
+    {
+      "path": "TalentPlanService/start_validate.go",
+      "sha256": "e872f8492fff6870550e257bff013d28cceeb56ddfc60c26122cbbe70d756444"
+    },
+    {
+      "path": "TalentPlanService/start_events.go",
+      "sha256": "e7dd7f56d198830da5954b1ee0e49fb899657d5f2dfb4dbd1cf57e41ac44bc6b"
+    }
+  ],
+  "documentation": [
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/README.md",
+      "sha256": "c832a4c338c89f59c1136debadbc328804c71d23356641d7d6cb9111eacf61ea"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/docs/cultivation-startup.md",
+      "sha256": "ecc48643811bf3e143577a0e73e20fe9b1f147827796f3f8e09dac57b6a24e4a"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/docs/panel-targets-2026-10-28.md",
+      "sha256": "3931414f3ea4d60447fb8f537632d0d79aa9c926ecaa6555880878c94fa91561"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/docs/inventory-reservation-design-2026-10-28.md",
+      "sha256": "ab60a2055c12101873db193ea749106fd2bfe86ad0f908ef093247df832b46a5"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/docs/acceptance.md",
+      "sha256": "1ed42f7f0af663400bc4b6ff34e4ddfae786ea3640d25acef06d72a0f4413e46"
+    }
+  ],
+  "evidence": [
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/panel-targets-tests-90e72edc15994581b882fea39821641f/evidence.json",
+      "sha256": "a9407f50785ab2bb62888dda7f08efd2aba5a08e2bb0a354dad6ff3ce818f400"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/panel-targets-tests-90e72edc15994581b882fea39821641f/cleanup-manifest.json",
+      "sha256": "6bc7c0d7faa4fea6c43690bfe2b38840ccce697718bd3530017488301ca93227"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/panel-targets-tests-90e72edc15994581b882fea39821641f/cleanup-result.json",
+      "sha256": "47d8e68422459b62fcd1d59e3ec6542dd2baa53d06aeef86ecf3747e01be1b67"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/panel-targets-tests-90e72edc15994581b882fea39821641f/source-copy-hashes.json",
+      "sha256": "db7085cd78240d06df78e1eb50fc08b8dc23902add168369b6c239a50c1bbe27"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/panel-targets-tests-90e72edc15994581b882fea39821641f/normal-final-results.jsonl",
+      "sha256": "9901a0c4f946e2673ddada35460eb9b8b5c09a1a8101af4f0475f4983b823dc6"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/panel-targets-tests-90e72edc15994581b882fea39821641f/race-final-results.jsonl",
+      "sha256": "1611d9b491367dc7b892642890ad1ddfd12f0ba8d1eced49e877a44ac4b431c8"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/panel-targets-tests-90e72edc15994581b882fea39821641f/vet-final-stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/panel-targets-tests-90e72edc15994581b882fea39821641f/vet-final-stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/panel-targets-root-e0a4d0ee3f1e4cdeb0767d38af8d3d62/host-build-validation.json",
+      "sha256": "a2bbd8f242d655ca19595f5679f81afe5d631924d065f3d0f1d667d4a2e0e305"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/panel-targets-root-e0a4d0ee3f1e4cdeb0767d38af8d3d62/source-before-build.json",
+      "sha256": "9e9400d04f7f56df3c3b8ce680e3ece5b1beebf8de7d406aa352f621415e7b1d"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/panel-targets-root-e0a4d0ee3f1e4cdeb0767d38af8d3d62/source-after-build.json",
+      "sha256": "9e9400d04f7f56df3c3b8ce680e3ece5b1beebf8de7d406aa352f621415e7b1d"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/panel-targets-root-e0a4d0ee3f1e4cdeb0767d38af8d3d62/review-summary.json",
+      "sha256": "c1fa4fdb3365455a0ad5aadebaddc8ce433f8621f8e0601893a92e97b09d4d35"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/panel-targets-root-e0a4d0ee3f1e4cdeb0767d38af8d3d62/protected-release-audit.json",
+      "sha256": "010a8c07322195a43e0729f25ef15d848fed4f19e65c2060cb9b2fbd27b6881b"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/panel-targets-root-e0a4d0ee3f1e4cdeb0767d38af8d3d62/cleanup-plan.json",
+      "sha256": "d2aa38d31b27df9f7fd28e9ed2bed20f19331524e59c52f0fc357e5fbba91929"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/panel-targets-root-e0a4d0ee3f1e4cdeb0767d38af8d3d62/cleanup-result.json",
+      "sha256": "41dd56598d10cdb816901e51f33fa3c8c2ae7898a18840cc4515b9a10c3bbd5a"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/panel-targets-root-e0a4d0ee3f1e4cdeb0767d38af8d3d62/go-vet.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/panel-targets-root-e0a4d0ee3f1e4cdeb0767d38af8d3d62/go-build.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/panel-targets-root-e0a4d0ee3f1e4cdeb0767d38af8d3d62/whitespace-check.json",
+      "sha256": "abf100dc5f626a15f581cbdce207d4768b52e743729a24d4854e3303680a901e"
+    }
+  ],
+  "previousStage": {
+    "path": "AutoBGI_Desktop_Pet_AI/docs/cultivation-execution-foundation-validation-2026-10-28.json",
+    "sha256": "b8be86dff098cb3255403ebc308545b0a990ec8bd58af8f70d422f3b67e5ed3e",
+    "unchanged": true,
+    "currentDocumentationDoesNotRewriteHistoricalHashes": true
+  },
+  "boundaries": [
+    "Synthetic identities, isolated SQLite and mocked executors only",
+    "No live database, credentials, account caches or official API requests",
+    "No AutoBGI, BetterGI, game or native desktop process launched",
+    "No system display, network or power settings changed",
+    "No native focus, touch, mixed-DPI, multi-monitor, sleep or eight-hour validation",
+    "250 MB memory target remains unpassed",
+    "Trusted panel provider, skill selection/confirmation and separate targets notification remain incomplete",
+    "Inventory identity/time/coverage, cross-start reservation and consumer handshake remain incomplete"
+  ],
+  "capabilitySourceBindings": [
+    {
+      "path": "menu/talent_queue_startup.go",
+      "sha256": "d80604932a2d23c047781b318bbc29a8d9a583b406ce16f653f1e5a231b05cc7"
+    },
+    {
+      "path": "menu/desktop_pet_cultivation_queue.go",
+      "sha256": "7733a611b1e9de47bfa21022b9737548dd9bdb8d03ab93ab2235948498b72e34"
+    },
+    {
+      "path": "desktopPet/cultivation_queue_types.go",
+      "sha256": "a778ec4647b39e470bfbf3ee8e3e553f8fdea4376cbbb0e097a9a78ae782ea60"
+    }
+  ]
+}

@@ -1,0 +1,750 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-28",
+  "stage": "independent targets-met source chain after frozen 0.2.14",
+  "status": "source implemented; isolated validation and builds passed; production integration and complete specification remain unfinished",
+  "goalComplete": false,
+  "clientSourceDirectory": "AutoBGI_Desktop_Pet_AI",
+  "changes": {
+    "feature": "targetsMetEvents",
+    "endpoint": "GET /api/desktop-pet/v1/cultivation-target-events",
+    "kinds": [
+      "talent.entry.targets-met",
+      "talent.queue.targets-met"
+    ],
+    "observedAt": "Frozen trusted panel SourceTime",
+    "occurredAt": "Finalized queue transaction time",
+    "schemaCompatibility": {
+      "1": "Unchanged material payload and stream",
+      "2": "Panel mode without events; never backfilled",
+      "3": "Panel mode with explicit host TargetEventsVersion=1; independent targets stream"
+    },
+    "independentPersistence": true,
+    "sharedSingleHostWorker": true,
+    "sharedSingleClientPollingLoop": true,
+    "neutralNotificationWithoutCelebration": true,
+    "journalSchema": 1,
+    "newJournalField": "targetScopes,omitempty",
+    "journalCompatibility": "New code accepts old logs without targetScopes; old frozen binaries are not guaranteed to accept upgraded logs containing new fields"
+  },
+  "validation": {
+    "domainAndActualMenu": {
+      "runs": [
+        {
+          "name": "normal-verified",
+          "command": "go test -count=1 -mod=mod -json ./TalentPlanService ./menu",
+          "exitCode": 0,
+          "topLevelCount": 39,
+          "subtestCount": 204,
+          "totalNamedTests": 243,
+          "leafCount": 215,
+          "passCount": 243,
+          "failCount": 0,
+          "skipCount": 0,
+          "dataRaceCount": 0,
+          "oldPanelRegressionNamedCount": 150
+        },
+        {
+          "name": "race-verified",
+          "command": "go test -race -count=1 -mod=mod -json ./TalentPlanService ./menu",
+          "exitCode": 0,
+          "topLevelCount": 39,
+          "subtestCount": 204,
+          "totalNamedTests": 243,
+          "leafCount": 215,
+          "passCount": 243,
+          "failCount": 0,
+          "skipCount": 0,
+          "dataRaceCount": 0,
+          "oldPanelRegressionNamedCount": 150
+        }
+      ],
+      "sourceCopies": 26,
+      "modelCopies": 6,
+      "sourceSetSHA256": "93935a50aecb24eb07f2713d064040c8681cc586ecc7f0f3ef8b9b3a43aa01ff",
+      "boundedEvents": 297,
+      "receiveBatches": [
+        256,
+        41
+      ],
+      "incrementalPages": [
+        100,
+        100,
+        97
+      ],
+      "vetExit": 0
+    },
+    "protocolAndHTTP": {
+      "runs": [
+        {
+          "name": "normal",
+          "exit": 0,
+          "topLevel": 6,
+          "subtests": 69,
+          "passEvents": 75,
+          "failEvents": 0
+        },
+        {
+          "name": "race",
+          "exit": 0,
+          "topLevel": 6,
+          "subtests": 69,
+          "passEvents": 75,
+          "failEvents": 0
+        }
+      ],
+      "vet": {
+        "exit": 0,
+        "logBytes": 0
+      },
+      "productionInputs": 13
+    },
+    "client": {
+      "runs": [
+        {
+          "mode": "normal",
+          "passEvents": 77,
+          "topLevel": 12,
+          "subtests": 65,
+          "packagePasses": 3,
+          "failures": 0,
+          "raceWarnings": 0
+        },
+        {
+          "mode": "race",
+          "passEvents": 77,
+          "topLevel": 12,
+          "subtests": 65,
+          "packagePasses": 3,
+          "failures": 0,
+          "raceWarnings": 0
+        }
+      ],
+      "normalExit": 0,
+      "raceExit": 0,
+      "vetExit": 0,
+      "typecheckExit": 0,
+      "goInputs": 50,
+      "frontendInputs": 17,
+      "bindings": {
+        "generatedFiles": 15,
+        "command": ".\\.tools\\wails3.exe generate bindings -ts -i",
+        "exitCode": 0,
+        "source": "Prior successful tool output in the same task",
+        "services": 2,
+        "packages": 259,
+        "methods": 47,
+        "models": 53
+      },
+      "componentChecks": 16,
+      "componentPassed": true,
+      "componentLimitations": [
+        "Synthetic Vue renderer; no native desktop or browser launch.",
+        "CSS inspected, not a browser visual/layout assertion."
+      ]
+    },
+    "separateWorker": {
+      "normalExit": 0,
+      "raceExit": 0,
+      "vetExit": 0,
+      "runs": [
+        {
+          "run": "normal",
+          "passedTests": 5,
+          "failedTests": 0,
+          "skippedTests": 0
+        },
+        {
+          "run": "race",
+          "passedTests": 5,
+          "failedTests": 0,
+          "skippedTests": 0
+        }
+      ],
+      "productionApplicationLaunched": false,
+      "initialBootstrapError": "First retry used an absent Go module GOROOT; no test executed. Retained bootstrap-error.log and bootstrap-error-results.json. Final run uses installed Go 1.27.1."
+    },
+    "builds": {
+      "host": {
+        "date": "2026-10-28",
+        "goVersion": "go version go1.27.1 windows/amd64",
+        "vetExit": 0,
+        "buildExit": 0,
+        "inputs": 607,
+        "sourceStable": true,
+        "changes": [],
+        "executablePath": "D:\\Documents\\go\\autobgi\\AutoBGI_Desktop_Pet_AI\\.validation\\targets-root-bcb547c670714da6906e4d301e92b53d\\AutoBGI-target-host.exe",
+        "executableRun": false,
+        "executableSHA256": "59394a71fb4a1b894e4aea3fc7efa3c60b46fcc1c4ebb271de175f2960514fbd"
+      },
+      "desktop": {
+        "date": "2026-10-28",
+        "goVersion": "go version go1.26.10 windows/amd64",
+        "frontendBuildExit": 0,
+        "frontendSourceStable": true,
+        "vetExit": 0,
+        "buildExit": 0,
+        "inputs": 134,
+        "sourceStable": true,
+        "changes": [],
+        "executablePath": "D:\\Documents\\go\\autobgi\\AutoBGI_Desktop_Pet_AI\\.validation\\targets-root-bcb547c670714da6906e4d301e92b53d\\AutoBGI-Pet-targets-compile.exe",
+        "executableRun": false,
+        "executableSHA256": "582ec129f185317821aec4f91d45cb6f67e8101907da85e20e23fd675f23cdf9"
+      },
+      "desktopViteModules": 95,
+      "productionExecutablesLaunched": false
+    },
+    "independentReview": {
+      "reviewedFileCount": 29,
+      "confirmedSubstantiveDefects": [],
+      "hashMismatches": 0,
+      "evidence": {
+        "path": "AutoBGI_Desktop_Pet_AI/.validation/targets-root-bcb547c670714da6906e4d301e92b53d/independent-review.json",
+        "sha256": "1c447056fcc0650e74dbdb3b6b29af7fe63fa0790a38b4d32323e480222df89b"
+      }
+    },
+    "finalSourceAudit": {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/targets-root-bcb547c670714da6906e4d301e92b53d/source-final-audit.json",
+      "sha256": "3cd34f406b2fa25d999fdb33bbf91963caaa63739f95c83cb62e8a414970cbcd"
+    },
+    "formatting": {
+      "sourceFilesChecked": 53,
+      "handwrittenFilesWithoutDiagnostics": 52,
+      "generatedFileWarnings": [
+        {
+          "path": "AutoBGI_Desktop_Pet_AI/frontend/bindings/events/index.ts",
+          "exit": 3,
+          "diagnostic": "D:\\Documents\\go\\autobgi\\AutoBGI_Desktop_Pet_AI\\frontend\\bindings\\events\\index.ts:6: new blank line at EOF.",
+          "sha256": "b103683f94ec8779e49311845e4246fda26504184b133b850cdff8969ab5d068"
+        }
+      ],
+      "gofmtPassed": true,
+      "generatedOutputPreserved": true,
+      "interpretation": "The only whitespace diagnostic is a trailing blank line in the untouched Wails 3.0.0 generated events binding; handwritten production changes are clean."
+    }
+  },
+  "frozenArtifacts": [
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/bin/0.2.14/AutoBGI-Pet.exe",
+      "expected": "0efe2b9b58fa5d8a51f64f13518a9b60b8e2b307cd1d782e46d5b6e17a7e990f",
+      "actual": "0efe2b9b58fa5d8a51f64f13518a9b60b8e2b307cd1d782e46d5b6e17a7e990f",
+      "matched": true
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/bin/0.2.14/AutoBGI-Pet-0.2.14-windows-amd64.zip",
+      "expected": "b88c76bde60a46a972de1ebcacbfefb5d6f33872a6f8a407aed873fb6a340634",
+      "actual": "b88c76bde60a46a972de1ebcacbfefb5d6f33872a6f8a407aed873fb6a340634",
+      "matched": true
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/bin/AutoBGI-Pet.exe",
+      "expected": "23af3113a9d843bb930dd0119945f1e6fe5b806bc737811a3a04f02d1e115e05",
+      "actual": "23af3113a9d843bb930dd0119945f1e6fe5b806bc737811a3a04f02d1e115e05",
+      "matched": true
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/bin/AutoBGI-Pet-0.2.13-windows-amd64.zip",
+      "expected": "15e8340cd1c07536c27c124cc0e9c862db0d376c381d0addb9265e8d42c72c52",
+      "actual": "15e8340cd1c07536c27c124cc0e9c862db0d376c381d0addb9265e8d42c72c52",
+      "matched": true
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/drag-session-20261028/release-context.json",
+      "expected": "ccec5d8f6774df07286855829cffba6f268e5fab85a766be6ca632d06fbc68ba",
+      "actual": "ccec5d8f6774df07286855829cffba6f268e5fab85a766be6ca632d06fbc68ba",
+      "matched": true
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/drag-session-20261028/final-source-audit.json",
+      "expected": "e5ecc42d4b9fee0bbca4468554c9da69012bdb69f3304bdec733b3f26cc23c9b",
+      "actual": "e5ecc42d4b9fee0bbca4468554c9da69012bdb69f3304bdec733b3f26cc23c9b",
+      "matched": true
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/inventory-release-20261028/final-release-audit.json",
+      "expected": "50399d358420079ed6ab4adb512ba52b5749ad2e9d29eec20720bf1dfffe27b3",
+      "actual": "50399d358420079ed6ab4adb512ba52b5749ad2e9d29eec20720bf1dfffe27b3",
+      "matched": true
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/inventory-release-20261028/independent-package-audit.json",
+      "expected": "e70c578063ad6033b4d2f4a3eb0a51a715036d8cdc09ad398d4567087652a706",
+      "actual": "e70c578063ad6033b4d2f4a3eb0a51a715036d8cdc09ad398d4567087652a706",
+      "matched": true
+    }
+  ],
+  "historicalEvidence": [
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/panel-targets-root-e0a4d0ee3f1e4cdeb0767d38af8d3d62/summary-final-audit.json",
+      "expected": "b0d069385c679ec874a2924acd6e90739af8f1d16023cc772cc5ddbc8bb45046",
+      "actual": "b0d069385c679ec874a2924acd6e90739af8f1d16023cc772cc5ddbc8bb45046",
+      "matched": true
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/docs/panel-targets-validation-2026-10-28.json",
+      "expected": "1e0ce48e4f054c4971894734093634b773bf9056d05ecf255a9726b3c745e08f",
+      "actual": "1e0ce48e4f054c4971894734093634b773bf9056d05ecf255a9726b3c745e08f",
+      "matched": true
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/docs/cultivation-execution-foundation-validation-2026-10-28.json",
+      "expected": "b8be86dff098cb3255403ebc308545b0a990ec8bd58af8f70d422f3b67e5ed3e",
+      "actual": "b8be86dff098cb3255403ebc308545b0a990ec8bd58af8f70d422f3b67e5ed3e",
+      "matched": true
+    }
+  ],
+  "cleanup": {
+    "status": "all four single exact cleanup attempts rejected before execution by automatic approval",
+    "reason": "blocked by policy",
+    "totalProtectedResidualFiles": 5123,
+    "groups": [
+      {
+        "scope": "protocol",
+        "files": 4927,
+        "attempts": 1,
+        "commandExecuted": false
+      },
+      {
+        "scope": "client",
+        "files": 100,
+        "attempts": 1,
+        "commandExecuted": false
+      },
+      {
+        "scope": "domain_and_menu",
+        "files": 91,
+        "attempts": 1,
+        "commandExecuted": false
+      },
+      {
+        "scope": "root",
+        "files": 5,
+        "attempts": 1,
+        "commandExecuted": false
+      }
+    ],
+    "removedFiles": 0,
+    "retries": 0,
+    "changedAfterRejection": 0,
+    "remainingNewTestFiles": true,
+    "normalBuildsExcludeValidationDirectories": true,
+    "historicalProtectedTargetsUntouched": true
+  },
+  "productionCapabilities": {
+    "inventoryVerified": false,
+    "executionAvailable": false,
+    "completionEventsAvailable": false,
+    "productionStartSourceAvailable": false
+  },
+  "boundaries": [
+    "No production AutoBGI/BetterGI/game or native pet launch",
+    "No real accounts, credentials, inventory caches, production DB or config accessed",
+    "No display/network/power setting or input capture",
+    "No frozen release executable, ZIP or syso rebuilt",
+    "No live deployment or trusted-source integration verified",
+    "Synthetic Vue renderer; no browser layout/native interaction claim",
+    "250 MB memory target and eight-hour stability remain unverified or previously not met"
+  ],
+  "remainingWork": [
+    "Trusted production panel provider with source time, identity, base stats and skill binding",
+    "User element and A/E/Q target selection and confirmation",
+    "Trusted inventory coverage, time and completion evidence",
+    "Catalog expansion, Sunday index and persisted inventory reservations",
+    "Frozen user-confirmed run intent, real BGI consumer/configuration handshake",
+    "Runtime progress, resume and lifecycle mapping; legacy retry policy",
+    "Reliable general task terminal events and account switching",
+    "Native focus, touch, DPI/multiple displays, long-run performance",
+    "Optional AI, voice and Live2D"
+  ],
+  "sourceAndDocumentCount": 54,
+  "sourceAndDocuments": [
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/docs/api-v1.openapi.yaml",
+      "sha256": "1992b4d070ca6c2b35d6493d39db36c6c7a1651d370f28d196911f9893b87912"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/docs/cultivation-startup.md",
+      "sha256": "2ada49316eb3c7d63efa92efddf2b2cb402e141efbc74d42d42b4b4a87f43765"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/docs/target-events-2026-10-28.md",
+      "sha256": "bb1849040c7006f3da31f5d5d45727d2fac71b5c1539e43d3f6e12199d9122b1"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/frontend/bindings/autobgi-pet/internal/autobgi/index.ts",
+      "sha256": "7d1ca46ad6a265c812962317f49d891200f8f3c6ef0a3706b2efc8f56188a39a"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/frontend/bindings/autobgi-pet/internal/autobgi/models.ts",
+      "sha256": "27cf9ace35f6abbacefed13cc8b9222156c64f97a897c1ac1b3d629a0b4950a5"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/frontend/bindings/autobgi-pet/internal/desktop/desktopservice.ts",
+      "sha256": "2324cc42a9c6ad3ebac972a3c40fad198a726d037e6cb242d4a08bf0c92907d0"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/frontend/bindings/autobgi-pet/internal/desktop/index.ts",
+      "sha256": "706e1830b8ed161b7610f7b77e8746625e11d4a6a65aafe04f1149a59bd3c70f"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/frontend/bindings/autobgi-pet/internal/desktop/models.ts",
+      "sha256": "0bfb128b8a64fce2636d157fb6bdcd38f4a781a54c22e60aa3c24af7bff6cdc8"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/frontend/bindings/autobgi-pet/internal/profile/index.ts",
+      "sha256": "5030714fcadea4aa1627db62a2af0a8450d91056a42ac3bcdea2063c45a5882c"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/frontend/bindings/autobgi-pet/internal/profile/models.ts",
+      "sha256": "617bf35906573c0be054ec8e02c88b493fdead6a43b0ab9993fe2ea37b3e2ba7"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/frontend/bindings/autobgi-pet/internal/service/index.ts",
+      "sha256": "23e484f41cb996a2404d80fad319006db544c3ddceb8289eef858366f01d7455"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/frontend/bindings/autobgi-pet/internal/service/models.ts",
+      "sha256": "3bbadae2260fa5f20928296099e590ceafa2afd0b2797725789c0efd5585d94b"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/frontend/bindings/autobgi-pet/internal/service/service.ts",
+      "sha256": "cb7741c39912560acac05bc8775090591443f216f2d7e99ea8b95a454e513e4b"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/frontend/bindings/autobgi-pet/internal/skin/index.ts",
+      "sha256": "9365ef38e215bb495a97c1141c1d0b2a9cec36e141202b129d6aabab50ac48fb"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/frontend/bindings/autobgi-pet/internal/skin/models.ts",
+      "sha256": "afd7343ae58df4116d1d4e88c66b8dca9bbedb0f1566069841b4a204f909c5b1"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/frontend/bindings/events/index.ts",
+      "sha256": "b103683f94ec8779e49311845e4246fda26504184b133b850cdff8969ab5d068"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/frontend/bindings/github.com/wailsapp/wails/v3/internal/eventcreate.ts",
+      "sha256": "6eaeafcf797a1670e8ae925e7d125ef4eff930171874462e37e767b1c52cf7ed"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/frontend/bindings/github.com/wailsapp/wails/v3/internal/eventdata.d.ts",
+      "sha256": "1d7b9f4209d8cb01d7f848c848b53dc582b8dd4df44b09ff3a001c2cef455858"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/frontend/src/components/TargetEventHistory.vue",
+      "sha256": "51cf3da5c68bb1b39fada755a246ea8dcbd171d33806a6f84c92aa33eb9c342d"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/frontend/src/views/PanelView.vue",
+      "sha256": "03808cb17bce568bc9bcb4c01adf8682f8118a51afa997f15539f7aeca80a905"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/internal/autobgi/petv1.go",
+      "sha256": "5704ee6cc593c7f7e030bfa670ba1bcd4faccd270b0cdbf5edd61ff3f9f6f20d"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/internal/autobgi/targets_met.go",
+      "sha256": "33e6363641f9caf277bffb13dd30b1fb68766185b468600ab601cbbbf9de9a32"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/internal/autobgi/types.go",
+      "sha256": "5c30a77295a04674ca20f5faaa6213f91edf498b33282b24f6b1f3f593630960"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/internal/service/commands.go",
+      "sha256": "7bca2f5e9fe20395bebfdea39ef7a8cda57942c9ac07b453147ffd36d218bd0b"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/internal/service/events.go",
+      "sha256": "ca32e33c612af473b9d9df0a248f90ac6b5f903346957d29fc6eba89e6b4504b"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/internal/service/notifications.go",
+      "sha256": "c89b725d47c25f9496fc9b26ea05b8b918eec4807110048178d136fe8a88f7fa"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/internal/service/pause.go",
+      "sha256": "e23288441bd1fed25e9ed3fa26a3b90b3fa6f12ac1062623acf7e82feb981f6d"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/internal/service/poll.go",
+      "sha256": "e11cfe8dee5b37b0925bd0c90e95af6b82a4b14a19041956895db654e74ff4ce"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/internal/service/service.go",
+      "sha256": "952ce88164e98dc7a7e4322d75810bc7d5b71407b6dcd48dd42d940edf93f0e8"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/internal/service/targets_met.go",
+      "sha256": "375bf27c0afb337b80c393dde044b953a09eba29a7805f2b3a9f9d100f4d9135"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/internal/service/types.go",
+      "sha256": "5bc228cd2fe742cec03766da62ab33d0a4f3eaf9dc5b3aa5202cca5dadaf8605"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/internal/storage/journal.go",
+      "sha256": "bcbbb1895f038898fe5ae2e42f09206c7a0340e97629dd854fe5f83c5dd9f747"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/internal/storage/notification_json.go",
+      "sha256": "e2c239b7094c3adf4da2b355d1e7c52a89b10b4827b7e1c8b05b154fa74e49a3"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/internal/storage/notifications.go",
+      "sha256": "2d698e5736466307b8cc099b2d6b622044a3043b61f1737d0730f87919c64a24"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/internal/storage/targets_json.go",
+      "sha256": "e301c7375b5811cce5d0386aa933246cc46001965459d278c3e512d2bfbada17"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/internal/storage/targets_met.go",
+      "sha256": "91692a4f0004a5d7b2556e90bb57a3d275ddba4539e1e5589a1b71a8c0545506"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/README.md",
+      "sha256": "deda23913bc97afdcd749ade2356f6643e0b7de1341afadd11ab0f7b7a27a85a"
+    },
+    {
+      "path": "desktopPet/http.go",
+      "sha256": "1bd3db0f815daba74c94e6e647062272b4251660ec8ac1a3ba8cadc434b6df13"
+    },
+    {
+      "path": "desktopPet/target_event_types.go",
+      "sha256": "0c430815429cc7cb8c9296e9d0ce5d83059979e7fdc7d6c6e42b226986ab16d8"
+    },
+    {
+      "path": "desktopPet/target_events.go",
+      "sha256": "12a79ee50c96ff80c588d3bbf2042dbc870786fbf5e75b402e1a1317aa56f631"
+    },
+    {
+      "path": "menu/desktop_pet_materials_bridge.go",
+      "sha256": "5701b391d70f7430cf57f14c3979f350fe58dc7c003768238be0b6dfea715cdb"
+    },
+    {
+      "path": "menu/desktop_pet_materials_worker.go",
+      "sha256": "0b916b668a76aab97815ecf793d34bf271b54d10c339f9cf6dfac9f9506a4c01"
+    },
+    {
+      "path": "menu/desktop_pet_targets_bridge.go",
+      "sha256": "92e89a89fa82fb16e7f875db27da9027d9f5ab176dbce24e93bd9eb02c20d40c"
+    },
+    {
+      "path": "models/DesktopPetTargetEventModel.go",
+      "sha256": "9ee04d0fd74938e83a370b053ab90ef179d9eda8ee695955cdc701578cb966da"
+    },
+    {
+      "path": "models/InitDB.go",
+      "sha256": "7283a6b85900b662a5a6777be6de8db56fecae37b903c28f74c47b3ff82588ba"
+    },
+    {
+      "path": "models/TalentQueueStartModel.go",
+      "sha256": "326fd5f36913f6842b9f48ae473e2cc3e23ab748c4262c939666744b495248ca"
+    },
+    {
+      "path": "TalentPlanService/material_event_store.go",
+      "sha256": "24ee72a6a8605474576fca910740617c48ca6ddb5e0ef20908a92de2e93b93e1"
+    },
+    {
+      "path": "TalentPlanService/start_events.go",
+      "sha256": "cd9ce1bff14e0d78aac3a9c9bd9510e9b46abad56512f54fce0a4ba1d1688aff"
+    },
+    {
+      "path": "TalentPlanService/start_prepare.go",
+      "sha256": "5cb60690947ca662f2e938f032868f56b59a40a46bbc971ed7ceaf455bffaffd"
+    },
+    {
+      "path": "TalentPlanService/start_types.go",
+      "sha256": "6c131edbd050b67ebc3b74e5f6322fc8cb6ca5b58776ff793b6137ec212ebec7"
+    },
+    {
+      "path": "TalentPlanService/start_validate.go",
+      "sha256": "6d1d92d331a68718c997df3a6696398dc5fc269b0484a5e7392f33f17a0be39e"
+    },
+    {
+      "path": "TalentPlanService/target_event_store.go",
+      "sha256": "dc13b720312a4efab4de25fee127d3cfe511b4827bbaeeeb61d2da2d4f6fbcf1"
+    },
+    {
+      "path": "TalentPlanService/target_event_types.go",
+      "sha256": "6c58fe7ffe0cee21e6e2841b0ee068abbfefe605fd398c562458a48eaeb8e6a7"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/docs/acceptance.md",
+      "sha256": "1bf0fa6767b79446fd4d0ca0d8dc8cf0ab2ae0aabd02f13eaf8ec1abdeaec80b"
+    }
+  ],
+  "documents": [
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/README.md",
+      "sha256": "deda23913bc97afdcd749ade2356f6643e0b7de1341afadd11ab0f7b7a27a85a"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/docs/acceptance.md",
+      "sha256": "1bf0fa6767b79446fd4d0ca0d8dc8cf0ab2ae0aabd02f13eaf8ec1abdeaec80b"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/docs/target-events-2026-10-28.md",
+      "sha256": "bb1849040c7006f3da31f5d5d45727d2fac71b5c1539e43d3f6e12199d9122b1"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/docs/cultivation-startup.md",
+      "sha256": "2ada49316eb3c7d63efa92efddf2b2cb402e141efbc74d42d42b4b4a87f43765"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/docs/api-v1.openapi.yaml",
+      "sha256": "1992b4d070ca6c2b35d6493d39db36c6c7a1651d370f28d196911f9893b87912"
+    }
+  ],
+  "evidence": [
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/targets-notifications-tests-aa393b6bd8474330898b8a3c77ffc1eb/evidence.json",
+      "sha256": "c60f5020521f147e61d7e5250523a7faaa301356111dd13217f1d109ea5fe577"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/targets-notifications-tests-aa393b6bd8474330898b8a3c77ffc1eb/cleanup-result.json",
+      "sha256": "0c504beb9bf9c9fd848aee4d7a3a56ba5d55fd436ab63e0782819a05a5880863"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/targets-notifications-tests-aa393b6bd8474330898b8a3c77ffc1eb/cleanup-manifest.json",
+      "sha256": "36c80722356bdb89bdb855362d452f81124ae4e9a2b6eb268cac21f2a3f5ae24"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/targets-client-e7cac1d84d0948b391509a2cff5ed526/client-validation.json",
+      "sha256": "cadfbd83b913f3c2faf6a6df4d5dd19affd5e9fc6a0c2da0cd5b952ad0113cbf"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/targets-client-e7cac1d84d0948b391509a2cff5ed526/production-changed-hashes.json",
+      "sha256": "034549835b6674af8d7ede0cf8bd5b40bc69b73521090e4c96b5c665b053176b"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/targets-client-e7cac1d84d0948b391509a2cff5ed526/source-bindings.json",
+      "sha256": "7051419d25bf1d7a9d5244175f9969efae6e2d852c7287c26c1e5e7adaa7d2ec"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/targets-client-e7cac1d84d0948b391509a2cff5ed526/frontend-source-hashes.json",
+      "sha256": "16981db3dcaf0a87b3e2bf49ffe97ab5b2dc3532dbe6e5b7fd051f5dd4178fac"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/targets-client-e7cac1d84d0948b391509a2cff5ed526/cleanup.json",
+      "sha256": "91584388916921c485f0aabe8e11467f1c7dc0430585d0b1e076a20126140dee"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/targets-client-e7cac1d84d0948b391509a2cff5ed526/final-audit.json",
+      "sha256": "47356373055425f913e16ac5a03123f7d71ca98a92a3e3f6b649771734444931"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/targets-protocol-0e617058ec8744168942cf5b3660bbff/validation.json",
+      "sha256": "ca179d4ee8e7cb6b51ec21f32ade9256ab9f748a734a1cb7b1ffbddcc800d110"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/targets-protocol-0e617058ec8744168942cf5b3660bbff/source-hashes.json",
+      "sha256": "dc34aef1dfc803284a844c8841f990d5bddb752f5b5122a5060bda8e9e7e004b"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/targets-protocol-0e617058ec8744168942cf5b3660bbff/cleanup.json",
+      "sha256": "cb9636b79a14c889b0fc9ba7083044e60995d91b789b70de844f9518907c7133"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/targets-protocol-0e617058ec8744168942cf5b3660bbff/final-audit.json",
+      "sha256": "d4f3d73ac8dab3292fad20b994d730d6ba08e88b31c5314a06db48bf91bcfbb6"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/targets-root-bcb547c670714da6906e4d301e92b53d/host-build-validation.json",
+      "sha256": "057514eaab47be4e308907e5a705103df3279f01add0598dd678743d9bf104e3"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/targets-root-bcb547c670714da6906e4d301e92b53d/host-source-before.json",
+      "sha256": "363a6ef9e7c643585b82ef7390e4c4eba805af51a09fad861db08e5621bc227a"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/targets-root-bcb547c670714da6906e4d301e92b53d/host-source-after.json",
+      "sha256": "363a6ef9e7c643585b82ef7390e4c4eba805af51a09fad861db08e5621bc227a"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/targets-root-bcb547c670714da6906e4d301e92b53d/desktop-build-validation.json",
+      "sha256": "11caaca264647574b85c9b5d2a7143c30b65e827dbb0f2aaf64f97911d79416c"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/targets-root-bcb547c670714da6906e4d301e92b53d/desktop-source-before.json",
+      "sha256": "35dde0dab66524b264a2b8dd90e92a6eee75049c0f34b0e2f688500563a9040c"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/targets-root-bcb547c670714da6906e4d301e92b53d/desktop-source-after.json",
+      "sha256": "35dde0dab66524b264a2b8dd90e92a6eee75049c0f34b0e2f688500563a9040c"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/targets-root-bcb547c670714da6906e4d301e92b53d/desktop-frontend-before.json",
+      "sha256": "60010a30bd327c40360029bc69907c97d8089979db9beb1e2a7546753e411b91"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/targets-root-bcb547c670714da6906e4d301e92b53d/desktop-frontend-after.json",
+      "sha256": "60010a30bd327c40360029bc69907c97d8089979db9beb1e2a7546753e411b91"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/targets-root-bcb547c670714da6906e4d301e92b53d/worker/results.json",
+      "sha256": "2c179aae69558c2889533a11dd440766ea78607123fe5876748d6b94d2102f5e"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/targets-root-bcb547c670714da6906e4d301e92b53d/worker/source-binding.json",
+      "sha256": "b3f0e8f2b9b09ceabed9f6d9bbf16fd84c49219f8bf20fd242a455e87bf57805"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/targets-root-bcb547c670714da6906e4d301e92b53d/worker/normal.jsonl",
+      "sha256": "c417c64e00fc30c04ea20221ab2b9993708d0c4ae634c5ccea9892058bb3a77e"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/targets-root-bcb547c670714da6906e4d301e92b53d/worker/race.jsonl",
+      "sha256": "e19fb3b54c6e4472e179d3d2ab98ded1ec09be236f13b5f92436ed3ecab1472f"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/targets-root-bcb547c670714da6906e4d301e92b53d/worker/bootstrap-error.log",
+      "sha256": "52e7397924f48d08003e24137df4810faa1c6fbd029fb8b5852581eb560f1793"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/targets-root-bcb547c670714da6906e4d301e92b53d/worker/bootstrap-error-results.json",
+      "sha256": "9cc323c9f896fbae5de782ec72cc056470d90bc3efe1b163265bb89b35da8519"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/targets-root-bcb547c670714da6906e4d301e92b53d/protected-release-audit.json",
+      "sha256": "010a8c07322195a43e0729f25ef15d848fed4f19e65c2060cb9b2fbd27b6881b"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/targets-root-bcb547c670714da6906e4d301e92b53d/historical-evidence-audit.json",
+      "sha256": "0cd80cdee37e6b456eb6780ba62ccb1eae3ba7299d46d5de93a8797ba59f75fb"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/targets-root-bcb547c670714da6906e4d301e92b53d/independent-review.json",
+      "sha256": "1c447056fcc0650e74dbdb3b6b29af7fe63fa0790a38b4d32323e480222df89b"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/targets-root-bcb547c670714da6906e4d301e92b53d/source-final-audit.json",
+      "sha256": "3cd34f406b2fa25d999fdb33bbf91963caaa63739f95c83cb62e8a414970cbcd"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/targets-root-bcb547c670714da6906e4d301e92b53d/formatting-status.json",
+      "sha256": "68dde8ad200b4623848175d8de15f9f7bb2aeec8f15d51fbad5ea9478950fc6d"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/targets-root-bcb547c670714da6906e4d301e92b53d/gofmt-audit.json",
+      "sha256": "da3bfc83d0b891c02f4706a1612e4f30da95a16a5cf844977b3603f781704e7f"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/targets-root-bcb547c670714da6906e4d301e92b53d/whitespace-audit.json",
+      "sha256": "9710a59e4e8849e038c94f553194f02ac5fe40005a3440b9246eb03866598f8e"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/targets-root-bcb547c670714da6906e4d301e92b53d/cleanup-targets.json",
+      "sha256": "11702e91f5ca250e69585b4134e5881c24b7aa6cc8dbeea90cf7e8f14ac39303"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/targets-root-bcb547c670714da6906e4d301e92b53d/cleanup-residuals.json",
+      "sha256": "d8858a8b4e9868ab2fbd5c61ebd3319e6a18e60e1fe6597a13265dfcee3b71ae"
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/.validation/targets-root-bcb547c670714da6906e4d301e92b53d/cleanup.json",
+      "sha256": "4114d635d399cfd50045dd6755c351b6a30d5822e7e52aebd59b1229f73f56fb"
+    }
+  ]
+}

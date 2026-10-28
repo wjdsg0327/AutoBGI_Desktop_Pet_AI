@@ -1,0 +1,95 @@
+{
+  "schemaVersion": 1,
+  "sampledAtLocal": "2026-10-27T20:07:05.3738238+08:00",
+  "sampledAtUtc": "2026-10-27T12:07:05.3738238Z",
+  "rootPid": 106108,
+  "singleSnapshot": true,
+  "source": "Win32_Process + Win32_PerfFormattedData_PerfProc_Process",
+  "processCount": 8,
+  "roleCounts": {
+    "host": 1,
+    "browser": 1,
+    "crashpad-handler": 1,
+    "gpu-process": 1,
+    "network-service": 1,
+    "storage-service": 1,
+    "renderer": 2
+  },
+  "totalsMiB": {
+    "workingSet": 454.048,
+    "privateWorkingSet": 123.914,
+    "privateBytes": 268.313
+  },
+  "processes": [
+    {
+      "pid": 106108,
+      "parentPid": 125484,
+      "role": "host",
+      "workingSetMiB": 31.914,
+      "privateWorkingSetMiB": 9.676,
+      "privateBytesMiB": 55.133
+    },
+    {
+      "pid": 149668,
+      "parentPid": 106108,
+      "role": "browser",
+      "workingSetMiB": 107.477,
+      "privateWorkingSetMiB": 26.461,
+      "privateBytesMiB": 34.32
+    },
+    {
+      "pid": 14616,
+      "parentPid": 149668,
+      "role": "crashpad-handler",
+      "workingSetMiB": 10.625,
+      "privateWorkingSetMiB": 1.703,
+      "privateBytesMiB": 2.809
+    },
+    {
+      "pid": 153636,
+      "parentPid": 149668,
+      "role": "gpu-process",
+      "workingSetMiB": 77.348,
+      "privateWorkingSetMiB": 22.07,
+      "privateBytesMiB": 80.793
+    },
+    {
+      "pid": 128168,
+      "parentPid": 149668,
+      "role": "network-service",
+      "workingSetMiB": 34.727,
+      "privateWorkingSetMiB": 6.223,
+      "privateBytesMiB": 11.172
+    },
+    {
+      "pid": 142888,
+      "parentPid": 149668,
+      "role": "storage-service",
+      "workingSetMiB": 19.242,
+      "privateWorkingSetMiB": 2.832,
+      "privateBytesMiB": 7.402
+    },
+    {
+      "pid": 114140,
+      "parentPid": 149668,
+      "role": "renderer",
+      "workingSetMiB": 88.34,
+      "privateWorkingSetMiB": 27.387,
+      "privateBytesMiB": 36.832
+    },
+    {
+      "pid": 16536,
+      "parentPid": 149668,
+      "role": "renderer",
+      "workingSetMiB": 84.375,
+      "privateWorkingSetMiB": 27.562,
+      "privateBytesMiB": 39.852
+    }
+  ],
+  "notes": [
+    "仅记录隔离测试进程树的单点快照，不能作为十分钟平均值或峰值。",
+    "workingSet 为各进程工作集之和，共享驻留页可能重复计量，不能直接称为独占物理内存。",
+    "privateWorkingSet 为各进程私有驻留工作集之和；privateBytes 为私有提交内存，三种口径不能混用。",
+    "此文件不包含命令行、用户数据目录路径、配置或凭据。"
+  ]
+}

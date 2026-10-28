@@ -1,0 +1,775 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-28",
+  "recordedAt": "2026-10-28T01:52:25.1586845+08:00",
+  "status": "source-implemented-isolated-validation-passed-cleanup-partially-blocked",
+  "scope": "companion AutoBGI startup recovery, web confirmation and legacy one-dragon side-effect fencing",
+  "overallSpecificationComplete": false,
+  "desktopClientVersion": "0.2.7",
+  "desktopClientRebuilt": false,
+  "desktopPackageIncludesThisCompanionSourceUpdate": false,
+  "productionAutoBGIExecutableBuiltOrStarted": false,
+  "productionWebDistReplaced": false,
+  "recoveryModes": {
+    "prepared": "cancel-unmodified only after complete original file hash recheck; no file write",
+    "dispatched": "finalize existing database transaction only; no redispatch",
+    "dispatching": "read only; no force cancel, process-based inference or resend",
+    "terminal": "single-record query and same-action idempotent result"
+  },
+  "recoveryHTTP": {
+    "buildMode": "all real menu production sources plus only owned recovery test source",
+    "failCount": 0,
+    "vetExit": 0,
+    "race": true,
+    "repetition": 3,
+    "cleanup": "stopped after automatic approval rejection; no retry or alternate deletion attempted",
+    "passCount": 24,
+    "parentTests": 8,
+    "sourceHashes": [
+      {
+        "sha256": "20FD532786E8A858E05D34E35DC7936C1AF1E43297B31C65B67D7ADE46BCD401",
+        "path": "menu/talent_queue_start_recovery.go"
+      },
+      {
+        "sha256": "A17DA514B90BC130334499EC5CB7F51C9E7F16E3B2C49E26CED0CED49A738CFF",
+        "path": "menu/routes_talent_queue.go"
+      },
+      {
+        "sha256": "34A8312C4B3CB4AB8657326CDE8A5420BFB60ED1A1FBECB082F229B564CB4A73",
+        "path": "menu/oneLong_handlers.go"
+      },
+      {
+        "sha256": "D0E407AF24083256C759C0414A5FD0C56754CD61C1BDAFEE9BE48DE4E52FE35A",
+        "path": "TalentPlanService/start_types.go"
+      },
+      {
+        "sha256": "6F354D50C6232837540BC95CDC80C895D3E3437A06D9CA27BA9DEEF130323102",
+        "path": "TalentPlanService/start_prepare.go"
+      },
+      {
+        "sha256": "D426F5CA84DA218733C172C7C2CD77511E3E99FC94205BB455261F9A8E8EB202",
+        "path": "menu/talent_queue_start_recovery_tmp_test.go"
+      }
+    ],
+    "boundaries": [
+      "no real game or BetterGI dispatch",
+      "inventory provider remains unavailable",
+      "no production CAS",
+      "no external-file restoration or force cancel",
+      "dispatching is read-only"
+    ],
+    "runtimeIsolation": "independent cwd with absolute synthetic BetterGIAddress; no real credentials or account data supplied",
+    "cleanupRejectedTarget": "menu/talent_queue_start_recovery_tmp_test.go",
+    "cleanupReviewReason": "blocked by policy",
+    "remainingArtifacts": [
+      "menu/talent_queue_start_recovery_tmp_test.go",
+      "D:\\Documents\\go\\autobgi\\AutoBGI_Desktop_Pet_AI\\.validation\\start-recovery-b884d015e6de4503b75f854e40a2a3f9\\start-recovery.exe",
+      "D:\\Documents\\go\\autobgi\\AutoBGI_Desktop_Pet_AI\\.validation\\start-recovery-b884d015e6de4503b75f854e40a2a3f9\\cwd"
+    ]
+  },
+  "legacyFence": {
+    "status": "passed_cleanup_blocked",
+    "validated_at": "2026-10-28T01:44:55.7405189+08:00",
+    "description": "旧版一条龙启动围栏独立隔离验证",
+    "go": "go1.27.1 windows/amd64",
+    "race_enabled": true,
+    "repetitions": 3,
+    "runtime_cwd": "D:\\Documents\\go\\autobgi\\AutoBGI_Desktop_Pet_AI\\.validation\\legacy-fence-independent-20261028\\runtime",
+    "production_files_checked": 11,
+    "all_production_hashes_unchanged": true,
+    "unique_named_tests": 35,
+    "passing_executions": 105,
+    "logs": [
+      {
+        "log": "task-results.jsonl",
+        "named_tests": [
+          "TestDomainLegacyCallbacks",
+          "TestDomainLegacyCallbacks/before-error-stops-start",
+          "TestDomainLegacyCallbacks/concurrent-attempts-run-once",
+          "TestDomainLegacyCallbacks/guard-denies-before-and-start",
+          "TestDomainLegacyCallbacks/missing-start-never-runs-before",
+          "TestDomainLegacyCallbacks/original-start-error-retained",
+          "TestDomainLegacyCallbacks/public-warning-runs-outside-wrapper",
+          "TestDomainLegacyCallbacks/registration-snapshot-does-not-change-inflight",
+          "TestDomainLegacyCallbacks/repeated-attempt-runs-once",
+          "TestDomainLegacyCallbacks/retained-after-panic-rejected",
+          "TestDomainLegacyCallbacks/retained-after-return-rejected",
+          "TestDomainLegacyCallbacks/unregistered-original-order",
+          "TestDomainLegacyCallbacks/wrapper-cannot-swallow-action-error",
+          "TestDomainLegacyCallbacks/wrapper-error-after-action-retained",
+          "TestDomainLegacyCallbacks/wrapper-without-attempt-is-not-success"
+        ],
+        "unique_named_tests": 15,
+        "passing_executions": 45,
+        "failure_events": 0,
+        "race_events": 0,
+        "package_pass": true
+      },
+      {
+        "log": "menu-results.jsonl",
+        "named_tests": [
+          "TestDomainLegacyLockBoundaries",
+          "TestDomainLegacyLockBoundaries/directory-remains-fixed-until-legacy-finishes",
+          "TestDomainLegacyLockBoundaries/queue-lock-waits-before-action",
+          "TestDomainMissingEvidenceKeepsLegacy",
+          "TestDomainScopeStartFence",
+          "TestDomainScopeStartFence/different-name-dispatched",
+          "TestDomainScopeStartFence/different-name-dispatching",
+          "TestDomainScopeStartFence/different-name-prepared",
+          "TestDomainScopeStartFence/foreign-scope-is-isolated",
+          "TestDomainScopeStartFence/missing-dependencies-refuse",
+          "TestDomainScopeStartFence/nil-store-refuses",
+          "TestDomainScopeStartFence/scope-error-refuses",
+          "TestDomainScopeStartFence/storage-corruption-active-key",
+          "TestDomainScopeStartFence/storage-corruption-payload",
+          "TestDomainScopeStartFence/storage-corruption-queue-payload",
+          "TestDomainScopeStartFence/storage-corruption-stage",
+          "TestDomainScopeStartFence/storage-corruption-unknown-table",
+          "TestDomainScopeStartFence/target-file-lifecycle-refuses",
+          "TestDomainScopeStartFence/terminal-aborted-allows-original-action",
+          "TestDomainScopeStartFence/terminal-finalized-allows-original-action"
+        ],
+        "unique_named_tests": 20,
+        "passing_executions": 60,
+        "failure_events": 0,
+        "race_events": 0,
+        "package_pass": true
+      }
+    ],
+    "runner_correction": "PowerShell native arguments with dotted test flags are now quoted; initial invalid-flag run retained separately",
+    "compile_commands": [
+      "go test -c -race -o legacy-task.test.exe ./task",
+      "go test -c -race -o legacy-menu.test.exe menu/talent_queue_startup.go menu/legacy_fence_domain_temporary_test.go"
+    ],
+    "tested_boundaries": [
+      "真实协调器回调拒绝、错误、panic和单次执行边界",
+      "全scope待处理启动记录及损坏状态拒绝",
+      "真实SQLite状态迁移与缺少库存证据降级",
+      "真实队列锁和执行目录锁持有范围"
+    ],
+    "limits": [
+      "没有连接生产或读取真实配置凭据",
+      "没有启动游戏、真实进程关闭或原始重试分发",
+      "menu仅编译真实startup源与最小依赖类型stub",
+      "没有启用生产材料自动写入或实现CAS"
+    ],
+    "cleanup": {
+      "temporary_sources": "blocked_by_policy_no_retry",
+      "temporary_test_executables": "retained_no_cleanup_attempt_after_policy_block",
+      "protected_older_targets": "untouched",
+      "temporary_source_states": [
+        {
+          "path": "task/legacy_fence_domain_temporary_test.go",
+          "exists": true
+        },
+        {
+          "path": "menu/legacy_fence_domain_temporary_test.go",
+          "exists": true
+        }
+      ],
+      "temporary_executable_states": [
+        {
+          "path": "D:\\Documents\\go\\autobgi\\AutoBGI_Desktop_Pet_AI\\.validation\\legacy-fence-independent-20261028\\legacy-task.test.exe",
+          "exists": true,
+          "sha256": "580237a3bb6581920f93d28132c3bf6528de29e9ad9bd6909c0434d05b07072f"
+        },
+        {
+          "path": "D:\\Documents\\go\\autobgi\\AutoBGI_Desktop_Pet_AI\\.validation\\legacy-fence-independent-20261028\\legacy-menu.test.exe",
+          "exists": true,
+          "sha256": "6ac6c52fcbbfea2e4fa51ccef7af4af2b301674ea102b669e8cf0e603e260c02"
+        }
+      ],
+      "rejection": "自动策略以 blocked by policy 拒绝本轮两个临时测试源的同一次 Remove-Item 调用；已停止清理，没有换用其他删除方法。",
+      "tagged_revalidation_executable_states": [
+        {
+          "path": "D:\\Documents\\go\\autobgi\\AutoBGI_Desktop_Pet_AI\\.validation\\legacy-fence-independent-20261028\\legacy-task-tagged.test.exe",
+          "exists": true,
+          "sha256": "303ae767aad5958a2dcb7df578317c2a24043d801ede5eb14de8048ddf84b798"
+        },
+        {
+          "path": "D:\\Documents\\go\\autobgi\\AutoBGI_Desktop_Pet_AI\\.validation\\legacy-fence-independent-20261028\\legacy-menu-tagged.test.exe",
+          "exists": true,
+          "sha256": "51b41d8c699f9e272ec2678380d0b635654deeaee6973c9f2cf26e757b8f6c4c"
+        }
+      ]
+    },
+    "named_test_record_breakdown": {
+      "top_level": 4,
+      "subtests": 31,
+      "leaf_tests": 32,
+      "parent_containers": 3
+    },
+    "retained_test_compatibility_fix": {
+      "description": "仅新增专用构建约束和中文说明，保留全部测试正文，不删除或改名",
+      "source_hashes": "tagged-retained-source-hashes.json",
+      "body_unchanged": true,
+      "default_package_selection": "default-package-selection.json",
+      "default_package_ignored": true,
+      "gofmt_clean": true,
+      "task_compile_files": "tagged-task-compile-files.json",
+      "race_enabled": true,
+      "repetitions": 3,
+      "latest_logs": [
+        {
+          "log": "tagged-task-results.jsonl",
+          "unique_named_records": 15,
+          "passing_executions": 45,
+          "failure_events": 0,
+          "race_events": 0,
+          "package_pass": true
+        },
+        {
+          "log": "tagged-menu-results.jsonl",
+          "unique_named_records": 20,
+          "passing_executions": 60,
+          "failure_events": 0,
+          "race_events": 0,
+          "package_pass": true
+        }
+      ],
+      "production_hash_audit": "tagged-source-hash-audit.json",
+      "production_hashes_unchanged": 11
+    }
+  },
+  "retainedLegacyTestCompatibility": [
+    {
+      "path": "task/legacy_fence_domain_temporary_test.go",
+      "previous_sha256": "8e0d333bfe5b03a7d8bedcd8a30d5d788bba852e1de9137e3ca178df5695afce",
+      "retained_sha256": "79feea9dfeeeb2524473027da57897aca2d111e21246662aebd1b90997c69268",
+      "body_without_added_header_sha256": "8e0d333bfe5b03a7d8bedcd8a30d5d788bba852e1de9137e3ca178df5695afce",
+      "body_unchanged": true,
+      "build_constraint": "autobgi_legacy_fence_validation",
+      "default_package_ignored": true
+    },
+    {
+      "path": "menu/legacy_fence_domain_temporary_test.go",
+      "previous_sha256": "8b372384737fd24d638e7739b903ffab2744f6732212e48eead67a5a74c955b4",
+      "retained_sha256": "7835db4f7c1e1d957af5c5863f8d653a377a643355e08a264f825158dfebbe4e",
+      "body_without_added_header_sha256": "8b372384737fd24d638e7739b903ffab2744f6732212e48eead67a5a74c955b4",
+      "body_unchanged": true,
+      "build_constraint": "autobgi_legacy_fence_validation",
+      "default_package_ignored": true
+    }
+  ],
+  "vueFinal": {
+    "schemaVersion": 1,
+    "date": "2026-10-28",
+    "recordedAt": "2026-10-28T01:49:59+08:00",
+    "status": "passed",
+    "productionSourcesFrozen": true,
+    "description": "培养启动独立核对组件与父页面验证证据；本文件仅记录断言结果，不包含测试源码。",
+    "execution": {
+      "workingDirectory": "D:\\Documents\\go\\autobgi\\menu\\web",
+      "shell": "PowerShell",
+      "commandForm": "@'<JavaScript validation supplied through stdin>'@ | node --input-type=module",
+      "nodeVersion": "v24.21.0",
+      "testSourceFilesCreated": 0,
+      "testSourceFilesRemaining": 0,
+      "actualVueRuntime": true,
+      "sfcCompiler": "@vue/compiler-sfc",
+      "runtimeMechanism": "SFC parse + compileScript; inlineTemplate compiled and TypeScript transpileModule converted to CommonJS in memory; actual Vue createRenderer mounts with controlled API promises and nextTick.",
+      "recoveryComponentTemplateExecuted": true,
+      "parentComponentTemplateExecuted": true,
+      "parentTestAdapters": [
+        "Ant Design components and icons use lightweight rendering stubs.",
+        "vue-router, Modal and message are mocked.",
+        "Parent queue state uses a small component stub exposing lifecycleState and capturing lifecycleLocked.",
+        "Actual TalentStartRecovery is mounted inside actual BgiConfig.",
+        "Selected BgiConfig bindings are exposed only in the in-memory SFC string to make assertions; production files contain no test exports."
+      ],
+      "queueLogicTestAdapter": "Actual TalentQueueEditor script setup is compiled and mounted with a headless render; selected existing bindings are exposed only in memory. Native select v-model DOM directives are outside this queue logic test.",
+      "apiAdapter": "All API methods use in-memory responses and controlled promises. createPlansApi is imported directly to verify URLs, encoded IDs and the exact three-field POST body.",
+      "finalCommandExitCode": 0,
+      "finalOutput": "FINAL_STARTUP_RECOVERY_VUE_ASSERTIONS_OK {\"total\":38,\"recovery\":22,\"parent\":7,\"inflight\":3,\"scopeMismatch\":5,\"queueLock\":1}",
+      "nonFatalNodeWarning": "Importing plans.js emits MODULE_TYPELESS_PACKAGE_JSON because the package does not declare type:module. The final assertions and process exit code pass."
+    },
+    "rounds": [
+      {
+        "name": "historical-before-scope-mismatch-fix",
+        "authoritativeForFinalSources": false,
+        "passed": true,
+        "cases": {
+          "recovery": 22,
+          "parent": 7,
+          "inflight": 3,
+          "total": 32
+        },
+        "limitations": "This earlier round covered pending-operation source isolation but did not cover listScope changing while loading the new configuration failed. A later read-only review identified that loaded-config scope gate gap."
+      },
+      {
+        "name": "final-after-scope-mismatch-fix",
+        "authoritativeForFinalSources": true,
+        "passed": true,
+        "allPreviousCasesRerun": true,
+        "singleStdinInvocation": true,
+        "cases": {
+          "recovery": 22,
+          "parent": 7,
+          "inflight": 3,
+          "scopeMismatch": 5,
+          "queueLock": 1,
+          "total": 38
+        }
+      }
+    ],
+    "assertionGroups": {
+      "recovery": {
+        "passed": 22,
+        "cases": [
+          "Empty collection reads the exact directory and confirms no pending records.",
+          "Prepared cancellation requires two explicit clicks and freezes operation, scope, version and action.",
+          "Prepared record without a verified unchanged file offers no recovery action.",
+          "Dispatching is readonly and offers no cancel, finalize or resend action.",
+          "Dispatched record only submits finalize and accepts the exact finalized terminal.",
+          "HTTP 409 does not report success or enter a transport-unknown confirmation branch.",
+          "Lost POST response queries the original operation and accepts only its matching terminal.",
+          "Original-operation GET still pending remains unknown and does not replay POST.",
+          "Original-operation GET with a different operation ID cannot confirm success.",
+          "Numeric plan revision is rejected instead of rounded.",
+          "uint64 overflow revision string is rejected.",
+          "Duplicate operation IDs fail the collection closed.",
+          "Different-directory collection response is rejected.",
+          "A-to-B-to-A ignores the oldest same-directory collection response.",
+          "Directory change invalidates a late POST terminal while keeping the in-flight lock.",
+          "Unmount invalidates a pending POST and prevents followup reads.",
+          "New parent lock prevents a previously opened confirmation from submitting.",
+          "Refresh invalidates the opened confirmation.",
+          "Late unknown-result GET cannot cross directory scope.",
+          "Warning strings remain plain rendered text instead of executable markup.",
+          "Malformed success envelope triggers only original-operation GET confirmation.",
+          "Explicit unsuccessful business envelope never reports recovery success."
+        ]
+      },
+      "parent": {
+        "passed": 7,
+        "cases": [
+          "Empty configuration directory still initializes the independent pending-operation area.",
+          "TALENT_START_PENDING refreshes independent startup records without legacy recovery or replaying start.",
+          "Confirmed recovery retains unsaved configuration draft and queue component generation.",
+          "Unsaved queue draft prevents automatic reload and stays preserved.",
+          "Clean confirmed recovery refreshes configuration and queue without launching.",
+          "Existing pending startup gates save and start while preserving draft.",
+          "API wrapper encodes operation ID and posts only expectedScopeId, expectedOperationVersion and action."
+        ]
+      },
+      "inflight": {
+        "passed": 3,
+        "cases": [
+          "Same-directory refresh keeps busy and mutation/start locks, delays GET until the original POST ends, and never sends a second mutation.",
+          "Directory switch keeps the in-flight lock and ignores the original directory terminal and success notice.",
+          "Unmounted parent sends no recovery followup requests."
+        ]
+      },
+      "scopeMismatch": {
+        "passed": 5,
+        "cases": [
+          "New listScope plus failed configuration GET retains old scope, name, revision and draft; editor inert, queue locked, save/start/rename/delete send no requests even after the new pending list is checked and empty.",
+          "Valid but wrong-scope configuration response is rejected before replacing the retained draft.",
+          "Explicit valid configuration reload for the current listScope restores matching scope and unlocks actions and queue.",
+          "Creating a configuration still targets current listScope despite an older loaded editor; old loaded-config actions stay blocked.",
+          "Loaded configuration scope mismatch locks save/start immediately before pending-list completion."
+        ]
+      },
+      "queueLock": {
+        "passed": 1,
+        "cases": [
+          "Actual queue setup: after first autosave is sent, later draft edits remain unsent when the scope lock arrives; completing the first save does not dispatch the next autosave, retains dirty draft and records an explicit retry message."
+        ]
+      }
+    },
+    "additionalChecks": {
+      "sfcParseCompileScriptCompileTemplate": {
+        "passed": true,
+        "files": [
+          "menu/web/src/components/TalentStartRecovery.vue",
+          "menu/web/src/components/TalentQueueEditor.vue",
+          "menu/web/src/views/BgiConfig.vue"
+        ]
+      },
+      "gitDiffCheck": {
+        "passed": true,
+        "scope": "Four production source files listed in sourceHashesSHA256."
+      },
+      "viteBuildByThisAgent": false,
+      "viteBuildOwner": "root agent performs a fresh isolated outDir build after this final source freeze."
+    },
+    "sourceHashesSHA256": {
+      "menu/web/src/components/TalentStartRecovery.vue": "56437a245625717d7d3c3460371b2af4d9201461d48c681616e6ac86de3ae41a",
+      "menu/web/src/components/TalentQueueEditor.vue": "557f85656f42404ca848f8db391320ab56210804bb90489bba85a21845bbe57b",
+      "menu/web/src/views/BgiConfig.vue": "51013ff1fdb12cef83ff9c16fb980ec16f8cf2d0c9d1622bd9a66fa5e9a7c262",
+      "menu/web/src/utils/api/plans.js": "e85fb34329c316f034f6ec131b607b5bda26b0c2edf91d9414f20d78f052d37e"
+    },
+    "validationBoundaries": {
+      "realAntDesignBrowserInteractions": false,
+      "browserDOMInertBehaviorVisuallyVerified": false,
+      "nativeDesktopUI": false,
+      "screenshotsOrVisualQA": false,
+      "realHTTPRequests": false,
+      "realGinServerUsedByThisEvidence": false,
+      "productionConnected": false,
+      "realCredentialsRead": false,
+      "gameOrBetterGIControlled": false,
+      "fullPreparedFileRestorationClaimed": false,
+      "notes": [
+        "Evidence confirms actual Vue component logic and rendered attributes under a custom renderer, with controlled in-memory API responses.",
+        "No claim is made about browser-native inert behavior, real Ant Design interaction, visual layout, native UI or end-to-end HTTP execution.",
+        "Server-side Gin, storage and complete-file digest validation are separate server agent evidence.",
+        "Prepared cancellation means only cancellation after the server rechecks the original complete-file digest; it does not restore edited settings or resend a startup.",
+        "Dispatched finalize records queue and material-event completion only and does not prove game-side cultivation completed."
+      ]
+    },
+    "harnessHistory": {
+      "earlierHarnessAdaptations": [
+        "Custom renderer insert initially used an unbound this.remove and was corrected in the in-memory harness.",
+        "Parent inspection required injecting expose into the actual SFC source and correctly wrapping mocked default component exports.",
+        "Queue has separate normal and setup script blocks, so its existing expose macro was expanded in memory.",
+        "Queue native select v-model requires DOM options; its targeted autosave logic test uses actual script setup with a headless render."
+      ],
+      "productionFailuresInFinalRound": 0,
+      "finalRoundPassedAfterHarnessAdaptations": true
+    }
+  },
+  "rootChecks": {
+    "createdAt": "2026-10-28T01:41:30.0967694+08:00",
+    "directory": "D:\\Documents\\go\\autobgi\\AutoBGI_Desktop_Pet_AI\\.validation\\startup-recovery-final-35484181fdf445f5b3d5460b6d205928",
+    "toolchain": "go version go1.27.1 windows/amd64",
+    "packages": [
+      "./menu",
+      "./task",
+      "./OneLong",
+      "./bgiStatus",
+      "./TaskCron",
+      "./LogKeyword",
+      "./MCP",
+      "./characterDevelopment",
+      "./TalentPlanService"
+    ],
+    "buildExitCode": 0,
+    "vetExitCode": 0,
+    "initialVetExitCode": 1,
+    "initialVetReason": "temporary named-file stub test caused package redeclaration; retained test sources now have an explicit opt-in build constraint",
+    "finalVetAt": "2026-10-28T01:44:24.2543831+08:00",
+    "finalDiffCheckExitCode": 0,
+    "finalDiffCheckLog": "D:\\Documents\\go\\autobgi\\AutoBGI_Desktop_Pet_AI\\.validation\\startup-recovery-final-35484181fdf445f5b3d5460b6d205928\\diff-check-final.log"
+  },
+  "frontendFinal": {
+    "frontendBuildExitCode": 0,
+    "frontendOutDir": "D:\\Documents\\go\\autobgi\\AutoBGI_Desktop_Pet_AI\\.validation\\startup-recovery-final-35484181fdf445f5b3d5460b6d205928\\frontend-dist-final",
+    "frontendLog": "D:\\Documents\\go\\autobgi\\AutoBGI_Desktop_Pet_AI\\.validation\\startup-recovery-final-35484181fdf445f5b3d5460b6d205928\\frontend-build-final.log",
+    "existingHelperTestsExitCode": 0,
+    "existingHelperTests": 5,
+    "helperLog": "D:\\Documents\\go\\autobgi\\AutoBGI_Desktop_Pet_AI\\.validation\\startup-recovery-final-35484181fdf445f5b3d5460b6d205928\\frontend-existing-helper-tests-final.log",
+    "sourcesUnchangedDuringBuild": true,
+    "sourceSHA256": [
+      {
+        "path": "menu/web/src/components/TalentStartRecovery.vue",
+        "sha256": "56437a245625717d7d3c3460371b2af4d9201461d48c681616e6ac86de3ae41a"
+      },
+      {
+        "path": "menu/web/src/components/TalentQueueEditor.vue",
+        "sha256": "557f85656f42404ca848f8db391320ab56210804bb90489bba85a21845bbe57b"
+      },
+      {
+        "path": "menu/web/src/views/BgiConfig.vue",
+        "sha256": "51013ff1fdb12cef83ff9c16fb980ec16f8cf2d0c9d1622bd9a66fa5e9a7c262"
+      },
+      {
+        "path": "menu/web/src/utils/api/plans.js",
+        "sha256": "e85fb34329c316f034f6ec131b607b5bda26b0c2edf91d9414f20d78f052d37e"
+      }
+    ],
+    "finishedAt": "2026-10-28T01:50:36.5665255+08:00",
+    "priorBuild": "frontend-checks.json",
+    "priorBuildSupersededByScopeFix": true
+  },
+  "frontendBuildWarnings": [
+    "Existing vendor and application chunks exceed the Vite 500 kB warning threshold; production build succeeded."
+  ],
+  "sourceEvidenceAllMatch": true,
+  "sourceEvidenceComparisons": [
+    {
+      "path": "menu/talent_queue_start_recovery.go",
+      "evidence": "recovery-http",
+      "expected": "20fd532786e8a858e05d34e35dc7936c1af1e43297b31c65b67d7ade46bcd401",
+      "actual": "20fd532786e8a858e05d34e35dc7936c1af1e43297b31c65b67d7ade46bcd401"
+    },
+    {
+      "path": "menu/routes_talent_queue.go",
+      "evidence": "recovery-http",
+      "expected": "a17da514b90bc130334499ec5cb7f51c9e7f16e3b2c49e26ced0ced49a738cff",
+      "actual": "a17da514b90bc130334499ec5cb7f51c9e7f16e3b2c49e26ced0ced49a738cff"
+    },
+    {
+      "path": "menu/oneLong_handlers.go",
+      "evidence": "recovery-http",
+      "expected": "34a8312c4b3cb4ab8657326cde8a5420bfb60ed1a1fbecb082f229b564cb4a73",
+      "actual": "34a8312c4b3cb4ab8657326cde8a5420bfb60ed1a1fbecb082f229b564cb4a73"
+    },
+    {
+      "path": "TalentPlanService/start_types.go",
+      "evidence": "recovery-http",
+      "expected": "d0e407af24083256c759c0414a5fd0c56754cd61c1bdafee9be48de4e52fe35a",
+      "actual": "d0e407af24083256c759c0414a5fd0c56754cd61c1bdafee9be48de4e52fe35a"
+    },
+    {
+      "path": "TalentPlanService/start_prepare.go",
+      "evidence": "recovery-http",
+      "expected": "6f354d50c6232837540bc95cdc80c895d3e3437a06d9ca27ba9deef130323102",
+      "actual": "6f354d50c6232837540bc95cdc80c895d3e3437a06d9ca27ba9deef130323102"
+    },
+    {
+      "path": "menu/talent_queue_start_recovery_tmp_test.go",
+      "evidence": "recovery-http",
+      "expected": "d426f5ca84da218733c172c7c2cd77511e3e99fc94205bb455261f9a8e8eb202",
+      "actual": "d426f5ca84da218733c172c7c2cd77511e3e99fc94205bb455261f9a8e8eb202"
+    },
+    {
+      "path": "task/legacy_startup.go",
+      "evidence": "legacy-fence",
+      "expected": "e30215051f4951123e94a44f9aa719e7f6508f1466c9cdd029e48dc102e31373",
+      "actual": "e30215051f4951123e94a44f9aa719e7f6508f1466c9cdd029e48dc102e31373"
+    },
+    {
+      "path": "task/Task.go",
+      "evidence": "legacy-fence",
+      "expected": "4a3b405565df793e28fd0274b222ab6a6f2c1d153d4d70966cc87829c9f2c93f",
+      "actual": "4a3b405565df793e28fd0274b222ab6a6f2c1d153d4d70966cc87829c9f2c93f"
+    },
+    {
+      "path": "task/startup_hooks.go",
+      "evidence": "legacy-fence",
+      "expected": "d7c7edc7edd4518ac31db3db42d46f0fc004f9b0355b48a444c8e05f8e919fd7",
+      "actual": "d7c7edc7edd4518ac31db3db42d46f0fc004f9b0355b48a444c8e05f8e919fd7"
+    },
+    {
+      "path": "menu/talent_queue_startup.go",
+      "evidence": "legacy-fence",
+      "expected": "d80604932a2d23c047781b318bbc29a8d9a583b406ce16f653f1e5a231b05cc7",
+      "actual": "d80604932a2d23c047781b318bbc29a8d9a583b406ce16f653f1e5a231b05cc7"
+    },
+    {
+      "path": "bgiStatus/talent_queue_lifecycle.go",
+      "evidence": "legacy-fence",
+      "expected": "52c568d35d6a2d079eca0e1bfa1e73adcb09d45d9dc786471a31bd7471815b1a",
+      "actual": "52c568d35d6a2d079eca0e1bfa1e73adcb09d45d9dc786471a31bd7471815b1a"
+    },
+    {
+      "path": "bgiStatus/aBGIByJs.go",
+      "evidence": "legacy-fence",
+      "expected": "75ac4962043392a6512f6ab51446095b37bcc53ca77b7c9721f05d018e08dda5",
+      "actual": "75ac4962043392a6512f6ab51446095b37bcc53ca77b7c9721f05d018e08dda5"
+    },
+    {
+      "path": "OneLong/oneLong.go",
+      "evidence": "legacy-fence",
+      "expected": "d5e1984f21281398bc144e3c573da2c50e22761ddad5dab9a96f36624bffc81c",
+      "actual": "d5e1984f21281398bc144e3c573da2c50e22761ddad5dab9a96f36624bffc81c"
+    },
+    {
+      "path": "OneLong/OneLongTask.go",
+      "evidence": "legacy-fence",
+      "expected": "4b909a97c55b84ba6f1e4012cc340da3b37b0ddfe8f247dd967c6d5acb34e017",
+      "actual": "4b909a97c55b84ba6f1e4012cc340da3b37b0ddfe8f247dd967c6d5acb34e017"
+    },
+    {
+      "path": "TalentPlanService/start_types.go",
+      "evidence": "legacy-fence",
+      "expected": "d0e407af24083256c759c0414a5fd0c56754cd61c1bdafee9be48de4e52fe35a",
+      "actual": "d0e407af24083256c759c0414a5fd0c56754cd61c1bdafee9be48de4e52fe35a"
+    },
+    {
+      "path": "TalentPlanService/start_prepare.go",
+      "evidence": "legacy-fence",
+      "expected": "6f354d50c6232837540bc95cdc80c895d3e3437a06d9ca27ba9deef130323102",
+      "actual": "6f354d50c6232837540bc95cdc80c895d3e3437a06d9ca27ba9deef130323102"
+    },
+    {
+      "path": "TalentPlanService/start_store.go",
+      "evidence": "legacy-fence",
+      "expected": "91c065c45a9246e16b156276961288b911a18bda2d6796ee6cbf4483e394815d",
+      "actual": "91c065c45a9246e16b156276961288b911a18bda2d6796ee6cbf4483e394815d"
+    },
+    {
+      "path": "task/legacy_fence_domain_temporary_test.go",
+      "evidence": "retained-test-build-constraint",
+      "expected": "79feea9dfeeeb2524473027da57897aca2d111e21246662aebd1b90997c69268",
+      "actual": "79feea9dfeeeb2524473027da57897aca2d111e21246662aebd1b90997c69268"
+    },
+    {
+      "path": "menu/legacy_fence_domain_temporary_test.go",
+      "evidence": "retained-test-build-constraint",
+      "expected": "7835db4f7c1e1d957af5c5863f8d653a377a643355e08a264f825158dfebbe4e",
+      "actual": "7835db4f7c1e1d957af5c5863f8d653a377a643355e08a264f825158dfebbe4e"
+    },
+    {
+      "path": "menu/web/src/components/TalentStartRecovery.vue",
+      "evidence": "vue-final-38",
+      "expected": "56437a245625717d7d3c3460371b2af4d9201461d48c681616e6ac86de3ae41a",
+      "actual": "56437a245625717d7d3c3460371b2af4d9201461d48c681616e6ac86de3ae41a"
+    },
+    {
+      "path": "menu/web/src/components/TalentQueueEditor.vue",
+      "evidence": "vue-final-38",
+      "expected": "557f85656f42404ca848f8db391320ab56210804bb90489bba85a21845bbe57b",
+      "actual": "557f85656f42404ca848f8db391320ab56210804bb90489bba85a21845bbe57b"
+    },
+    {
+      "path": "menu/web/src/views/BgiConfig.vue",
+      "evidence": "vue-final-38",
+      "expected": "51013ff1fdb12cef83ff9c16fb980ec16f8cf2d0c9d1622bd9a66fa5e9a7c262",
+      "actual": "51013ff1fdb12cef83ff9c16fb980ec16f8cf2d0c9d1622bd9a66fa5e9a7c262"
+    },
+    {
+      "path": "menu/web/src/utils/api/plans.js",
+      "evidence": "vue-final-38",
+      "expected": "e85fb34329c316f034f6ec131b607b5bda26b0c2edf91d9414f20d78f052d37e",
+      "actual": "e85fb34329c316f034f6ec131b607b5bda26b0c2edf91d9414f20d78f052d37e"
+    },
+    {
+      "path": "menu/web/src/components/TalentStartRecovery.vue",
+      "evidence": "final-vite-build",
+      "expected": "56437a245625717d7d3c3460371b2af4d9201461d48c681616e6ac86de3ae41a",
+      "actual": "56437a245625717d7d3c3460371b2af4d9201461d48c681616e6ac86de3ae41a"
+    },
+    {
+      "path": "menu/web/src/components/TalentQueueEditor.vue",
+      "evidence": "final-vite-build",
+      "expected": "557f85656f42404ca848f8db391320ab56210804bb90489bba85a21845bbe57b",
+      "actual": "557f85656f42404ca848f8db391320ab56210804bb90489bba85a21845bbe57b"
+    },
+    {
+      "path": "menu/web/src/views/BgiConfig.vue",
+      "evidence": "final-vite-build",
+      "expected": "51013ff1fdb12cef83ff9c16fb980ec16f8cf2d0c9d1622bd9a66fa5e9a7c262",
+      "actual": "51013ff1fdb12cef83ff9c16fb980ec16f8cf2d0c9d1622bd9a66fa5e9a7c262"
+    },
+    {
+      "path": "menu/web/src/utils/api/plans.js",
+      "evidence": "final-vite-build",
+      "expected": "e85fb34329c316f034f6ec131b607b5bda26b0c2edf91d9414f20d78f052d37e",
+      "actual": "e85fb34329c316f034f6ec131b607b5bda26b0c2edf91d9414f20d78f052d37e"
+    }
+  ],
+  "sourceHashesSHA256": {
+    "menu/talent_queue_start_recovery.go": "20fd532786e8a858e05d34e35dc7936c1af1e43297b31c65b67d7ade46bcd401",
+    "menu/routes_talent_queue.go": "a17da514b90bc130334499ec5cb7f51c9e7f16e3b2c49e26ced0ced49a738cff",
+    "menu/oneLong_handlers.go": "34a8312c4b3cb4ab8657326cde8a5420bfb60ed1a1fbecb082f229b564cb4a73",
+    "TalentPlanService/start_types.go": "d0e407af24083256c759c0414a5fd0c56754cd61c1bdafee9be48de4e52fe35a",
+    "TalentPlanService/start_prepare.go": "6f354d50c6232837540bc95cdc80c895d3e3437a06d9ca27ba9deef130323102",
+    "task/legacy_startup.go": "e30215051f4951123e94a44f9aa719e7f6508f1466c9cdd029e48dc102e31373",
+    "task/Task.go": "4a3b405565df793e28fd0274b222ab6a6f2c1d153d4d70966cc87829c9f2c93f",
+    "task/startup_hooks.go": "d7c7edc7edd4518ac31db3db42d46f0fc004f9b0355b48a444c8e05f8e919fd7",
+    "menu/talent_queue_startup.go": "d80604932a2d23c047781b318bbc29a8d9a583b406ce16f653f1e5a231b05cc7",
+    "bgiStatus/talent_queue_lifecycle.go": "52c568d35d6a2d079eca0e1bfa1e73adcb09d45d9dc786471a31bd7471815b1a",
+    "bgiStatus/aBGIByJs.go": "75ac4962043392a6512f6ab51446095b37bcc53ca77b7c9721f05d018e08dda5",
+    "OneLong/oneLong.go": "d5e1984f21281398bc144e3c573da2c50e22761ddad5dab9a96f36624bffc81c",
+    "OneLong/OneLongTask.go": "4b909a97c55b84ba6f1e4012cc340da3b37b0ddfe8f247dd967c6d5acb34e017",
+    "TalentPlanService/start_store.go": "91c065c45a9246e16b156276961288b911a18bda2d6796ee6cbf4483e394815d",
+    "TaskCron/TaskCron.go": "5884af25e1dbc76328a545b9f2edb4d0de77257fce7abced3a3def4acfd7ddda",
+    "LogKeyword/LogKeywordService.go": "5c91543c80cb6d165e12f6a0b83f43563988045707bc1af60d07d5bcd304cd21",
+    "MCP/service.go": "dd25b752e7c0ba347f80b859d247292ccd7a358dfc581609685fa5adcccfc4aa",
+    "characterDevelopment/characterPlan.go": "c87a88b62181fbfcacde00bc16d5439beb34c9421abe8e283d25548c0f2cbf9a",
+    "menu/menu.go": "e2354db07064d99b4b9ac628ecb205fdd176fb6a2def40fc4831502f57ba3252",
+    "menu/web/src/components/TalentStartRecovery.vue": "56437a245625717d7d3c3460371b2af4d9201461d48c681616e6ac86de3ae41a",
+    "menu/web/src/components/TalentQueueEditor.vue": "557f85656f42404ca848f8db391320ab56210804bb90489bba85a21845bbe57b",
+    "menu/web/src/views/BgiConfig.vue": "51013ff1fdb12cef83ff9c16fb980ec16f8cf2d0c9d1622bd9a66fa5e9a7c262",
+    "menu/web/src/utils/api/plans.js": "e85fb34329c316f034f6ec131b607b5bda26b0c2edf91d9414f20d78f052d37e",
+    "AutoBGI_Desktop_Pet_AI/README.md": "efd8a6393618902272ce290d45458234e1ccb59037624831ee2b975d6bbc0c50",
+    "AutoBGI_Desktop_Pet_AI/docs/startup-recovery.md": "cf2d1eef70e791bc1e01ffa6d6777abc8ef10e4a8aa9ac6a684205f474ce0e21",
+    "AutoBGI_Desktop_Pet_AI/docs/cultivation-startup.md": "9450ca675fe3734c0a4f326be14eae6d63cb1101417ef5643dd32ce290ddff74",
+    "AutoBGI_Desktop_Pet_AI/docs/acceptance.md": "a4a43eca0cce7ba3c36f9c536d0334474753727354bf186166baa6e21b7f17f2"
+  },
+  "evidenceHashesSHA256": {
+    "AutoBGI_Desktop_Pet_AI/.validation/start-recovery-b884d015e6de4503b75f854e40a2a3f9/result.json": "64f1c25aac351e2df519a3695341930c54b2765660392859846dacedafb9062a",
+    "AutoBGI_Desktop_Pet_AI/.validation/legacy-fence-independent-20261028/validation.json": "915c1e2dc984de07360f633e61ed7d27fd62223e6c826545681984c02852f67a",
+    "AutoBGI_Desktop_Pet_AI/.validation/legacy-fence-independent-20261028/tagged-source-hash-audit.json": "e3f350a79ddf4c8de987f801e1639f8c13772694625f9fbbe959d4b7b3826aa0",
+    "AutoBGI_Desktop_Pet_AI/.validation/legacy-fence-independent-20261028/tagged-retained-source-hashes.json": "629a85604ff0a28f8878dc88ec2a22e83940e96fe2f7ec12e3410f20bbec2891",
+    "AutoBGI_Desktop_Pet_AI/.validation/startup-recovery-vue-20261028.json": "d4be25b345c78e7fb5429fd92190aff29a96e16fb45fc20ea60946ca53d8cf04",
+    "D:\\Documents\\go\\autobgi\\AutoBGI_Desktop_Pet_AI\\.validation\\startup-recovery-final-35484181fdf445f5b3d5460b6d205928\\root-checks.json": "b60e54f1f62449dc7352904b252bc840181d11006c6aa8e4db0bd00a4d6b1e02",
+    "D:\\Documents\\go\\autobgi\\AutoBGI_Desktop_Pet_AI\\.validation\\startup-recovery-final-35484181fdf445f5b3d5460b6d205928\\frontend-checks-final.json": "efc171a668f78989ee430db89cd0c18694edda8958dbe6ef6ab2d5d353d15810",
+    "D:\\Documents\\go\\autobgi\\AutoBGI_Desktop_Pet_AI\\.validation\\startup-recovery-final-35484181fdf445f5b3d5460b6d205928\\frontend-build-final.log": "5cc7d71e5a9dd61d03811c18fe09fc6152613a8ba0f75cc709b160b10f04ce2c",
+    "D:\\Documents\\go\\autobgi\\AutoBGI_Desktop_Pet_AI\\.validation\\startup-recovery-final-35484181fdf445f5b3d5460b6d205928\\frontend-existing-helper-tests-final.log": "fc3e0fb33381697b8551a4864b7b91d6ed9c48362f482d32bb13f6ee0f85154d",
+    "D:\\Documents\\go\\autobgi\\AutoBGI_Desktop_Pet_AI\\.validation\\startup-recovery-final-35484181fdf445f5b3d5460b6d205928\\diff-check-final.log": "e20970e0971635275eab1911a5f05c731251a2a326d33b6127fe46fc610703da"
+  },
+  "preservedArtifacts": [
+    {
+      "path": "menu/web/index.html",
+      "expectedSHA256": "ca96ceb33080ee823d448d0a6da44029cf1aad63553d7a731209a193f93c23aa",
+      "actualSHA256": "ca96ceb33080ee823d448d0a6da44029cf1aad63553d7a731209a193f93c23aa",
+      "unchanged": true
+    },
+    {
+      "path": "menu/web/version.txt",
+      "expectedSHA256": "28ae199272f193ac9368dc9f4abcd8bbe4631ea6eba15f167675ec53512b5c01",
+      "actualSHA256": "28ae199272f193ac9368dc9f4abcd8bbe4631ea6eba15f167675ec53512b5c01",
+      "unchanged": true
+    },
+    {
+      "path": "abgi-updater.exe",
+      "expectedSHA256": "0279ba6eee199c3c1fd8fead6b360405bef5d68f07067b6ab95b26d6a6150b79",
+      "actualSHA256": "0279ba6eee199c3c1fd8fead6b360405bef5d68f07067b6ab95b26d6a6150b79",
+      "unchanged": true
+    },
+    {
+      "path": "menu/routes_integrations.go",
+      "expectedSHA256": "6b9646ea8ec1ad40304f0455177298ad263ead6646f88008c9a5e8e60eaaa20a",
+      "actualSHA256": "6b9646ea8ec1ad40304f0455177298ad263ead6646f88008c9a5e8e60eaaa20a",
+      "unchanged": true
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/bin/AutoBGI-Pet.exe",
+      "expectedSHA256": "eb6e3cac7488137da8afe9543776e395e2119a3eb2226b43cf5eba385fd6b579",
+      "actualSHA256": "eb6e3cac7488137da8afe9543776e395e2119a3eb2226b43cf5eba385fd6b579",
+      "unchanged": true
+    },
+    {
+      "path": "AutoBGI_Desktop_Pet_AI/bin/AutoBGI-Pet-0.2.7-windows-amd64.zip",
+      "expectedSHA256": "dc4720af9c9bb68e958eb19e085ba519ec708a9d8593d6a5818781f55496b84b",
+      "actualSHA256": "dc4720af9c9bb68e958eb19e085ba519ec708a9d8593d6a5818781f55496b84b",
+      "unchanged": true
+    }
+  ],
+  "independentReviews": [
+    "Recovery API stage transitions, stable confirmation version, terminal idempotency and lock order reviewed without confirmed new defects.",
+    "Review found loaded-configuration scope mismatch after failed new-scope GET; fixed before final 38-case Vue rerun and final Vite build.",
+    "Final scope gates preserve old drafts and block loaded-config mutations while keeping create targeted to the current list scope."
+  ],
+  "validationBoundaries": {
+    "realCredentialsRead": false,
+    "productionDatabaseRead": false,
+    "realBetterGIGameControl": false,
+    "realNetworkSleepChanges": false,
+    "nativeWindowsUIRetested": false,
+    "actualBrowserAntInertVisuallyVerified": false,
+    "HTTPTestUsesRealGinAndSyntheticSQLite": true,
+    "VueTestsUseActualRuntimeAndControlledPromises": true,
+    "productionInventoryEvidenceAvailable": false,
+    "productionConfigCASAvailable": false,
+    "crossStartAutomaticFieldOwnershipComplete": false,
+    "executionAvailable": false,
+    "inventoryVerified": false,
+    "completionEventsAvailable": false,
+    "previous250MBMemoryTargetPassClaimed": false
+  },
+  "cleanup": {
+    "newlyCreatedTestSourcesFullyRemoved": false,
+    "reason": "Automatic approval review rejected deletion: blocked by policy. No retry, alternate deletion or rename attempted.",
+    "blockedSourceTargets": [
+      "menu/talent_queue_start_recovery_tmp_test.go",
+      "task/legacy_fence_domain_temporary_test.go",
+      "menu/legacy_fence_domain_temporary_test.go"
+    ],
+    "legacyStubBuildConstraint": "autobgi_legacy_fence_validation",
+    "legacyTestBodyPreserved": true,
+    "legacyDefaultPackageSelectionIgnored": true,
+    "retainedArtifactsExcludedFromDesktopPortablePackage": true,
+    "earlierRejectedTargetsUntouched": true
+  },
+  "remainingWork": [
+    "verified production inventory identity, source time, coverage, completion and official material mapping",
+    "Windows configuration CAS and cross-start automatic-field ownership restoration",
+    "authoritative external dispatch evidence for dispatching recovery",
+    "real service and game integration",
+    "native DPI, sleep, focus and full-process performance acceptance"
+  ]
+}
