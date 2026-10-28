@@ -81,6 +81,12 @@ html[data-view=pet],html[data-view=bubble],html[data-view=pet] body,html[data-vi
 .bubble-status-label{color:#7994ae;white-space:nowrap}
 .bubble-status-value{color:#254873;overflow-wrap:anywhere;min-width:0}
 .bubble-status-row:has(.bubble-status-value:first-child){display:block}
+/* 预计进度沿用状态气泡的蓝色，达到上限时填满轨道。 */
+.bubble-progress{padding:8px 0 2px;border-top:1px solid #dceaf5}
+.bubble-progress-heading{display:flex;justify-content:space-between;gap:8px;color:#7994ae;font-size:12px;line-height:1.45}
+.bubble-progress-heading span:last-child{color:#376eaa;text-align:right}
+.bubble-progress-track{height:7px;margin-top:6px;overflow:hidden;border-radius:999px;background:#dceaf5}
+.bubble-progress-fill{height:100%;border-radius:inherit;background:linear-gradient(90deg,#83b9df,#478bc4);transition:width .25s ease}
 @keyframes furina-breathe{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-3px) scale(1.015)}}
 @keyframes furina-wave{from{transform:rotate(-4deg)}to{transform:rotate(4deg)}}
 @keyframes furina-happy{from{transform:translateY(0) rotate(-3deg)}to{transform:translateY(-10px) rotate(3deg)}}
