@@ -38,6 +38,8 @@ func (d *DesktopService) addHotKeyMenu(menu *application.Menu) {
 	d.mu.Unlock()
 
 	submenu := menu.AddSubmenu("BGI 快捷键")
+	// 关闭接口独立于快捷键配置读取，读取失败时仍保留可用的关闭入口。
+	defer d.addCloseActions(submenu)
 	if snapshot.status != oneLongMenuReady {
 		hint := "未连接或连接尚未完成"
 		if snapshot.status == oneLongMenuLoading {
@@ -53,7 +55,7 @@ func (d *DesktopService) addHotKeyMenu(menu *application.Menu) {
 		return
 	}
 	if snapshot.pending {
-		submenu.Add("正在发送按键，请稍候").SetEnabled(false)
+		submenu.Add("正在处理操作，请稍候").SetEnabled(false)
 	}
 	for _, name := range hotKeyNames {
 		key := keys[name]
@@ -77,6 +79,67 @@ func (d *DesktopService) addHotKeyMenu(menu *application.Menu) {
 	submenu.Add("刷新快捷键").SetEnabled(!snapshot.pending).OnClick(func(*application.Context) {
 		d.scheduleHotKeyMenuRefresh(d.service.GetState(), true)
 	})
+}
+
+// addCloseActions 在当前在线连接中提供 AutoBGI 的两个固定关闭入口。
+func (d *DesktopService) addCloseActions(menu *application.Menu) {
+	state := d.service.GetState()
+	d.mu.Lock()
+	pending := d.hotKeyMenu.pending
+	d.mu.Unlock()
+	profileID, activeProfileID, generation := state.Connection.ProfileID, state.ActiveProfileID, state.Connection.Generation
+	enabled := state.Connection.Status == "online" && !pending
+	menu.AddSeparator()
+	menu.Add("关闭 BGI 和原神").SetEnabled(enabled).OnClick(func(*application.Context) {
+		d.closeFromHotKeyMenu("bgi_and_game", "关闭 BGI 和原神", profileID, activeProfileID, generation)
+	})
+	menu.Add("关闭原神").SetEnabled(enabled).OnClick(func(*application.Context) {
+		d.closeFromHotKeyMenu("game", "关闭原神", profileID, activeProfileID, generation)
+	})
+}
+
+// closeFromHotKeyMenu 仅提交一次关闭请求，旧连接的回包不影响当前连接。
+func (d *DesktopService) closeFromHotKeyMenu(action, label, profileID, activeProfileID string, generation uint64) {
+	state := d.service.GetState()
+	if !oneLongMenuOnlineIdentityMatches(state, profileID, activeProfileID, generation) {
+		d.showBubbleForState(state, "连接已变化，请重新打开菜单", "error")
+		return
+	}
+	d.mu.Lock()
+	if d.hotKeyMenu.pending {
+		d.mu.Unlock()
+		d.showBubble("已有操作正在处理，请稍候", "error")
+		return
+	}
+	d.hotKeyMenu.pending = true
+	d.mu.Unlock()
+	d.rebuildTrayMenu()
+	go func() {
+		err := d.service.CloseFromMenuForConnection(action, profileID, activeProfileID, generation)
+		application.InvokeAsync(func() {
+			if d.stopped() {
+				return
+			}
+			current := d.service.GetState()
+			d.mu.Lock()
+			d.hotKeyMenu.pending = false
+			d.mu.Unlock()
+			d.rebuildTrayMenu()
+			if !oneLongMenuIdentityMatches(current, profileID, activeProfileID, generation) {
+				return
+			}
+			if err == nil {
+				d.showBubble(label+"请求已受理，请核对运行状态", "status")
+				return
+			}
+			var menuErr *service.OneLongStartError
+			if errors.As(err, &menuErr) {
+				d.showBubble(menuErr.Message, "error")
+				return
+			}
+			d.showBubble("关闭请求失败，请检查连接", "error")
+		})
+	}()
 }
 
 // scheduleHotKeyMenuRefresh 异步读取当前在线连接，连接变化时立即撤销旧菜单。

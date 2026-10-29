@@ -72,6 +72,11 @@ func (c *Client) request(ctx context.Context, method, route string, body any, de
 
 // requestQuery 只供已定义领域路由编码查询参数，绝不拼接不可信路径或服务来源。
 func (c *Client) requestQuery(ctx context.Context, method, route string, query url.Values, body any, dest any) error {
+	return c.requestQueryWithHTTP(ctx, c.http, method, route, query, body, dest)
+}
+
+// requestQueryWithHTTP 复用固定路由和鉴权规则，允许耗时的关闭操作使用专用超时。
+func (c *Client) requestQueryWithHTTP(ctx context.Context, client *http.Client, method, route string, query url.Values, body any, dest any) error {
 	u := *c.base
 	u.Path = strings.TrimRight(c.base.Path, "/") + route
 	u.RawPath = ""
@@ -93,7 +98,7 @@ func (c *Client) requestQuery(ctx context.Context, method, route string, query u
 	if body != nil {
 		req.Header.Set("Content-Type", "application/json")
 	}
-	response, err := c.http.Do(req)
+	response, err := client.Do(req)
 	if err != nil {
 		if ctx.Err() != nil {
 			return ctx.Err()
