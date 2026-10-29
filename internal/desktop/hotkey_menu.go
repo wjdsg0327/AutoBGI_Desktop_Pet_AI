@@ -129,7 +129,8 @@ func (d *DesktopService) closeFromHotKeyMenu(action, label, profileID, activePro
 				return
 			}
 			if err == nil {
-				d.showBubble(label+"请求已受理，请核对运行状态", "status")
+				// 关闭回执不是字段摘要，按完整句子换行和估算气泡高度。
+				d.showBubble(label+"请求已受理，请核对运行状态", "manual")
 				return
 			}
 			var menuErr *service.OneLongStartError
@@ -242,7 +243,8 @@ func (d *DesktopService) pressHotKeyFromMenu(name, key, profileID, activeProfile
 				return
 			}
 			if err == nil {
-				d.showBubble("按键请求已发送："+name, "status")
+				// 冒号属于普通提示文案，不应触发运行摘要的窄标签列布局。
+				d.showBubble("按键请求已发送："+name, "manual")
 				return
 			}
 			var menuErr *service.OneLongStartError

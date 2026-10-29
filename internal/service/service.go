@@ -69,10 +69,10 @@ type Service struct {
 	targetCancel        context.CancelFunc
 	targetCollecting    bool
 	targetHistoryOnly   bool
-	notificationBlocked bool   // 宿主临时禁播事实不进入前端偏好，也不能由页面伪造来源。
-	petDragGeneration   uint64 // 只随已提交的交互策略变化递增，普通快照不能中断手势。
-	oneLongStartMu      sync.Mutex
-	oneLongStarting     bool       // 原生菜单启动期间拒绝重复点击，旧接口没有幂等保证。
+	notificationBlocked bool       // 宿主临时禁播事实不进入前端偏好，也不能由页面伪造来源。
+	petDragGeneration   uint64     // 只随已提交的交互策略变化递增，普通快照不能中断手势。
+	menuStartMu         sync.Mutex // 一条龙与配置组共用启动门禁，防止跨菜单重复派发。
+	menuStarting        bool       // 原生菜单启动期间拒绝重复点击，旧接口没有幂等保证。
 	hotKeyPressMu       sync.Mutex // 快捷键控制接口没有幂等保证，独立限制并发派发。
 	hotKeyPressing      bool       // 前一次按键尚未结束时拒绝后续点击。
 	adapterInitMu       sync.Mutex // 菜单首次读取时串行探测适配器，避免并发创建多个连接适配器。

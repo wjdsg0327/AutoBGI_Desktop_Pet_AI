@@ -39,7 +39,7 @@ func oneLongRequestUnknown(err error) error {
 	}
 	var apiErr *autobgi.APIError
 	if errors.As(err, &apiErr) {
-		if apiErr.HTTPStatus >= 500 {
+		if apiErr.HTTPStatus >= 500 || apiErr.HTTPStatus == 408 {
 			return &OneLongStartError{Code: "RESULT_UNKNOWN", Message: "启动请求结果未知，请在 AutoBGI 核对；不会自动重发", Unknown: true}
 		}
 		switch apiErr.Code {
@@ -110,18 +110,18 @@ func (s *Service) menuConnectionMatchesLocked(profileID, activeProfileID string,
 		s.state.Connection.Generation == generation
 }
 
-// setOneLongStarting 让第二次菜单点击立即失败，不等待第一次旧接口请求返回。
-func (s *Service) setOneLongStarting(starting bool) bool {
-	s.oneLongStartMu.Lock()
-	defer s.oneLongStartMu.Unlock()
+// setMenuStarting 让一条龙与配置组的重复点击立即失败，不等待第一次旧接口请求返回。
+func (s *Service) setMenuStarting(starting bool) bool {
+	s.menuStartMu.Lock()
+	defer s.menuStartMu.Unlock()
 	if starting {
-		if s.oneLongStarting {
+		if s.menuStarting {
 			return false
 		}
-		s.oneLongStarting = true
+		s.menuStarting = true
 		return true
 	}
-	s.oneLongStarting = false
+	s.menuStarting = false
 	return true
 }
 
@@ -151,10 +151,10 @@ func (s *Service) StartOneLongFromMenuForConnection(name, expectedProfileID, exp
 		return oneLongMenuError("CONNECTION_CHANGED", "连接已变化，请重新打开菜单后启动")
 	}
 	s.mu.Unlock()
-	if !s.setOneLongStarting(true) {
-		return oneLongMenuError("TASK_BUSY", "已有一条龙启动请求正在处理，请稍后查看桌宠提示")
+	if !s.setMenuStarting(true) {
+		return oneLongMenuError("TASK_BUSY", "已有启动请求正在处理，请稍后查看桌宠提示")
 	}
-	defer s.setOneLongStarting(false)
+	defer s.setMenuStarting(false)
 
 	if err := s.ensureMenuAdapter(); err != nil {
 		return oneLongMenuError("CONNECTION_UNAVAILABLE", err.Error())

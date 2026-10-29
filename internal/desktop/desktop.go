@@ -84,7 +84,10 @@ type DesktopService struct {
 	oneLongMenuReadSequence    uint64
 	oneLongMenuStateRevision   uint64
 	oneLongMenuLoading         bool
-	oneLongStartPending        bool
+	// 一条龙与配置组共享在途启动标记，避免两种菜单交叉派发。
+	menuStartPending bool
+	// 配置组独立跟踪列表身份，刷新不能清除共享的启动门禁。
+	scriptGroupMenu scriptGroupMenuState
 	// 快捷键菜单独立跟踪连接身份，避免旧连接结果覆盖当前菜单。
 	hotKeyMenu hotKeyMenuState
 	// 原生弹出菜单运行期间禁止重入，避免销毁正在显示的菜单。
@@ -164,6 +167,7 @@ func (d *DesktopService) Attach(app *application.App, icon []byte) {
 	d.tray.OnDoubleClick(d.ShowPanel)
 	// 初次连接前先保留禁用提示，连接状态变化后由 Apply 异步读取真实配置。
 	d.scheduleOneLongMenuRefresh(state, false)
+	d.scheduleScriptGroupMenuRefresh(state, false)
 	d.scheduleHotKeyMenuRefresh(state, false)
 	app.Event.OnApplicationEvent(events.Common.ApplicationStarted, func(*application.ApplicationEvent) {
 		d.startDesktop(needsInitialSetup(state.Profiles, state.ActiveProfileID), p.RecoveryShortcut)
@@ -185,6 +189,7 @@ func (d *DesktopService) Apply(state service.AppState) {
 		}
 		// 连接代次、活动资料或能力变化都会让一条龙菜单重新读取当前服务。
 		d.scheduleOneLongMenuRefresh(state, false)
+		d.scheduleScriptGroupMenuRefresh(state, false)
 		d.scheduleHotKeyMenuRefresh(state, false)
 		// 重入只保留最高版本，不能在外层原生调用尚未返回时再次写入窗口。
 		d.mu.Lock()
@@ -512,7 +517,7 @@ func (d *DesktopService) buildTrayMenu() *application.Menu {
 	status := d.oneLongMenuStatus
 	hint := d.oneLongMenuHint
 	names := append([]string(nil), d.oneLongMenuNames...)
-	startPending := d.oneLongStartPending
+	startPending := d.menuStartPending
 	menuProfileID := d.oneLongMenuProfileID
 	menuActiveProfileID := d.oneLongMenuActiveProfileID
 	menuGeneration := d.oneLongMenuGeneration
@@ -521,7 +526,7 @@ func (d *DesktopService) buildTrayMenu() *application.Menu {
 	switch status {
 	case oneLongMenuReady:
 		if startPending {
-			oneLongMenu.Add("正在启动一条龙，请稍候").SetEnabled(false)
+			oneLongMenu.Add("正在处理启动请求，请稍候").SetEnabled(false)
 		}
 		for _, name := range names {
 			selectedName := name
@@ -541,6 +546,8 @@ func (d *DesktopService) buildTrayMenu() *application.Menu {
 		oneLongMenu.Add(hint).SetEnabled(false)
 	}
 
+	// 两个入口共用原生菜单构建路径，桌宠右键与托盘保持一致。
+	d.addScriptGroupMenu(menu)
 	d.addHotKeyMenu(menu)
 	menu.AddSeparator()
 	menu.Add("断开连接").OnClick(func(*application.Context) { d.service.Disconnect() })
@@ -573,6 +580,7 @@ func (d *DesktopService) ShowContextMenu() {
 		}
 		d.contextMenuOpen = true
 		retry := d.oneLongMenuStatus == oneLongMenuError
+		groupRetry := d.scriptGroupMenu.status == oneLongMenuError
 		hotKeyRetry := d.hotKeyMenu.status == oneLongMenuError
 		d.mu.Unlock()
 		defer func() {
@@ -586,6 +594,7 @@ func (d *DesktopService) ShowContextMenu() {
 		// 列表读取失败时重新尝试，菜单使用当次连接快照并与托盘分别构建。
 		state := d.service.GetState()
 		d.scheduleOneLongMenuRefresh(state, retry)
+		d.scheduleScriptGroupMenuRefresh(state, groupRetry)
 		d.scheduleHotKeyMenuRefresh(state, hotKeyRetry)
 		const menuID = "pet-native-menu"
 		d.app.ContextMenu.Add(menuID, &application.ContextMenu{Menu: d.buildTrayMenu()})
@@ -779,12 +788,12 @@ func (d *DesktopService) startOneLongFromMenu(name, expectedProfileID, expectedA
 		return
 	}
 	d.mu.Lock()
-	if d.oneLongStartPending {
+	if d.menuStartPending {
 		d.mu.Unlock()
-		d.showBubble("已有一条龙启动请求正在处理，请稍后查看桌宠提示", "error")
+		d.showMenuStartBubble("已有启动请求正在处理，请稍后查看桌宠提示", "error", expectedProfileID, expectedActiveProfileID, expectedGeneration)
 		return
 	}
-	d.oneLongStartPending = true
+	d.menuStartPending = true
 	d.mu.Unlock()
 	d.rebuildTrayMenu()
 	profileID, activeProfileID, generation := expectedProfileID, expectedActiveProfileID, expectedGeneration
@@ -797,7 +806,7 @@ func (d *DesktopService) startOneLongFromMenu(name, expectedProfileID, expectedA
 			current := d.service.GetState()
 			d.mu.Lock()
 			sameConnection := oneLongMenuIdentityMatches(current, profileID, activeProfileID, generation)
-			d.oneLongStartPending = false
+			d.menuStartPending = false
 			d.mu.Unlock()
 			if !sameConnection {
 				// 旧连接的启动结果不进入新连接的通知队列；新连接菜单由 Apply 重新读取。
@@ -806,19 +815,20 @@ func (d *DesktopService) startOneLongFromMenu(name, expectedProfileID, expectedA
 			}
 			d.rebuildTrayMenu()
 			if err == nil {
-				d.showBubble("一条龙启动请求已受理："+target, "status")
+				// 启动回执使用完整句子布局，只有运行摘要才使用状态字段双列。
+				d.showMenuStartBubble("一条龙启动请求已受理："+target, "manual", profileID, activeProfileID, generation)
 				return
 			}
 			var startErr *service.OneLongStartError
 			if errors.As(err, &startErr) {
-				d.showBubble(startErr.Message, "error")
+				d.showMenuStartBubble(startErr.Message, "error", profileID, activeProfileID, generation)
 				if startErr.Code == "PRESET_NOT_FOUND" || startErr.Code == "LIST_FAILED" {
 					// 服务端列表可能已变化，失败后重新读取一次以修正菜单名称。
 					d.scheduleOneLongMenuRefresh(current, true)
 				}
 				return
 			}
-			d.showBubble(err.Error(), "error")
+			d.showMenuStartBubble(err.Error(), "error", profileID, activeProfileID, generation)
 		})
 	}()
 }
