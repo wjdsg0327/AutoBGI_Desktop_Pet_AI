@@ -85,6 +85,10 @@ type DesktopService struct {
 	oneLongMenuStateRevision   uint64
 	oneLongMenuLoading         bool
 	oneLongStartPending        bool
+	// 快捷键菜单独立跟踪连接身份，避免旧连接结果覆盖当前菜单。
+	hotKeyMenu hotKeyMenuState
+	// 原生弹出菜单运行期间禁止重入，避免销毁正在显示的菜单。
+	contextMenuOpen bool
 }
 
 // New 由宿主注入唯一业务服务；所有窗口共用它的采集状态。
@@ -160,6 +164,7 @@ func (d *DesktopService) Attach(app *application.App, icon []byte) {
 	d.tray.OnDoubleClick(d.ShowPanel)
 	// 初次连接前先保留禁用提示，连接状态变化后由 Apply 异步读取真实配置。
 	d.scheduleOneLongMenuRefresh(state, false)
+	d.scheduleHotKeyMenuRefresh(state, false)
 	app.Event.OnApplicationEvent(events.Common.ApplicationStarted, func(*application.ApplicationEvent) {
 		d.startDesktop(needsInitialSetup(state.Profiles, state.ActiveProfileID), p.RecoveryShortcut)
 	})
@@ -180,6 +185,7 @@ func (d *DesktopService) Apply(state service.AppState) {
 		}
 		// 连接代次、活动资料或能力变化都会让一条龙菜单重新读取当前服务。
 		d.scheduleOneLongMenuRefresh(state, false)
+		d.scheduleHotKeyMenuRefresh(state, false)
 		// 重入只保留最高版本，不能在外层原生调用尚未返回时再次写入窗口。
 		d.mu.Lock()
 		if state.Revision > max(d.appliedRevision, d.applyingRevision) &&
@@ -535,6 +541,7 @@ func (d *DesktopService) buildTrayMenu() *application.Menu {
 		oneLongMenu.Add(hint).SetEnabled(false)
 	}
 
+	d.addHotKeyMenu(menu)
 	menu.AddSeparator()
 	menu.Add("断开连接").OnClick(func(*application.Context) { d.service.Disconnect() })
 	menu.AddSeparator()
@@ -553,18 +560,37 @@ func (d *DesktopService) rebuildTrayMenu() {
 	tray.SetMenu(d.buildTrayMenu())
 }
 
-// ShowContextMenu 复用原生托盘菜单，不能接受前端传入任意菜单命令。
+// ShowContextMenu 使用桌宠窗口在鼠标位置打开同一组原生菜单，前端不能传入菜单命令。
 func (d *DesktopService) ShowContextMenu() {
-	d.mu.Lock()
-	tray := d.tray
-	retry := d.oneLongMenuStatus == oneLongMenuError
-	d.mu.Unlock()
-	if tray == nil {
-		return
-	}
-	// 读取失败时下一次打开菜单自动重试；成功列表不因每次右键而重复请求。
-	d.scheduleOneLongMenuRefresh(d.service.GetState(), retry)
-	tray.ShowMenu()
+	application.InvokeAsync(func() {
+		if d.stopped() || d.app == nil || d.pet == nil {
+			return
+		}
+		d.mu.Lock()
+		if d.contextMenuOpen {
+			d.mu.Unlock()
+			return
+		}
+		d.contextMenuOpen = true
+		retry := d.oneLongMenuStatus == oneLongMenuError
+		hotKeyRetry := d.hotKeyMenu.status == oneLongMenuError
+		d.mu.Unlock()
+		defer func() {
+			// 菜单项命令可能已经排队，等 UI 队列处理后才允许新菜单覆盖其映射。
+			go application.InvokeAsync(func() {
+				d.mu.Lock()
+				d.contextMenuOpen = false
+				d.mu.Unlock()
+			})
+		}()
+		// 列表读取失败时重新尝试，菜单使用当次连接快照并与托盘分别构建。
+		state := d.service.GetState()
+		d.scheduleOneLongMenuRefresh(state, retry)
+		d.scheduleHotKeyMenuRefresh(state, hotKeyRetry)
+		const menuID = "pet-native-menu"
+		d.app.ContextMenu.Add(menuID, &application.ContextMenu{Menu: d.buildTrayMenu()})
+		d.pet.OpenContextMenu(&application.ContextMenuData{Id: menuID})
+	})
 }
 
 const (
