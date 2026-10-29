@@ -38,15 +38,17 @@ let documentVisibilitySending = false
 const sleeping = computed(() => store.presentation.action === 'sleep')
 // 由宿主统一判定饿晕，避免前端提前中断而宿主尚未将动作重新排队。
 const fainted = computed(() => store.presentation.action === 'fainted')
+// 连接尚未在线时使用哭泣姿态，避免把旧动作误认为 AutoBGI 仍可用。
+const disconnected = computed(() => store.status !== 'online')
 const available = computed(() => store.presentation.visible && store.state?.preferences.pet.visible !== false && documentVisible.value)
 const mouseAvailable = computed(() => available.value && store.state?.preferences.pet.clickThrough !== true)
 const animated = computed(() => available.value && !sleeping.value)
 const interactive = computed(() => mouseAvailable.value && !sleeping.value)
-const action = computed(() => fainted.value ? 'faint' : triggeredAction.value === 'eat' ? 'pickup' : triggeredAction.value || (dragging.value ? 'dragging' : waving.value ? 'wave' : hunger.value !== 'normal' ? hunger.value : 'idle'))
-const canWave = computed(() => interactive.value && !fainted.value && !dragging.value && !triggeredAction.value)
+const action = computed(() => disconnected.value ? 'offline' : fainted.value ? 'faint' : triggeredAction.value === 'eat' ? 'pickup' : triggeredAction.value || (dragging.value ? 'dragging' : waving.value ? 'wave' : hunger.value !== 'normal' ? hunger.value : 'idle'))
+const canWave = computed(() => interactive.value && !fainted.value && !disconnected.value && !dragging.value && !triggeredAction.value)
 // 初始状态尚未读到时保留待确认动作，避免窗口尚未就绪就消耗队列时间。
 const visibleWindow = computed(() => animated.value && store.state !== null)
-const canPresentTrigger = computed(() => canvasReady.value && visibleWindow.value && !fainted.value)
+const canPresentTrigger = computed(() => canvasReady.value && visibleWindow.value && !fainted.value && !disconnected.value)
 
 // 仅以在线日志流的最后活动时间计算饥饿，连接建立或任何新日志都会重置起点。
 type ActivityState = { logStream?: { status?: string; lastActivityAt?: string } }
@@ -79,6 +81,13 @@ watch(fainted, value => {
   if (value && currentTrigger) {
     clearTrigger(currentTrigger)
   }
+}, { flush: 'sync' })
+
+// 连接断开时立即停止旧动作，重新连接后只播放新的日志触发。
+watch(disconnected, value => {
+  if (!value) return
+  if (currentTrigger) clearTrigger(currentTrigger)
+  stopInteraction()
 }, { flush: 'sync' })
 
 // 关闭拾取通知后，马上移除当前蛋糕画面。
@@ -174,7 +183,11 @@ function click() {
 
 // 双击与菜单只请求宿主白名单入口，既不修改已读状态，也不生成业务完成动画。
 function doubleClick() { stopInteraction(); if (mouseAvailable.value && !disposed) void store.run(async () => (await desktop()).ShowPanel()) }
-function contextMenu() { stopInteraction(); if (mouseAvailable.value && !disposed) void store.run(async () => (await desktop()).ShowContextMenu()) }
+function contextMenu() {
+  stopInteraction()
+  // 菜单是本地即时入口，不能被面板保存、连接初始化等业务请求的 busy 门禁吞掉。
+  if (mouseAvailable.value && !disposed) void store.runLocal(async () => (await desktop()).ShowContextMenu())
+}
 // 可见性上报串行发送，快速隐藏和恢复时旧请求不能覆盖最后一次状态。
 async function reportDocumentVisibility() {
   if (!store.native || documentVisibilitySending || disposed) return
@@ -266,7 +279,7 @@ function startPendingTrigger() {
 }
 
 // 已显示过的窗口被隐藏或连接代次变化后清理当前动作；初始加载则继续等待。
-watch([visibleWindow, canvasReady, pickupReady, fainted, () => store.state?.connection.generation], ([visible], previous) => {
+watch([visibleWindow, canvasReady, pickupReady, fainted, disconnected, () => store.state?.connection.generation], ([visible], previous) => {
   if (visibleWindow.value) hadVisibleWindow = true
   // 显示恢复后补取宿主队首，避免先于窗口可见的重播事件丢失。
   if (visible && previous?.[0] === false && store.native) {
@@ -298,6 +311,8 @@ function playTrigger(value: TriggerEvent) {
       !Number.isSafeInteger(value.attempt) || value.attempt <= 0 ||
       !['idle', 'happy', 'wave', 'surprised', 'sad', 'eat'].includes(value.action) ||
       value.action === 'eat' && (typeof value.keyword !== 'string' || !value.keyword.trim())) return
+  // 初始状态尚未加载时先保留宿主队列，明确离线后才拒绝迟到动作。
+  if (disconnected.value && store.state !== null) return
   if (value.action === 'eat' && (store.state as { preferences?: { notifications?: { pickupEnabled?: boolean } } } | null)?.preferences?.notifications?.pickupEnabled === false) return
   const generation = store.state?.connection.generation
   if (generation !== undefined && generation > value.generation) return
@@ -359,5 +374,5 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <main class="pet-window" :class="`pet-action-${action}`" :aria-label="`芙宁娜桌宠，${store.statusLabel}`" @pointerdown="pointerDown" @pointermove="pointerMove" @pointerup="pointerUp" @pointercancel="pointerCancel" @lostpointercapture="pointerCancel" @click="click" @dblclick="doubleClick" @contextmenu.prevent="contextMenu"><PetCanvas :action="action" :pickup-name="pickupName" :visible="animated" @ready="canvasReady = true" @pickup-ready="pickupReady = true" /><span class="pet-status-label"><i class="status-dot" :class="store.status" />{{ store.status === 'online' ? 'ABGI已连接' : store.status === 'connecting' ? '正在连接' : '芙宁娜' }}</span></main>
+  <main class="pet-window" :class="`pet-action-${action}`" :aria-label="`芙宁娜桌宠，${store.statusLabel}`" @pointerdown="pointerDown" @pointermove="pointerMove" @pointerup="pointerUp" @pointercancel="pointerCancel" @lostpointercapture="pointerCancel" @click="click" @dblclick="doubleClick" @contextmenu.prevent="contextMenu"><PetCanvas :action="action" :pickup-name="pickupName" :visible="animated" @ready="canvasReady = true" @pickup-ready="pickupReady = true" /></main>
 </template>

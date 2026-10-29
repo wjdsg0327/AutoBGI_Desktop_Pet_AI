@@ -147,15 +147,9 @@ func (s *Service) poll(ctx context.Context, p profile.Profile, client *autobgi.C
 			if time.Since(stableSince) >= 60*time.Second {
 				failures = 0
 			}
+			// 连接恢复只更新事实状态，不再额外投递“已连接”成功气泡。
 			if disconnectedNotice {
-				s.addNoticeLocked("connection", "连接已恢复，状态已更新")
 				disconnectedNotice = false
-			} else if !connectedOnce {
-				message := "已连接 AutoBGI，状态已更新"
-				if snapshot.SourceMode == "legacy" {
-					message += "；旧版仅报告进程和展示文本，不推断任务完成"
-				}
-				s.addNoticeLocked("connection", message)
 			}
 			if connectedOnce && previous != nil && !previous.Stale && text(previous.Task.GroupName) != text(snapshot.Task.GroupName) {
 				s.addNoticeLocked("progress", "当前配置组已变化："+text(snapshot.Task.GroupName))

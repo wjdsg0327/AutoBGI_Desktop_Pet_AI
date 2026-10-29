@@ -18,7 +18,7 @@ const petState = computed(() => store.state as PanelState | null)
 const activeSection = computed(() => store.section === 'connections' ? 'connections' : store.section === 'logs' ? 'logs' : 'rules')
 const stream = computed(() => petState.value?.logStream)
 const streamStatus = computed(() => stream.value?.status || 'disconnected')
-const streamLabel = computed(() => ({ online: 'ABGI已连接', connecting: '正在连接', backoff: '等待重连', paused: '连接已暂停', auth_failed: '密钥验证失败', error: '连接异常', disconnected: '尚未连接' })[streamStatus.value] || '状态未知')
+const streamLabel = computed(() => ({ online: '连接正常', connecting: '正在连接', backoff: '等待重连', paused: '连接已暂停', auth_failed: '密钥验证失败', error: '连接异常', disconnected: '尚未连接' })[streamStatus.value] || '状态未知')
 const navigation = [
   { id: 'rules', label: '桌宠设置', icon: 'settings' },
   { id: 'connections', label: '连接设置', icon: 'link' },
@@ -48,6 +48,8 @@ const rulesDirty = ref(false)
 const applyingRules = ref(false)
 const rulesNotice = ref('')
 const previewAction = ref<RuleAction>('idle')
+// 每次点击预览都递增序号，让相同动作也能重新开始播放。
+const previewRevision = ref(0)
 let previewTimer: ReturnType<typeof setTimeout> | undefined
 function applyRules(items: KeywordRule[]) {
   applyingRules.value = true
@@ -84,7 +86,11 @@ function moveRule(index: number, offset: number) {
 function preview(action: RuleAction) {
   clearTimeout(previewTimer)
   previewAction.value = action
-  previewTimer = setTimeout(() => { previewAction.value = 'idle' }, 5000)
+  previewRevision.value++
+  previewTimer = setTimeout(() => {
+    previewAction.value = 'idle'
+    previewRevision.value++
+  }, 5000)
 }
 onBeforeUnmount(() => clearTimeout(previewTimer))
 
@@ -212,7 +218,7 @@ function formatTime(value: string) {
 
       <!-- 规则按列表顺序处理，每条规则可包含多个关键词、动作和台词。 -->
       <section v-if="activeSection === 'rules'" class="page-content">
-        <div class="hero"><div class="hero-copy"><span class="hero-kicker"><i />YOUR DESKTOP COMPANION</span><h2>让日志有回应，<br /><em>让陪伴更有趣。</em></h2><p>设置关键词、动作和台词，让芙宁娜陪你留意 ABGI 的每个瞬间。</p><button class="hero-button" :disabled="rules.length >= 40 || store.busy" @click="addRule"><AppIcon name="plus" :size="16" />添加关键词规则</button></div><div class="hero-portrait"><div class="portrait-ring" /><span class="portrait-star star-a">✦</span><span class="portrait-star star-b">✧</span><PetCanvas :action="previewAction" :skin-id="store.state?.preferences.pet.skinId" /><span class="portrait-caption">ABGI-PET / FURINA</span></div></div>
+        <div class="hero"><div class="hero-copy"><span class="hero-kicker"><i />YOUR DESKTOP COMPANION</span><h2>让日志有回应，<br /><em>让陪伴更有趣。</em></h2><p>设置关键词、动作和台词，让芙宁娜陪你留意 ABGI 的每个瞬间。</p><button class="hero-button" :disabled="rules.length >= 40 || store.busy" @click="addRule"><AppIcon name="plus" :size="16" />添加关键词规则</button></div><div class="hero-portrait" :class="`pet-action-${previewAction}`"><div class="portrait-ring" /><span class="portrait-star star-a">✦</span><span class="portrait-star star-b">✧</span><PetCanvas :key="previewRevision" :action="previewAction" :skin-id="store.state?.preferences.pet.skinId" /><span class="portrait-caption">ABGI-PET / FURINA</span></div></div>
         <!-- 拾取开关独立于规则草稿，即时保存且显示宿主实际状态。 -->
         <div class="pickup-setting"><div><strong>拾取通知</strong><p>收到交互或拾取日志时，芙宁娜会吃掉写有物品名称的小蛋糕。</p></div><label class="toggle-label"><input type="checkbox" :checked="pickupEnabled" :disabled="!store.native || store.busy" @change="setPickupEnabled" /><span class="toggle" /><span class="sr-only">开启拾取通知</span></label></div>
         <div class="content-heading"><div><span class="overline">KEYWORD AUTOMATION</span><h2>关键词规则 <span>{{ rules.length }} / 40</span></h2><p>关键词不区分大小写；一条日志只执行第一条匹配规则。动作持续 5 秒后恢复待机，连续命中依次播放。</p></div><div class="rule-actions"><button class="secondary-button" :disabled="!store.native || store.busy" @click="importRules">导入规则</button><button class="secondary-button" :disabled="!store.native || store.busy" @click="exportRules">导出规则</button><button class="secondary-button" :disabled="rules.length >= 40 || store.busy" @click="addRule"><AppIcon name="plus" :size="16" />添加规则</button></div></div>

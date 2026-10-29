@@ -46,6 +46,8 @@ html[data-view=pet],html[data-view=bubble],html[data-view=pet] body,html[data-vi
 .pet-action-happy .pet-art{animation:furina-happy .65s ease-in-out infinite alternate}
 .pet-action-surprised .pet-art{animation:furina-surprise .5s ease-in-out infinite alternate}
 .pet-action-sad .pet-art{animation:furina-sad 2.2s ease-in-out infinite}
+/* 断开连接时沿用哭泣姿态，让连接状态直接体现在桌宠动作上。 */
+.pet-action-offline .pet-art{animation:furina-sad 2.2s ease-in-out infinite}
 .pet-action-hungry .pet-art{animation:furina-sad 2.2s ease-in-out infinite}
 .pet-action-weak .pet-art{animation:furina-weak 1.8s ease-in-out infinite}
 .pet-action-faint .pet-art{animation:furina-faint 3s ease-in-out infinite}

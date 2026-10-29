@@ -68,6 +68,15 @@ export const useAppStore = defineStore('app', () => {
     finally { busy.value = false }
   }
 
+  // 原生菜单属于即时本地入口，不能因为面板正在保存或初始化就被全局 busy 丢弃。
+  async function runLocal<T>(work: () => Promise<T>): Promise<T | undefined> {
+    error.value = ''
+    try { return await work() }
+    catch (reason) {
+      error.value = reason instanceof Error ? reason.message : '本地操作未完成，请稍后重试。'
+    }
+  }
+
   // 先订阅事件再读取快照，并在卸载后停止使用迟到的初始化结果。
   async function initialize() {
     if (!native) return
@@ -97,5 +106,5 @@ export const useAppStore = defineStore('app', () => {
   async function saveProfile(input: ProfileInput) { return run(async () => { accept(await api.saveProfile(input)); return true }) }
   async function deleteProfile(id: string) { await run(async () => accept(await api.deleteProfile(id))) }
 
-  return { state, error, nativeWarning, busy, native, section, bubble, presentation, status, statusLabel, accept, initialize, dispose, run, connect, disconnect, saveProfile, deleteProfile }
+  return { state, error, nativeWarning, busy, native, section, bubble, presentation, status, statusLabel, accept, initialize, dispose, run, runLocal, connect, disconnect, saveProfile, deleteProfile }
 })

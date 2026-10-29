@@ -14,7 +14,7 @@ func petClickSummary(state service.AppState) string {
 	label := "尚未连接，请打开连接设置"
 	switch state.Connection.Status {
 	case "online":
-		label = "已连接 AutoBGI"
+		label = "连接正常"
 	case "connecting":
 		label = "正在连接，等待更新"
 	case "backoff":
