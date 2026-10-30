@@ -9,6 +9,7 @@ import (
 	"autobgi-pet/internal/bindings"
 	"autobgi-pet/internal/desktop"
 	"autobgi-pet/internal/service"
+
 	"github.com/wailsapp/wails/v3/pkg/application"
 )
 
@@ -59,6 +60,7 @@ func main() {
 		OnShutdown: func() { srv.Shutdown(); desktopService.Shutdown() },
 	})
 	desktopService.Attach(app, icon)
+
 	srv.SetEmitter(desktopService.Apply)
 	// 关键词命中单独投递，避免状态快照合并时遗漏动作或台词。
 	srv.SetLogTriggerEmitter(desktopService.QueueLogTrigger)

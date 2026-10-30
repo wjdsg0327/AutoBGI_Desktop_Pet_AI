@@ -98,6 +98,9 @@ func (d *DesktopService) setSleeping(sleeping bool) {
 		d.mu.Unlock()
 	}
 	d.service.Pause(sleeping)
+	if sleeping {
+		d.HideTodoWindow()
+	}
 	if !sleeping {
 		// 唤醒前的实时队列已按禁播消费，解除运行时门禁也不会把历史重新送进气泡。
 		d.service.SetNotificationDeliveryBlocked(false)

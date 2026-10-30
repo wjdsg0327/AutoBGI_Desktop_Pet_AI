@@ -35,6 +35,29 @@ func validateKeywordRules(rules []profile.KeywordRule) ([]profile.KeywordRule, e
 		if !utf8.ValidString(rule.Text) || utf8.RuneCountInString(rule.Text) > 300 || strings.ContainsAny(rule.Text, "\x00\r\n") {
 			return nil, fmt.Errorf("第 %d 条规则的台词须为单行，且不能超过 300 个字符", i+1)
 		}
+		// 代办动作只接受已实现的固定入口，旧规则没有字段时继续保持关闭。
+		if rule.Todo != nil {
+			todo := *rule.Todo
+			switch todo.Action {
+			case "":
+				if todo.Enabled {
+					return nil, fmt.Errorf("第 %d 条规则请选择代办处理动作", i+1)
+				}
+			case "one_long", "script_group", "close_bgi_game", "shutdown":
+			default:
+				return nil, fmt.Errorf("第 %d 条规则的代办动作无效", i+1)
+			}
+			if !utf8.ValidString(todo.Target) || utf8.RuneCountInString(todo.Target) > 512 || strings.ContainsAny(todo.Target, "\x00\r\n") {
+				return nil, fmt.Errorf("第 %d 条规则的代办目标无效", i+1)
+			}
+			if todo.Enabled && (todo.Action == "one_long" || todo.Action == "script_group") && strings.TrimSpace(todo.Target) == "" {
+				return nil, fmt.Errorf("第 %d 条规则请选择代办的配置名称", i+1)
+			}
+			if todo.Action == "close_bgi_game" || todo.Action == "shutdown" {
+				todo.Target = ""
+			}
+			rule.Todo = &todo
+		}
 		if len(rule.Keywords) > 20 {
 			return nil, fmt.Errorf("第 %d 条规则最多填写 20 个关键词", i+1)
 		}

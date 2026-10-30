@@ -41,6 +41,9 @@ export interface AppState {
     "targetsMet": TargetsMetState | null;
     "keywordRules": profile$0.KeywordRule[] | null;
     "logStream": LogStreamState;
+    "todos": TodoItem[] | null;
+    "todoFeedback": TodoFeedback | null;
+    "todoNotice": string;
 }
 
 /**
@@ -202,4 +205,32 @@ export interface TargetsMetState {
     "stale": boolean;
     "truncated": boolean;
     "events": autobgi$0.TargetMetEvent[] | null;
+}
+
+/**
+ * TodoFeedback 描述单次处理请求，受理不等于远端任务已经完成。
+ */
+export interface TodoFeedback {
+    "id": string;
+    "profileId": string;
+    "baseUrl": string;
+    "action": string;
+    "target": string;
+    "status": string;
+    "message": string;
+}
+
+/**
+ * TodoItem 仅向当前连接的窗口展示已脱敏的代办快照。
+ */
+export interface TodoItem {
+    "id": string;
+    "text": string;
+    "action": string;
+    "target": string;
+    "profileId": string;
+    "profileName": string;
+    "baseUrl": string;
+    "createdAt": string;
+    "expiresAt": string;
 }

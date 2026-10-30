@@ -29,7 +29,9 @@ type profileTransferDocument struct {
 
 // profileTransferEntry 的权限字段只用于兼容旧导出，导入始终重新采用安全默认值。
 type profileTransferEntry struct {
-	Name          string `json:"name"`
+	Name string `json:"name"`
+	// 昵称随连接资料迁移，旧版文件缺少此字段时保持为空。
+	Nickname      string `json:"nickname,omitempty"`
 	BaseURL       string `json:"baseUrl"`
 	AdapterMode   string `json:"adapterMode"`
 	ReadOnly      bool   `json:"readOnly"`
@@ -88,7 +90,7 @@ func parseProfileTransfer(text string) ([]profileTransferEntry, error) {
 		return nil, errors.New("一次需要导入 1 至 20 个连接")
 	}
 	result := make([]profileTransferEntry, 0, len(entries))
-	allowed := map[string]bool{"name": true, "baseUrl": true, "adapterMode": true, "readOnly": true, "allowInsecure": true, "autoConnect": true}
+	allowed := map[string]bool{"name": true, "nickname": true, "baseUrl": true, "adapterMode": true, "readOnly": true, "allowInsecure": true, "autoConnect": true}
 	for index, raw := range entries {
 		fields, parseErr := transferObject(raw, allowed)
 		if parseErr != nil {
@@ -100,6 +102,12 @@ func parseProfileTransfer(text string) ([]profileTransferEntry, error) {
 			value, exists := fields[name]
 			if !exists || bytes.Equal(bytes.TrimSpace(value), []byte("null")) || json.Unmarshal(value, destination) != nil {
 				return nil, fmt.Errorf("第 %d 个连接的名称、地址或适配器模式缺失或格式无效", index+1)
+			}
+		}
+		// 昵称是可选字符串，显式传入无效类型时拒绝整批导入。
+		if value, exists := fields["nickname"]; exists {
+			if bytes.Equal(bytes.TrimSpace(value), []byte("null")) || json.Unmarshal(value, &entry.Nickname) != nil {
+				return nil, fmt.Errorf("第 %d 个连接的昵称必须是字符串", index+1)
 			}
 		}
 		for name, destination := range map[string]*bool{"readOnly": &entry.ReadOnly, "allowInsecure": &entry.AllowInsecure, "autoConnect": &entry.AutoConnect} {
@@ -117,12 +125,27 @@ func parseProfileTransfer(text string) ([]profileTransferEntry, error) {
 	return result, nil
 }
 
+// normalizeProfileNickname 统一保存和导入的昵称限制，不向错误信息回显用户输入。
+func normalizeProfileNickname(value string) (string, error) {
+	nickname := strings.TrimSpace(value)
+	if !utf8.ValidString(nickname) || utf8.RuneCountInString(nickname) > 80 || strings.IndexFunc(nickname, unicode.IsControl) >= 0 {
+		return "", errors.New("昵称不能超过 80 个字符或包含控制字符")
+	}
+	return nickname, nil
+}
+
 // validateTransferredProfile 沿用固定来源地址规则，并拒绝控制字符、超长文本和非法端口。
 func validateTransferredProfile(entry *profileTransferEntry) error {
 	entry.Name = strings.TrimSpace(entry.Name)
 	if entry.Name == "" || utf8.RuneCountInString(entry.Name) > 80 || strings.IndexFunc(entry.Name, unicode.IsControl) >= 0 {
 		return errors.New("连接名称需要 1 至 80 个字符，且不能包含控制字符")
 	}
+	// 导入和界面编辑遵循同一规则，避免迁移后出现无法保存的昵称。
+	nickname, err := normalizeProfileNickname(entry.Nickname)
+	if err != nil {
+		return err
+	}
+	entry.Nickname = nickname
 	if entry.AdapterMode != "auto" && entry.AdapterMode != "legacy" && entry.AdapterMode != "pet-v1" {
 		return errors.New("适配器模式只能是 auto、legacy 或 pet-v1")
 	}
@@ -189,7 +212,7 @@ func (s *Service) ImportProfiles(text string) (AppState, error) {
 		}
 		used[id] = true
 		// 会话标记使无密钥资料重启后仍可展示，且不会把新引用误报为已有系统凭据。
-		next.Profiles = append(next.Profiles, profile.Profile{ID: id, Name: entry.Name, BaseURL: entry.BaseURL, CredentialRef: "AutoBGI-Pet/profile/" + id, AdapterMode: entry.AdapterMode, ReadOnly: true, AutoConnect: false, AllowInsecure: entry.AllowInsecure, SessionOnly: true})
+		next.Profiles = append(next.Profiles, profile.Profile{ID: id, Name: entry.Name, Nickname: entry.Nickname, BaseURL: entry.BaseURL, CredentialRef: "AutoBGI-Pet/profile/" + id, AdapterMode: entry.AdapterMode, ReadOnly: true, AutoConnect: false, AllowInsecure: entry.AllowInsecure, SessionOnly: true})
 	}
 	if err = s.store.Save(next); err != nil {
 		s.mu.Unlock()

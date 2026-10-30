@@ -39,6 +39,21 @@ func (p *PetAPI) UpdateKeywordRules(rules []profile.KeywordRule) (service.AppSta
 	return p.service.UpdateKeywordRules(rules)
 }
 
+// ListTodoTargets 读取当前连接中可选的一条龙或配置组名称。
+func (p *PetAPI) ListTodoTargets(action string) ([]string, error) {
+	return p.service.ListTodoTargets(action)
+}
+
+// ProcessTodo 仅根据后端保存的代办快照执行一次固定动作。
+func (p *PetAPI) ProcessTodo(id string) (service.AppState, error) {
+	return p.service.ProcessTodo(id)
+}
+
+// DismissTodo 删除当前连接中的代办，不触发业务动作。
+func (p *PetAPI) DismissTodo(id string) (service.AppState, error) {
+	return p.service.DismissTodo(id)
+}
+
 // UpdatePickupEnabled 独立保存拾取通知开关，不覆盖关键词编辑草稿。
 func (p *PetAPI) UpdatePickupEnabled(enabled bool) (service.AppState, error) {
 	return p.service.UpdatePickupEnabled(enabled)
@@ -54,6 +69,21 @@ func NewDesktopAPI(d *desktop.DesktopService) *DesktopAPI { return &DesktopAPI{d
 
 // GetPresentation 读取无密钥的窗口展示状态。
 func (d *DesktopAPI) GetPresentation() map[string]any { return d.desktop.GetPresentation() }
+
+// SetTodoPetHover 同步角色窗口悬停，三秒计时只由宿主管理。
+func (d *DesktopAPI) SetTodoPetHover(hover bool) { d.desktop.SetTodoPetHover(hover) }
+
+// SetTodoWindowHover 保留鼠标从角色移动到代办圆圈的短暂过渡。
+func (d *DesktopAPI) SetTodoWindowHover(hover bool) { d.desktop.SetTodoWindowHover(hover) }
+
+// OpenTodoWindow 展开代办对话，关闭对话不会消费代办。
+func (d *DesktopAPI) OpenTodoWindow() { d.desktop.OpenTodoWindow() }
+
+// CloseTodoWindow 收起代办窗口，不改变代办内容。
+func (d *DesktopAPI) CloseTodoWindow() { d.desktop.HideTodoWindow() }
+
+// GetTodoWindowState 供窗口加载完成后补取当前展示模式。
+func (d *DesktopAPI) GetTodoWindowState() map[string]any { return d.desktop.GetTodoWindowState() }
 
 // StartKeywordTrigger 在桌宠首帧展示后确认当前派发轮次的动作开始。
 func (d *DesktopAPI) StartKeywordTrigger(id uint64, generation uint64, attempt uint64) bool {

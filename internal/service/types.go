@@ -58,6 +58,30 @@ type LogStreamState struct {
 	DroppedTriggers uint64 `json:"droppedTriggers"`
 }
 
+// TodoItem 仅向当前连接的窗口展示已脱敏的代办快照。
+type TodoItem struct {
+	ID          string `json:"id"`
+	Text        string `json:"text"`
+	Action      string `json:"action"`
+	Target      string `json:"target"`
+	ProfileID   string `json:"profileId"`
+	ProfileName string `json:"profileName"`
+	BaseURL     string `json:"baseUrl"`
+	CreatedAt   string `json:"createdAt"`
+	ExpiresAt   string `json:"expiresAt"`
+}
+
+// TodoFeedback 描述单次处理请求，受理不等于远端任务已经完成。
+type TodoFeedback struct {
+	ID        string `json:"id"`
+	ProfileID string `json:"profileId"`
+	BaseURL   string `json:"baseUrl"`
+	Action    string `json:"action"`
+	Target    string `json:"target"`
+	Status    string `json:"status"`
+	Message   string `json:"message"`
+}
+
 // AppState 是所有窗口共享的唯一状态，内含的连接资料已经脱敏。
 type AppState struct {
 	Revision            uint64                   `json:"revision"`
@@ -77,6 +101,9 @@ type AppState struct {
 	TargetsMet          *TargetsMetState         `json:"targetsMet"`     // 独立基础面板达标历史，保持原始观察与提交时间。
 	KeywordRules        []profile.KeywordRule    `json:"keywordRules"`
 	LogStream           LogStreamState           `json:"logStream"`
+	Todos               []TodoItem               `json:"todos"`
+	TodoFeedback        *TodoFeedback            `json:"todoFeedback"`
+	TodoNotice          string                   `json:"todoNotice"`
 }
 
 // CommandConfirmation 冻结确认对象；令牌只能消费一次，前端不能通过布尔值伪造确认。

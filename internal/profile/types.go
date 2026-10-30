@@ -3,8 +3,10 @@ package profile
 
 // Profile 只保存系统凭据引用；密钥始终保存在操作系统或会话内存中。
 type Profile struct {
-	ID                 string  `json:"id"`
-	Name               string  `json:"name"`
+	ID   string `json:"id"`
+	Name string `json:"name"`
+	// 昵称只用于区分连接的展示，不参与连接身份或动作目标。
+	Nickname           string  `json:"nickname,omitempty"`
 	BaseURL            string  `json:"baseUrl"`
 	CredentialRef      string  `json:"credentialRef"`
 	AdapterMode        string  `json:"adapterMode"`
@@ -19,6 +21,7 @@ type Profile struct {
 type ProfileView struct {
 	ID            string `json:"id"`
 	Name          string `json:"name"`
+	Nickname      string `json:"nickname"`
 	BaseURL       string `json:"baseUrl"`
 	AdapterMode   string `json:"adapterMode"`
 	ReadOnly      bool   `json:"readOnly"`
@@ -30,15 +33,17 @@ type ProfileView struct {
 
 // ProfileInput 仅在保存操作中一次性接收密钥，绝不作为状态返回。
 type ProfileInput struct {
-	ID            string `json:"id"`
-	Name          string `json:"name"`
-	BaseURL       string `json:"baseUrl"`
-	APIKey        string `json:"apiKey"`
-	AdapterMode   string `json:"adapterMode"`
-	ReadOnly      bool   `json:"readOnly"`
-	AutoConnect   bool   `json:"autoConnect"`
-	AllowInsecure bool   `json:"allowInsecure"`
-	SessionOnly   bool   `json:"sessionOnly"`
+	ID   string `json:"id"`
+	Name string `json:"name"`
+	// 空字符串清除昵称；缺失或 null 保留旧客户端已有的昵称。
+	Nickname      *string `json:"nickname"`
+	BaseURL       string  `json:"baseUrl"`
+	APIKey        string  `json:"apiKey"`
+	AdapterMode   string  `json:"adapterMode"`
+	ReadOnly      bool    `json:"readOnly"`
+	AutoConnect   bool    `json:"autoConnect"`
+	AllowInsecure bool    `json:"allowInsecure"`
+	SessionOnly   bool    `json:"sessionOnly"`
 }
 
 // PetPreferences 与业务连接状态分离，动画不能更改服务端状态。
@@ -70,13 +75,21 @@ type Preferences struct {
 	Startup       StartupPreferences      `json:"startup"`
 }
 
-// KeywordRule 定义一条日志命中后的动作与台词，多个关键词之间按任一匹配处理。
+// KeywordTodo 定义需要用户逐条决定的固定动作，目标名称不包含连接资料或密钥。
+type KeywordTodo struct {
+	Enabled bool   `json:"enabled"`
+	Action  string `json:"action"`
+	Target  string `json:"target"`
+}
+
+// KeywordRule 定义一条日志命中后的动作、台词和可选代办。
 type KeywordRule struct {
-	ID       string   `json:"id"`
-	Keywords []string `json:"keywords"`
-	Action   string   `json:"action"`
-	Text     string   `json:"text"`
-	Enabled  bool     `json:"enabled"`
+	ID       string       `json:"id"`
+	Keywords []string     `json:"keywords"`
+	Action   string       `json:"action"`
+	Text     string       `json:"text"`
+	Enabled  bool         `json:"enabled"`
+	Todo     *KeywordTodo `json:"todo,omitempty"`
 }
 
 // Config 按版本保存资料和偏好，不保存接口原始响应或密钥。

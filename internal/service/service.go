@@ -76,6 +76,12 @@ type Service struct {
 	hotKeyPressMu       sync.Mutex // 快捷键控制接口没有幂等保证，独立限制并发派发。
 	hotKeyPressing      bool       // 前一次按键尚未结束时拒绝后续点击。
 	adapterInitMu       sync.Mutex // 菜单首次读取时串行探测适配器，避免并发创建多个连接适配器。
+	// 代办与每个连接的处理结果分别保存，持久文件损坏时禁止覆盖。
+	todos        []storage.TodoRecord
+	todosBlocked bool
+	todoNotice   string
+	todoTimer    *time.Timer
+	todoFeedback map[todoSource]TodoFeedback
 }
 
 // New 加载非敏感配置，连接仅由宿主在启动就绪后按用户偏好发起。
@@ -87,11 +93,24 @@ func New() (*Service, error) {
 	config, notice := store.Load()
 	cache, cacheNotice := store.LoadCache()
 	journal, journalNotice := store.LoadJournal()
+	todos, todoErr := store.LoadTodos()
 	s := &Service{store: store, credentials: credential.New(), config: config, sessionKeys: map[string]string{}, cache: cache, journal: journal, journalBlocked: journalNotice != "", materialHistoryOnly: true, targetHistoryOnly: true}
 	// 本版动作与台词始终可展示，运行期间不沿用旧版气泡和勿扰偏好。
 	s.config.Preferences.Notifications.Bubble = true
 	s.config.Preferences.Notifications.QuietHoursEnabled = false
 	s.state = AppState{Connection: ConnectionState{Status: "disconnected"}, Notifications: []Notification{}, Commands: []autobgi.CommandReceipt{}, EventStatus: "disconnected", LogStream: LogStreamState{Status: "disconnected", Logs: []LogLine{}}, Notice: strings.Join(nonempty(notice, cacheNotice, journalNotice), "；")}
+	// 恢复代办前保留损坏文件，过期记录清理失败时不伪造已经删除。
+	s.todos, s.todosBlocked = todos, todoErr != nil
+	if todoErr != nil {
+		s.todoNotice = todoErr.Error()
+		s.state.Notice = strings.Join(nonempty(s.state.Notice, todoErr.Error()), "；")
+	} else {
+		if err := s.pruneTodosLocked(time.Now()); err != nil {
+			s.todoNotice = err.Error()
+			s.state.Notice = strings.Join(nonempty(s.state.Notice, err.Error()), "；")
+		}
+		s.scheduleTodoTimerLocked()
+	}
 	// 读取旧配置时保留其连接与窗口偏好，但不接纳损坏的关键词规则。
 	rules, rulesErr := validateKeywordRules(config.KeywordRules)
 	if rulesErr != nil {
@@ -172,11 +191,13 @@ func (s *Service) snapshotLocked() AppState {
 	s.state.Profiles = make([]profile.ProfileView, 0, len(s.config.Profiles))
 	for _, p := range s.config.Profiles {
 		key := s.sessionKeys[p.ID]
-		s.state.Profiles = append(s.state.Profiles, profile.ProfileView{ID: p.ID, Name: p.Name, BaseURL: p.BaseURL, AdapterMode: p.AdapterMode, ReadOnly: p.ReadOnly, AutoConnect: p.AutoConnect, AllowInsecure: p.AllowInsecure, HasCredential: (!p.SessionOnly && p.CredentialRef != "") || key != "", SessionOnly: p.SessionOnly})
+		s.state.Profiles = append(s.state.Profiles, profile.ProfileView{ID: p.ID, Name: p.Name, Nickname: p.Nickname, BaseURL: p.BaseURL, AdapterMode: p.AdapterMode, ReadOnly: p.ReadOnly, AutoConnect: p.AutoConnect, AllowInsecure: p.AllowInsecure, HasCredential: (!p.SessionOnly && p.CredentialRef != "") || key != "", SessionOnly: p.SessionOnly})
 	}
 	s.state.ActiveProfileID = s.config.ActiveProfileID
 	s.state.Preferences = s.config.Preferences
 	s.state.KeywordRules = append([]profile.KeywordRule{}, s.config.KeywordRules...)
+	s.state.Todos, s.state.TodoFeedback = s.visibleTodosLocked(time.Now())
+	s.state.TodoNotice = s.todoNotice
 	s.state.Commands = s.commandsLocked()
 	s.state.NotificationHistory = s.notificationHistoryLocked()
 	if s.state.PreparedCommand != nil {
@@ -280,6 +301,14 @@ func (s *Service) SaveProfile(input profile.ProfileInput) (AppState, error) {
 	if name == "" || len([]rune(name)) > 80 {
 		return s.GetState(), errors.New("连接名称需要 1 至 80 个字符")
 	}
+	nickname := ""
+	if input.Nickname != nil {
+		// 保存与连接资料导入使用相同的昵称校验，空值表示清除。
+		nickname, err = normalizeProfileNickname(*input.Nickname)
+		if err != nil {
+			return s.GetState(), err
+		}
+	}
 	if input.AdapterMode == "" {
 		input.AdapterMode = "auto"
 	}
@@ -308,6 +337,30 @@ func (s *Service) SaveProfile(input profile.ProfileInput) (AppState, error) {
 	if index < 0 && len(s.config.Profiles) >= 20 {
 		s.mu.Unlock()
 		return s.GetState(), errors.New("最多保存 20 个连接")
+	}
+	if index >= 0 {
+		existing := s.config.Profiles[index]
+		if input.Nickname == nil {
+			// 旧版客户端不发送昵称时，不覆盖已经保存的值。
+			nickname = existing.Nickname
+		}
+		if input.APIKey == "" && existing.Name == name && existing.BaseURL == base &&
+			existing.AdapterMode == input.AdapterMode && existing.ReadOnly == input.ReadOnly &&
+			existing.AutoConnect == (input.AutoConnect && !input.SessionOnly) &&
+			existing.AllowInsecure == input.AllowInsecure && existing.SessionOnly == input.SessionOnly {
+			// 仅修改展示昵称时不触碰凭据，也不重连或中断正在接收的日志。
+			old := s.config
+			s.config.Profiles = append([]profile.Profile(nil), s.config.Profiles...)
+			s.config.Profiles[index].Nickname = nickname
+			if err = s.store.Save(s.config); err != nil {
+				s.config = old
+				s.mu.Unlock()
+				return s.GetState(), err
+			}
+			s.mu.Unlock()
+			s.publish()
+			return s.GetState(), nil
+		}
 	}
 	if input.ID == "" {
 		input.ID = randomID()
@@ -345,7 +398,7 @@ func (s *Service) SaveProfile(input profile.ProfileInput) (AppState, error) {
 			return s.GetState(), err
 		}
 	}
-	p := profile.Profile{ID: input.ID, Name: name, BaseURL: base, CredentialRef: ref, AdapterMode: input.AdapterMode, ReadOnly: input.ReadOnly, AutoConnect: input.AutoConnect && !input.SessionOnly, AllowInsecure: input.AllowInsecure, SessionOnly: input.SessionOnly}
+	p := profile.Profile{ID: input.ID, Name: name, Nickname: nickname, BaseURL: base, CredentialRef: ref, AdapterMode: input.AdapterMode, ReadOnly: input.ReadOnly, AutoConnect: input.AutoConnect && !input.SessionOnly, AllowInsecure: input.AllowInsecure, SessionOnly: input.SessionOnly}
 	old := s.config
 	s.config.Profiles = append([]profile.Profile(nil), s.config.Profiles...)
 	if index < 0 {
@@ -689,6 +742,10 @@ func (s *Service) Pause(paused bool) {
 func (s *Service) Shutdown() {
 	s.mu.Lock()
 	s.closed = true
+	if s.todoTimer != nil {
+		s.todoTimer.Stop()
+		s.todoTimer = nil
+	}
 	s.stopLocked()
 	s.emit = nil
 	s.logTriggerEmit = nil

@@ -14,5 +14,7 @@ export type {
     NotificationHistory,
     NotificationHistoryScope,
     NotificationRecord,
-    TargetsMetState
+    TargetsMetState,
+    TodoFeedback,
+    TodoItem
 } from "./models.js";

@@ -228,6 +228,8 @@ func (s *Service) acceptLogLine(ctx context.Context, profileID string, gen uint6
 		}
 		fired = &LogTrigger{ID: s.logTriggerSequence, Generation: gen, Action: rule.Action, Text: text, Keyword: keyword}
 		s.state.LogStream.LastTrigger = fired
+		// 代办与动画队列独立落盘，窗口隐藏或动作队列满时也不会漏掉命中。
+		s.createTodoLocked(*rule, profileID, text, time.Now())
 	}
 	// 同一行可以包含多个拾取项目，并且不影响该行已有的关键词匹配。
 	var pickups []LogPickup

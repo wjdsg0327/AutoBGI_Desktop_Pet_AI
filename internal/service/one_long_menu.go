@@ -141,6 +141,11 @@ func (s *Service) StartOneLongFromMenu(name string) error {
 //
 //wails:ignore
 func (s *Service) StartOneLongFromMenuForConnection(name, expectedProfileID, expectedActiveProfileID string, expectedGeneration uint64) error {
+	return s.startOneLongForConnection(name, expectedProfileID, expectedActiveProfileID, expectedGeneration, false)
+}
+
+// startOneLongForConnection 区分原菜单保护与用户点击代办时明确授权的切换。
+func (s *Service) startOneLongForConnection(name, expectedProfileID, expectedActiveProfileID string, expectedGeneration uint64, allowRunning bool) error {
 	target := strings.TrimSpace(name)
 	if target == "" {
 		return oneLongMenuError("INVALID_ARGUMENT", "一条龙名称不能为空")
@@ -201,7 +206,7 @@ func (s *Service) StartOneLongFromMenuForConnection(name, expectedProfileID, exp
 	if snapshot.Process.Running == nil {
 		return oneLongMenuError("STATUS_UNKNOWN", "BGI 当前状态未知，已拒绝启动")
 	}
-	if *snapshot.Process.Running {
+	if *snapshot.Process.Running && !allowRunning {
 		return oneLongMenuError("TASK_BUSY", "检测到 BGI 正在运行，已拒绝启动")
 	}
 

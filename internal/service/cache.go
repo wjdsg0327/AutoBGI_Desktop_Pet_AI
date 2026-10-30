@@ -45,7 +45,8 @@ func (s *Service) ExportProfiles() (string, error) {
 	defer s.mu.Unlock()
 	result := profileTransferDocument{SchemaVersion: 1, Profiles: []profileTransferEntry{}}
 	for _, p := range s.config.Profiles {
-		result.Profiles = append(result.Profiles, profileTransferEntry{Name: p.Name, BaseURL: p.BaseURL, AdapterMode: p.AdapterMode, ReadOnly: true, AllowInsecure: p.AllowInsecure, AutoConnect: false})
+		// 昵称属于展示资料，可与地址一起迁移，密钥和本机身份仍不导出。
+		result.Profiles = append(result.Profiles, profileTransferEntry{Name: p.Name, Nickname: p.Nickname, BaseURL: p.BaseURL, AdapterMode: p.AdapterMode, ReadOnly: true, AllowInsecure: p.AllowInsecure, AutoConnect: false})
 	}
 	data, err := json.MarshalIndent(result, "", "  ")
 	if err != nil || len(data) > MaxProfileTransferBytes {

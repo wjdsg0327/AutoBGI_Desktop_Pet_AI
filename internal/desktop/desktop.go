@@ -92,6 +92,19 @@ type DesktopService struct {
 	hotKeyMenu hotKeyMenuState
 	// 原生弹出菜单运行期间禁止重入，避免销毁正在显示的菜单。
 	contextMenuOpen bool
+	// 代办窗口与普通鼠标穿透气泡分离，悬停计时和交互状态由宿主统一管理。
+	todoWindow        *application.WebviewWindow
+	todoCreating      bool
+	todoVisible       bool
+	todoExpanded      bool
+	todoPetHover      bool
+	todoWindowHover   bool
+	todoHoverRevision uint64
+	todoViewRevision  uint64
+	todoShowTimer     *time.Timer
+	todoHideTimer     *time.Timer
+	// 原生防激活钩子与窗口宿主同生命周期，退出时在 UI 线程释放。
+	stopActivationGuard func()
 }
 
 // New 由宿主注入唯一业务服务；所有窗口共用它的采集状态。
@@ -298,6 +311,7 @@ func (d *DesktopService) drainDesktopApply() {
 		plan := d.notices.update(d.visibleNotificationStateLocked(state), d.sleeping, time.Now())
 		d.prepareBubbleLocked(plan)
 		d.mu.Unlock()
+		d.syncTodoWindowOnUI()
 		d.app.Event.Emit("pet:state", state)
 		d.emitPresentation()
 		d.dispatchBubble(plan)
@@ -459,6 +473,7 @@ func (d *DesktopService) HidePet() {
 	d.prepareBubbleLocked(plan)
 	d.mu.Unlock()
 	d.pet.Hide()
+	d.HideTodoWindow()
 	d.dispatchBubble(plan)
 }
 
@@ -468,6 +483,9 @@ func (d *DesktopService) SetClickThrough(enabled bool) {
 		return
 	}
 	d.pet.SetIgnoreMouseEvents(enabled)
+	if enabled {
+		d.HideTodoWindow()
+	}
 }
 
 // ToggleClickThrough 在调用时读取已保存偏好，避免复用启动时的旧菜单值。
@@ -1112,6 +1130,9 @@ func (d *DesktopService) SetPetDocumentVisible(visible bool) {
 	plan := d.notices.update(d.visibleNotificationStateLocked(state), d.sleeping, time.Now())
 	d.prepareBubbleLocked(plan)
 	d.mu.Unlock()
+	if !visible {
+		d.HideTodoWindow()
+	}
 	d.emitPresentation()
 	d.dispatchBubble(plan)
 }
@@ -1639,6 +1660,7 @@ func (d *DesktopService) moveBubbleOnScreens(screens []*application.Screen) {
 	if visible && bubble != nil {
 		d.placeBubbleOnScreens(bubble, screens)
 	}
+	d.moveTodoOnScreens(screens)
 }
 
 // placeBubble 将气泡限制在角色所在工作区，顶部空间不足时改放到角色下方。
@@ -1871,8 +1893,19 @@ func (d *DesktopService) Shutdown() {
 		d.faintTimer.Stop()
 		d.faintTimer = nil
 	}
+	if d.todoShowTimer != nil {
+		d.todoShowTimer.Stop()
+		d.todoShowTimer = nil
+	}
+	if d.todoHideTimer != nil {
+		d.todoHideTimer.Stop()
+		d.todoHideTimer = nil
+	}
 	d.mu.Unlock()
 	d.rememberPosition()
+	if d.stopActivationGuard != nil {
+		d.stopActivationGuard()
+	}
 }
 
 // Quit 才真正结束程序；隐藏和关闭面板均不调用它。

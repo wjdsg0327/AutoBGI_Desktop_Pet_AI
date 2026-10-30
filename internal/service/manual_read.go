@@ -74,6 +74,9 @@ func (s *Service) beginManualReadLocked(timeout time.Duration) (manualReadTicket
 // manualReadCurrentLocked 在返回或持久化前复核冻结来源，即使读取器忽略取消也不能提交迟到结果。
 func (s *Service) manualReadCurrentLocked(ticket manualReadTicket, ctx context.Context) bool {
 	p, valid := s.activeProfileLocked()
+	// 昵称仅影响展示，修改时不能使已开始的读取或动作请求误判为来源变化。
+	p.Nickname = ""
+	ticket.profile.Nickname = ""
 	return valid && !s.paused && ctx.Err() == nil && s.connectionCtx != nil && s.connectionCtx.Err() == nil &&
 		s.currentLocked(ticket.generation, ticket.profile.ID) && s.snapshotEpoch == ticket.epoch &&
 		s.state.Connection.Status == "online" && s.client == ticket.client && sameManualAdapter(s.adapter, ticket.adapter) &&

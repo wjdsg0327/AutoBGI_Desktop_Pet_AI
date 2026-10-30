@@ -21,10 +21,11 @@ const maxKeywordTransferBytes = 512 * 1024
 var keywordTransferGate sync.Mutex
 
 type keywordTransferRule struct {
-	Keywords *[]string `json:"keywords"`
-	Action   *string   `json:"action"`
-	Text     *string   `json:"text"`
-	Enabled  *bool     `json:"enabled"`
+	Keywords *[]string            `json:"keywords"`
+	Action   *string              `json:"action"`
+	Text     *string              `json:"text"`
+	Enabled  *bool                `json:"enabled"`
+	Todo     *profile.KeywordTodo `json:"todo,omitempty"`
 }
 
 type keywordTransferDocument struct {
@@ -71,7 +72,7 @@ func decodeKeywordTransfer(data []byte) ([]profile.KeywordRule, error) {
 	var document keywordTransferDocument
 	decoder := json.NewDecoder(bytes.NewReader(data))
 	decoder.DisallowUnknownFields()
-	if err := decoder.Decode(&document); err != nil || document.Version != 1 || document.Rules == nil {
+	if err := decoder.Decode(&document); err != nil || (document.Version != 1 && document.Version != 2) || document.Rules == nil {
 		return nil, errors.New("规则文件格式无效或版本不受支持")
 	}
 	if err := decoder.Decode(new(any)); err != io.EOF {
@@ -85,13 +86,16 @@ func decodeKeywordTransfer(data []byte) ([]profile.KeywordRule, error) {
 		if item.Keywords == nil || item.Action == nil || item.Text == nil || item.Enabled == nil {
 			return nil, errors.New("规则文件缺少必要字段")
 		}
+		if document.Version == 1 && item.Todo != nil {
+			return nil, errors.New("旧版规则文件包含不支持的代办字段")
+		}
 		// 编辑界面使用逗号分隔关键词，拒绝无法无损呈现的单个关键词。
 		for _, keyword := range *item.Keywords {
 			if strings.ContainsAny(keyword, ",，") {
 				return nil, errors.New("单个关键词不能包含逗号")
 			}
 		}
-		rules = append(rules, profile.KeywordRule{Keywords: *item.Keywords, Action: *item.Action, Text: *item.Text, Enabled: *item.Enabled})
+		rules = append(rules, profile.KeywordRule{Keywords: *item.Keywords, Action: *item.Action, Text: *item.Text, Enabled: *item.Enabled, Todo: item.Todo})
 	}
 	return service.ValidateKeywordRules(rules)
 }
@@ -105,9 +109,10 @@ func (d *DesktopService) ExportKeywordRulesFile(input []profile.KeywordRule) (bo
 	if err != nil {
 		return false, err
 	}
-	document := keywordTransferDocument{Version: 1, Rules: make([]keywordTransferRule, 0, len(rules))}
+	// 第二版带可选代办设置，第一版仍可导入并默认关闭代办。
+	document := keywordTransferDocument{Version: 2, Rules: make([]keywordTransferRule, 0, len(rules))}
 	for _, rule := range rules {
-		document.Rules = append(document.Rules, keywordTransferRule{Keywords: &rule.Keywords, Action: &rule.Action, Text: &rule.Text, Enabled: &rule.Enabled})
+		document.Rules = append(document.Rules, keywordTransferRule{Keywords: &rule.Keywords, Action: &rule.Action, Text: &rule.Text, Enabled: &rule.Enabled, Todo: rule.Todo})
 	}
 	data, err := json.MarshalIndent(document, "", "  ")
 	if err != nil || len(data) > maxKeywordTransferBytes {

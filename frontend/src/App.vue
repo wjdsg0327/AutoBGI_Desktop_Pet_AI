@@ -14,6 +14,7 @@ const ViewLoadError = defineComponent({
 const PanelView = defineAsyncComponent({ loader: () => import('./views/PanelView.vue'), errorComponent: ViewLoadError })
 const PetView = defineAsyncComponent({ loader: () => import('./views/PetView.vue'), errorComponent: ViewLoadError })
 const BubbleView = defineAsyncComponent({ loader: () => import('./views/BubbleView.vue'), errorComponent: ViewLoadError })
+const TodoView = defineAsyncComponent({ loader: () => import('./views/TodoView.vue'), errorComponent: ViewLoadError })
 
 // 原生宿主明确指定窗口职责，浏览器预览默认打开信息面板。
 const view = new URLSearchParams(location.search).get('view') || 'panel'
@@ -26,5 +27,6 @@ onBeforeUnmount(() => store.dispose())
 <template>
   <PetView v-if="view === 'pet'" />
   <BubbleView v-else-if="view === 'bubble'" />
+  <TodoView v-else-if="view === 'todo'" />
   <PanelView v-else />
 </template>

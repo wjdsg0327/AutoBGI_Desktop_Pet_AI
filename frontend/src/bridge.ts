@@ -34,6 +34,7 @@ export interface KeywordRuleInput {
   action: string
   text: string
   enabled: boolean
+  todo?: { enabled: boolean; action: string; target: string }
 }
 
 // 所有实际调用都经过宿主显式注册的两个精简服务。
@@ -51,6 +52,10 @@ export const api = {
   connect: (id: string) => invoke<AppState>('PetAPI', 'Connect', id),
   disconnect: () => invoke<AppState>('PetAPI', 'Disconnect'),
   updateKeywordRules: (rules: KeywordRuleInput[]) => invoke<AppState>('PetAPI', 'UpdateKeywordRules', rules),
+  // 代办动作和目标只从宿主读取，处理时不接受页面传入的任意动作。
+  listTodoTargets: (action: string) => invoke<string[]>('PetAPI', 'ListTodoTargets', action),
+  processTodo: (id: string) => invoke<AppState>('PetAPI', 'ProcessTodo', id),
+  dismissTodo: (id: string) => invoke<AppState>('PetAPI', 'DismissTodo', id),
   // 拾取通知单独保存，避免覆盖尚未保存的关键词草稿。
   updatePickupEnabled: (enabled: boolean) => invoke<AppState>('PetAPI', 'UpdatePickupEnabled', enabled),
 }
@@ -60,6 +65,12 @@ export async function desktop() {
   if (!isNative()) throw new Error('此操作需要 Windows 桌宠宿主。')
   return {
     GetPresentation: () => invoke<Record<string, unknown>>('DesktopAPI', 'GetPresentation'),
+    // 悬停和窗口模式由原生宿主管理，页面只上报当前指针位置。
+    SetTodoPetHover: (hover: boolean) => invoke<void>('DesktopAPI', 'SetTodoPetHover', hover),
+    SetTodoWindowHover: (hover: boolean) => invoke<void>('DesktopAPI', 'SetTodoWindowHover', hover),
+    OpenTodoWindow: () => invoke<void>('DesktopAPI', 'OpenTodoWindow'),
+    CloseTodoWindow: () => invoke<void>('DesktopAPI', 'CloseTodoWindow'),
+    GetTodoWindowState: () => invoke<{ visible: boolean; expanded: boolean; revision: number }>('DesktopAPI', 'GetTodoWindowState'),
     ShowPet: () => invoke<void>('DesktopAPI', 'ShowPet'),
     ShowPanel: () => invoke<void>('DesktopAPI', 'ShowPanel'),
     ShowContextMenu: () => invoke<void>('DesktopAPI', 'ShowContextMenu'),

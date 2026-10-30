@@ -33,6 +33,9 @@ let activePointer: number | null = null
 let pointerTarget: HTMLElement | null = null
 let documentVisibilityReported: boolean | undefined
 let documentVisibilitySending = false
+let todoHoverWanted = false
+let todoHoverReported = false
+let todoHoverSending = false
 
 // 可见与交互分别判定；穿透仅关闭鼠标交互，保留角色当前动画，隐藏或休眠才暂停动画。
 const sleeping = computed(() => store.presentation.action === 'sleep')
@@ -49,6 +52,21 @@ const canWave = computed(() => interactive.value && !fainted.value && !disconnec
 // 初始状态尚未读到时保留待确认动作，避免窗口尚未就绪就消耗队列时间。
 const visibleWindow = computed(() => animated.value && store.state !== null)
 const canPresentTrigger = computed(() => canvasReady.value && visibleWindow.value && !fainted.value && !disconnected.value)
+
+// 指针进入和离开按顺序上报，迟到的原生调用不能重新开启旧悬停计时。
+async function reportTodoHover(hover: boolean) {
+  todoHoverWanted = hover
+  if (!store.native || todoHoverSending || disposed) return
+  todoHoverSending = true
+  try {
+    while (!disposed && todoHoverReported !== todoHoverWanted) {
+      const next = todoHoverWanted
+      await (await desktop()).SetTodoPetHover(next)
+      todoHoverReported = next
+    }
+  } catch { todoHoverReported = false }
+  finally { todoHoverSending = false }
+}
 
 // 仅以在线日志流的最后活动时间计算饥饿，连接建立或任何新日志都会重置起点。
 type ActivityState = { logStream?: { status?: string; lastActivityAt?: string } }
@@ -125,7 +143,9 @@ const drag = new PetDragController({
 // 开始新规则动作时取消点击挥手；隐藏时结束当前手势和待发点击。
 watch(canWave, allowed => { if (!allowed) stopWave() }, { flush: 'sync' })
 watch(interactive, active => {
-  if (!active) { moved = true; stopInteraction(); endPointer(true) }
+  if (!active) { moved = true; stopInteraction(); endPointer(true); void reportTodoHover(false) }
+  // 隐藏、穿透或休眠恢复时指针可能仍在角色上，不一定会再次触发进入事件。
+  else if (document.querySelector('.pet-window:hover')) void reportTodoHover(true)
 }, { flush: 'sync' })
 
 // 同时只接受一个主指针，第二触点不能覆盖手势起点或提前松开正在拖动的角色。
@@ -374,5 +394,5 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <main class="pet-window" :class="`pet-action-${action}`" :aria-label="`芙宁娜桌宠，${store.statusLabel}`" @pointerdown="pointerDown" @pointermove="pointerMove" @pointerup="pointerUp" @pointercancel="pointerCancel" @lostpointercapture="pointerCancel" @click="click" @dblclick="doubleClick" @contextmenu.prevent="contextMenu"><PetCanvas :action="action" :pickup-name="pickupName" :visible="animated" @ready="canvasReady = true" @pickup-ready="pickupReady = true" /></main>
+  <main class="pet-window" :class="`pet-action-${action}`" :aria-label="`芙宁娜桌宠，${store.statusLabel}`" @pointerenter="interactive && reportTodoHover(true)" @pointerleave="reportTodoHover(false)" @pointerdown="pointerDown" @pointermove="pointerMove" @pointerup="pointerUp" @pointercancel="pointerCancel" @lostpointercapture="pointerCancel" @click="click" @dblclick="doubleClick" @contextmenu.prevent="contextMenu"><PetCanvas :action="action" :pickup-name="pickupName" :visible="animated" @ready="canvasReady = true" @pickup-ready="pickupReady = true" /></main>
 </template>

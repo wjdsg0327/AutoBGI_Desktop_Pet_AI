@@ -31,11 +31,11 @@ func interceptPowerMessages(handle func(bool)) func(uintptr, uint32, uintptr, ui
 //
 //wails:ignore
 func (d *DesktopService) HostWindowsOptions() application.WindowsOptions {
-	// 激活拒绝只作用于带明确样式的桌宠和气泡，其他消息仍按原主线程顺序处理电源意图。
-	return application.WindowsOptions{WndProcInterceptor: interceptWindowActivation(
+	// 鼠标和程序触发的激活均只拦截桌宠类窗口，其他消息仍按原主线程顺序处理。
+	return application.WindowsOptions{WndProcInterceptor: d.activationGuard(interceptWindowActivation(
 		interceptDragEnvironmentMessages(interceptPowerMessages(d.setPowerIntent), func() { d.invalidatePetDrag() }),
 		hostWindowExStyle,
-	)}
+	))}
 }
 
 // bindPowerEvents 在 Windows 上不再订阅通用睡眠事件，避免框架异步转发重复或颠倒原始消息。

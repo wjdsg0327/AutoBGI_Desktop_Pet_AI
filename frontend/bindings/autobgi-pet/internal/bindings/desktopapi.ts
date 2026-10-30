@@ -13,6 +13,9 @@ import { Call as $Call, CancellablePromise as $CancellablePromise } from "@wails
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore: Unused imports
 import * as desktop$0 from "../desktop/models.js";
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore: Unused imports
+import * as profile$0 from "../profile/models.js";
 
 /**
  * BeginPetDrag 开始一次带令牌的窗口拖动。
@@ -29,6 +32,13 @@ export function CancelPetDrag(token: string): $CancellablePromise<boolean> {
 }
 
 /**
+ * CloseTodoWindow 收起代办窗口，不改变代办内容。
+ */
+export function CloseTodoWindow(): $CancellablePromise<void> {
+    return $Call.ByID(2179635093);
+}
+
+/**
  * DragPetTo 按已授权的拖动令牌移动窗口。
  */
 export function DragPetTo(token: string, x: number, y: number): $CancellablePromise<boolean> {
@@ -36,10 +46,38 @@ export function DragPetTo(token: string, x: number, y: number): $CancellableProm
 }
 
 /**
+ * ExportKeywordRulesFile 将当前编辑的规则写入用户选择的分享文件。
+ */
+export function ExportKeywordRulesFile(rules: profile$0.KeywordRule[] | null): $CancellablePromise<boolean> {
+    return $Call.ByID(1117901341, rules);
+}
+
+/**
  * GetPresentation 读取无密钥的窗口展示状态。
  */
 export function GetPresentation(): $CancellablePromise<{ [_ in string]?: any } | null> {
     return $Call.ByID(633020581);
+}
+
+/**
+ * GetTodoWindowState 供窗口加载完成后补取当前展示模式。
+ */
+export function GetTodoWindowState(): $CancellablePromise<{ [_ in string]?: any } | null> {
+    return $Call.ByID(3851433362);
+}
+
+/**
+ * ImportKeywordRulesFile 选择并校验分享文件，返回规则草稿而不直接保存。
+ */
+export function ImportKeywordRulesFile(): $CancellablePromise<profile$0.KeywordRule[] | null> {
+    return $Call.ByID(194534190);
+}
+
+/**
+ * OpenTodoWindow 展开代办对话，关闭对话不会消费代办。
+ */
+export function OpenTodoWindow(): $CancellablePromise<void> {
+    return $Call.ByID(3646195627);
 }
 
 /**
@@ -61,6 +99,20 @@ export function PetDragged(token: string): $CancellablePromise<boolean> {
  */
 export function SetPetDocumentVisible(visible: boolean): $CancellablePromise<void> {
     return $Call.ByID(2262713111, visible);
+}
+
+/**
+ * SetTodoPetHover 同步角色窗口悬停，三秒计时只由宿主管理。
+ */
+export function SetTodoPetHover(hover: boolean): $CancellablePromise<void> {
+    return $Call.ByID(1041487448, hover);
+}
+
+/**
+ * SetTodoWindowHover 保留鼠标从角色移动到代办圆圈的短暂过渡。
+ */
+export function SetTodoWindowHover(hover: boolean): $CancellablePromise<void> {
+    return $Call.ByID(2789847645, hover);
 }
 
 /**

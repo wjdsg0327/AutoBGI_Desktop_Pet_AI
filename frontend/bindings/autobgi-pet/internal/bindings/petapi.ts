@@ -39,10 +39,31 @@ export function Disconnect(): $CancellablePromise<service$0.AppState> {
 }
 
 /**
+ * DismissTodo 删除当前连接中的代办，不触发业务动作。
+ */
+export function DismissTodo(id: string): $CancellablePromise<service$0.AppState> {
+    return $Call.ByID(3961752574, id);
+}
+
+/**
  * GetState 返回当前连接、日志与规则状态。
  */
 export function GetState(): $CancellablePromise<service$0.AppState> {
     return $Call.ByID(4127582827);
+}
+
+/**
+ * ListTodoTargets 读取当前连接中可选的一条龙或配置组名称。
+ */
+export function ListTodoTargets(action: string): $CancellablePromise<string[] | null> {
+    return $Call.ByID(127021852, action);
+}
+
+/**
+ * ProcessTodo 仅根据后端保存的代办快照执行一次固定动作。
+ */
+export function ProcessTodo(id: string): $CancellablePromise<service$0.AppState> {
+    return $Call.ByID(1317751223, id);
 }
 
 /**

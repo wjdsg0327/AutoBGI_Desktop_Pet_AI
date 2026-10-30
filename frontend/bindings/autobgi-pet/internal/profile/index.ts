@@ -3,6 +3,7 @@
 
 export type {
     KeywordRule,
+    KeywordTodo,
     NotificationPreferences,
     PetPreferences,
     Preferences,
