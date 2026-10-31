@@ -38,6 +38,10 @@ func validateKeywordRules(rules []profile.KeywordRule) ([]profile.KeywordRule, e
 		// 代办动作只接受已实现的固定入口，旧规则没有字段时继续保持关闭。
 		if rule.Todo != nil {
 			todo := *rule.Todo
+			// 关闭代办时同时关闭自动审批，重新开启后需要明确选择。
+			if !todo.Enabled {
+				todo.AutoApprove = false
+			}
 			switch todo.Action {
 			case "":
 				if todo.Enabled {

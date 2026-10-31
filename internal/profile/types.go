@@ -75,11 +75,12 @@ type Preferences struct {
 	Startup       StartupPreferences      `json:"startup"`
 }
 
-// KeywordTodo 定义需要用户逐条决定的固定动作，目标名称不包含连接资料或密钥。
+// KeywordTodo 定义手动或自动处理的固定动作，目标名称不包含连接资料或密钥。
 type KeywordTodo struct {
-	Enabled bool   `json:"enabled"`
-	Action  string `json:"action"`
-	Target  string `json:"target"`
+	Enabled     bool   `json:"enabled"`
+	Action      string `json:"action"`
+	Target      string `json:"target"`
+	AutoApprove bool   `json:"autoApprove,omitempty"`
 }
 
 // KeywordRule 定义一条日志命中后的动作、台词和可选代办。

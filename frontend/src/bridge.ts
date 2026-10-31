@@ -34,7 +34,7 @@ export interface KeywordRuleInput {
   action: string
   text: string
   enabled: boolean
-  todo?: { enabled: boolean; action: string; target: string }
+  todo?: { enabled: boolean; action: string; target: string; autoApprove?: boolean }
 }
 
 // 所有实际调用都经过宿主显式注册的两个精简服务。

@@ -9,7 +9,7 @@ import LiveLogPanel from '../components/LiveLogPanel.vue'
 // 面板只编辑日志关键词规则，连接和日志状态始终以原生服务广播为准。
 type RuleAction = 'idle' | 'happy' | 'wave' | 'surprised' | 'sad'
 type TodoAction = '' | 'one_long' | 'script_group' | 'close_bgi_game' | 'shutdown'
-type KeywordTodo = { enabled: boolean; action: TodoAction; target: string }
+type KeywordTodo = { enabled: boolean; action: TodoAction; target: string; autoApprove: boolean }
 type KeywordRule = { id: string; keywords: string[]; action: RuleAction; text: string; enabled: boolean; todo?: KeywordTodo }
 type RuleDraft = { id: string; keywordsText: string; action: RuleAction; text: string; enabled: boolean; todo: KeywordTodo }
 type LogEntry = { time: string; text: string }
@@ -54,9 +54,13 @@ const previewAction = ref<RuleAction>('idle')
 // 每次点击预览都递增序号，让相同动作也能重新开始播放。
 const previewRevision = ref(0)
 let previewTimer: ReturnType<typeof setTimeout> | undefined
+// 旧规则没有自动审批字段时始终保持手动处理。
+function normalizeTodo(todo?: Partial<KeywordTodo>): KeywordTodo {
+  return { enabled: todo?.enabled === true, action: todo?.action || '', target: todo?.target || '', autoApprove: todo?.autoApprove === true }
+}
 function applyRules(items: KeywordRule[]) {
   applyingRules.value = true
-  rules.value = items.map(item => ({ ...item, keywordsText: (item.keywords || []).join('，'), todo: item.todo ? { ...item.todo } : { enabled: false, action: '', target: '' } }))
+  rules.value = items.map(item => ({ ...item, keywordsText: (item.keywords || []).join('，'), todo: normalizeTodo(item.todo) }))
   rulesDirty.value = false
   applyingRules.value = false
 }
@@ -77,7 +81,7 @@ function parseKeywords(value: string): string[] {
 }
 function addRule() {
   if (rules.value.length >= 40) { rulesNotice.value = '最多可以设置 40 条规则。'; return }
-  rules.value.push({ id: crypto.randomUUID(), keywordsText: '', action: 'wave', text: '', enabled: true, todo: { enabled: false, action: '', target: '' } })
+  rules.value.push({ id: crypto.randomUUID(), keywordsText: '', action: 'wave', text: '', enabled: true, todo: normalizeTodo() })
 }
 function moveRule(index: number, offset: number) {
   const next = index + offset
@@ -121,9 +125,9 @@ async function importRules() {
     return
   }
   for (const rule of imported) {
-    rules.value.push({ id: crypto.randomUUID(), keywordsText: rule.keywords.join('，'), action: rule.action as RuleAction, text: rule.text, enabled: rule.enabled, todo: rule.todo ? { ...rule.todo, action: rule.todo.action as TodoAction } : { enabled: false, action: '', target: '' } })
+    rules.value.push({ id: crypto.randomUUID(), keywordsText: rule.keywords.join('，'), action: rule.action as RuleAction, text: rule.text, enabled: rule.enabled, todo: normalizeTodo(rule.todo ? { ...rule.todo, action: rule.todo.action as TodoAction } : undefined) })
   }
-  rulesNotice.value = imported.length ? `已导入 ${imported.length} 条规则，请检查后保存。` : '文件中没有规则。'
+  rulesNotice.value = imported.length ? `已导入 ${imported.length} 条规则，请检查动作和自动审批设置后保存。` : '文件中没有规则。'
 }
 
 // 导出当前草稿，不要求先保存，也不包含连接信息。
@@ -265,16 +269,18 @@ function toggleConnection(id: string) {
           <article v-for="(rule, index) in rules" :key="rule.id" class="rule-card">
             <div class="rule-top"><span class="rule-number">{{ String(index + 1).padStart(2, '0') }}</span><div><strong>关键词规则</strong><small>{{ rule.enabled ? '已启用' : '已暂停' }}</small></div><button class="order-button" :disabled="store.busy || index === 0" :aria-label="`上移第 ${index + 1} 条规则`" title="上移规则" @click="moveRule(index, -1)">↑</button><button class="order-button" :disabled="store.busy || index === rules.length - 1" :aria-label="`下移第 ${index + 1} 条规则`" title="下移规则" @click="moveRule(index, 1)">↓</button><label class="toggle-label"><input v-model="rule.enabled" type="checkbox" :disabled="store.busy" /><span class="toggle" /><span class="sr-only">启用规则 {{ index + 1 }}</span></label><button class="remove-button" :disabled="store.busy" :aria-label="`删除第 ${index + 1} 条规则`" @click="rules.splice(index, 1)"><AppIcon name="close" :size="16" /></button></div>
             <div class="rule-fields"><label class="rule-keywords">触发关键词 <small>多个关键词用逗号或换行分隔</small><textarea v-model="rule.keywordsText" :disabled="store.busy" rows="2" placeholder="例如：完成，结束" /></label><label>桌宠动作<select v-model="rule.action" :disabled="store.busy" @change="preview(rule.action)"><option v-for="action in actions" :key="action.value" :value="action.value">{{ action.label }}</option></select></label><label>要说的话 <small>留空则显示日志</small><input v-model="rule.text" :disabled="store.busy" maxlength="300" placeholder="例如：演出圆满结束！" /></label></div>
-            <!-- 代办与桌宠动画分开设置，只有用户在桌宠旁点击处理才发送请求。 -->
+            <!-- 自动审批逐条启用，关闭代办时同时清除自动审批授权。 -->
             <div class="todo-rule">
-              <label class="todo-toggle"><input v-model="rule.todo.enabled" type="checkbox" :disabled="store.busy" /><span>命中时创建代办</span></label>
+              <label class="todo-toggle"><input v-model="rule.todo.enabled" type="checkbox" :disabled="store.busy" @change="!rule.todo.enabled && (rule.todo.autoApprove = false)" /><span>命中时创建代办</span></label>
               <div v-if="rule.todo.enabled" class="todo-rule-fields">
                 <label>处理动作<select v-model="rule.todo.action" :disabled="store.busy" @change="changeTodoAction(rule)"><option value="">请选择动作</option><option value="one_long">启动一条龙</option><option value="script_group">启动配置组</option><option value="close_bgi_game">关闭 BGI 和原神</option><option value="shutdown">电脑关机</option></select></label>
                 <label v-if="rule.todo.action === 'one_long' || rule.todo.action === 'script_group'">配置名称<select v-model="rule.todo.target" :disabled="store.busy" @focus="loadTodoTargets(rule.todo.action)"><option value="">请选择配置名称</option><option v-if="rule.todo.target && !todoTargets[rule.todo.action].includes(rule.todo.target)" :value="rule.todo.target">{{ rule.todo.target }}（已保存）</option><option v-for="name in todoTargets[rule.todo.action]" :key="name" :value="name">{{ name }}</option></select></label>
                 <button v-if="rule.todo.action === 'one_long' || rule.todo.action === 'script_group'" class="text-action" type="button" :disabled="todoLoading[rule.todo.action]" @click="loadTodoTargets(rule.todo.action)">{{ todoLoading[rule.todo.action] ? '正在读取…' : '刷新配置名称' }}</button>
+                <label class="todo-auto"><input v-model="rule.todo.autoApprove" type="checkbox" :disabled="store.busy" /><span>自动审批：命中后立即执行</span></label>
+                <small v-if="rule.todo.autoApprove" class="todo-auto-hint">无需点击处理，将自动执行上方动作；同一连接正在处理其他请求时会排队。进行中的同规则命中会合并，完成后再次命中会再次执行；请求失败或结果未知时不会自动重发。</small>
                 <small v-if="(rule.todo.action === 'one_long' || rule.todo.action === 'script_group') && todoTargetErrors[rule.todo.action]">{{ todoTargetErrors[rule.todo.action] }}</small>
                 <small v-if="rule.todo.action === 'shutdown'">处理时会在 AutoBGI 所在电脑关闭相关软件，并安排 60 秒后关机。</small>
-                <small v-else>代办使用上方台词；同一规则重复命中会合并，保留至当天结束。</small>
+                <small v-else-if="!rule.todo.autoApprove">代办使用上方台词；同一规则重复命中会合并，保留至当天结束。</small>
               </div>
             </div>
             <div class="rule-bottom"><span>任意一个关键词出现在新日志中即可触发。</span><button :disabled="store.busy" @click="preview(rule.action)">预览动作 <AppIcon name="arrow" :size="14" /></button></div>
@@ -320,6 +326,8 @@ function toggleConnection(id: string) {
 .rule-actions{display:flex;flex-wrap:wrap;gap:8px}
 /* 代办设置沿用规则卡片的水蓝色与紧凑表单层次。 */
 .todo-rule{margin-top:16px;padding:14px;border:1px solid #dcebf2;border-radius:10px;background:#f5fbfe}.todo-toggle{display:flex;align-items:center;gap:8px;color:#315f79;font-size:12px;font-weight:600}.todo-toggle input{accent-color:#498ca8}.todo-rule-fields{display:flex;align-items:end;flex-wrap:wrap;gap:10px;margin-top:12px}.todo-rule-fields label{display:flex;flex:1 1 160px;flex-direction:column;gap:7px;color:#557184;font-size:11px;font-weight:600}.todo-rule-fields select{width:100%;padding:9px;border:1px solid #dceaf1;border-radius:8px;background:#fff;color:#294b61;font-size:12px}.todo-rule-fields small{flex-basis:100%;color:#657f91;font-size:11px;line-height:1.6}
+/* 自动审批说明与普通代办选项分开，提醒实际动作无需再次点击。 */
+.todo-rule-fields .todo-auto{flex:1 1 100%;flex-direction:row;align-items:center;gap:8px;color:#315f79;font-size:12px}.todo-auto input{accent-color:#498ca8}.todo-rule-fields .todo-auto-hint{color:#9b6a45}
 /* 海蓝、象牙白与细金线构成芙宁娜主题，避免依赖外部字体和网络图片。 */
 .furina-panel{--ink:#203852;--muted:#7a8da1;--blue:#244c72;--line:#dbe5ec;--gold:#bc9c60;display:flex;min-height:100vh;color:var(--ink);background:radial-gradient(circle at 82% 6%,#e7f3f8 0,transparent 30%),#f3f7f9;font-family:"Microsoft YaHei UI","Microsoft YaHei",sans-serif}
 .furina-sidebar{position:fixed;inset:0 auto 0 0;width:228px;padding:33px 19px 22px;background:linear-gradient(160deg,#18314e,#214765 70%,#193752);color:#e7f0f4;display:flex;flex-direction:column;z-index:2;overflow:auto}

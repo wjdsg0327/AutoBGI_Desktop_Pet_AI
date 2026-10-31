@@ -1,5 +1,8 @@
 module autobgi-pet
 
+// 本地保留 Wails 的 Windows 不激活窗口修复，避免气泡显示时抢走输入焦点。
+replace github.com/wailsapp/wails/v3 => ./third_party/wails
+
 go 1.26.0
 
 toolchain go1.26.10

@@ -82,6 +82,9 @@ type Service struct {
 	todoNotice   string
 	todoTimer    *time.Timer
 	todoFeedback map[todoSource]TodoFeedback
+	// 自动待办按来源顺序排队；运行状态仅保存在本次会话。
+	todoAutoQueue map[todoSource][]todoAutoEntry
+	todoInFlight  map[todoSource]todoFlight
 }
 
 // New 加载非敏感配置，连接仅由宿主在启动就绪后按用户偏好发起。

@@ -72,7 +72,7 @@ func decodeKeywordTransfer(data []byte) ([]profile.KeywordRule, error) {
 	var document keywordTransferDocument
 	decoder := json.NewDecoder(bytes.NewReader(data))
 	decoder.DisallowUnknownFields()
-	if err := decoder.Decode(&document); err != nil || (document.Version != 1 && document.Version != 2) || document.Rules == nil {
+	if err := decoder.Decode(&document); err != nil || (document.Version != 1 && document.Version != 2 && document.Version != 3) || document.Rules == nil {
 		return nil, errors.New("规则文件格式无效或版本不受支持")
 	}
 	if err := decoder.Decode(new(any)); err != io.EOF {
@@ -89,6 +89,10 @@ func decodeKeywordTransfer(data []byte) ([]profile.KeywordRule, error) {
 		if document.Version == 1 && item.Todo != nil {
 			return nil, errors.New("旧版规则文件包含不支持的代办字段")
 		}
+		// 自动审批需要第三版格式，旧版规则缺少该选项时继续手动处理。
+		if document.Version < 3 && item.Todo != nil && item.Todo.AutoApprove {
+			return nil, errors.New("旧版规则文件包含不支持的自动审批设置")
+		}
 		// 编辑界面使用逗号分隔关键词，拒绝无法无损呈现的单个关键词。
 		for _, keyword := range *item.Keywords {
 			if strings.ContainsAny(keyword, ",，") {
@@ -100,23 +104,35 @@ func decodeKeywordTransfer(data []byte) ([]profile.KeywordRule, error) {
 	return service.ValidateKeywordRules(rules)
 }
 
+// encodeKeywordTransfer 校验草稿并按实际内容选择版本，不包含连接资料或本机标识。
+func encodeKeywordTransfer(input []profile.KeywordRule) ([]byte, error) {
+	rules, err := service.ValidateKeywordRules(input)
+	if err != nil {
+		return nil, err
+	}
+	// 没有自动审批时沿用第二版格式，开启时使用明确的新版本。
+	document := keywordTransferDocument{Version: 2, Rules: make([]keywordTransferRule, 0, len(rules))}
+	for _, rule := range rules {
+		if rule.Todo != nil && rule.Todo.AutoApprove {
+			document.Version = 3
+		}
+		document.Rules = append(document.Rules, keywordTransferRule{Keywords: &rule.Keywords, Action: &rule.Action, Text: &rule.Text, Enabled: &rule.Enabled, Todo: rule.Todo})
+	}
+	data, err := json.MarshalIndent(document, "", "  ")
+	if err != nil || len(data) > maxKeywordTransferBytes {
+		return nil, errors.New("规则内容无法导出或文件超过大小限制")
+	}
+	return data, nil
+}
+
 // ExportKeywordRulesFile 先校验草稿，再通过原生对话框选择导出位置。
 func (d *DesktopService) ExportKeywordRulesFile(input []profile.KeywordRule) (bool, error) {
 	if d.app == nil || d.stopped() {
 		return false, errors.New("桌面宿主尚未就绪")
 	}
-	rules, err := service.ValidateKeywordRules(input)
+	data, err := encodeKeywordTransfer(input)
 	if err != nil {
 		return false, err
-	}
-	// 第二版带可选代办设置，第一版仍可导入并默认关闭代办。
-	document := keywordTransferDocument{Version: 2, Rules: make([]keywordTransferRule, 0, len(rules))}
-	for _, rule := range rules {
-		document.Rules = append(document.Rules, keywordTransferRule{Keywords: &rule.Keywords, Action: &rule.Action, Text: &rule.Text, Enabled: &rule.Enabled, Todo: rule.Todo})
-	}
-	data, err := json.MarshalIndent(document, "", "  ")
-	if err != nil || len(data) > maxKeywordTransferBytes {
-		return false, errors.New("规则内容无法导出或文件超过大小限制")
 	}
 	if !keywordTransferGate.TryLock() {
 		return false, errors.New("请先完成已打开的规则文件对话框")

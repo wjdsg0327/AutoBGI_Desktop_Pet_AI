@@ -69,6 +69,8 @@ type TodoItem struct {
 	BaseURL     string `json:"baseUrl"`
 	CreatedAt   string `json:"createdAt"`
 	ExpiresAt   string `json:"expiresAt"`
+	// 排队状态仅代表本次会话中的自动审批，重启后仍可手动决定。
+	AutoQueued bool `json:"autoQueued"`
 }
 
 // TodoFeedback 描述单次处理请求，受理不等于远端任务已经完成。
@@ -80,6 +82,8 @@ type TodoFeedback struct {
 	Target    string `json:"target"`
 	Status    string `json:"status"`
 	Message   string `json:"message"`
+	// 自动审批与手动操作共用结果格式，方便界面区分来源。
+	AutoApproved bool `json:"autoApproved"`
 }
 
 // AppState 是所有窗口共享的唯一状态，内含的连接资料已经脱敏。

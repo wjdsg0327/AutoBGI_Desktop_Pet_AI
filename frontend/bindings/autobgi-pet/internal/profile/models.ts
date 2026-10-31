@@ -14,12 +14,13 @@ export interface KeywordRule {
 }
 
 /**
- * KeywordTodo 定义需要用户逐条决定的固定动作，目标名称不包含连接资料或密钥。
+ * KeywordTodo 定义手动或自动处理的固定动作，目标名称不包含连接资料或密钥。
  */
 export interface KeywordTodo {
     "enabled": boolean;
     "action": string;
     "target": string;
+    "autoApprove"?: boolean;
 }
 
 /**

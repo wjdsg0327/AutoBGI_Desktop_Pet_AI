@@ -15,6 +15,18 @@ type todoSource struct {
 	baseURL   string
 }
 
+// todoAutoEntry 冻结命中时的连接代次，重连后的旧排队项不能自动发送。
+type todoAutoEntry struct {
+	id         string
+	generation uint64
+}
+
+// todoFlight 记录当前动作所属的规则，避免同一规则在请求中重复派发。
+type todoFlight struct {
+	id     string
+	ruleID string
+}
+
 // todoProfileLocked 只选择当前资料，离线时仍可查看该资料当天的代办。
 func (s *Service) todoProfileLocked() (profile.Profile, bool) {
 	for _, p := range s.config.Profiles {
@@ -97,28 +109,37 @@ func (s *Service) expireTodos() {
 }
 
 // createTodoLocked 将首次命中的动作与来源一起提交；相同规则和来源只保留一条。
-func (s *Service) createTodoLocked(rule profile.KeywordRule, profileID, text string, now time.Time) {
+func (s *Service) createTodoLocked(rule profile.KeywordRule, profileID, text string, now time.Time) (storage.TodoRecord, bool) {
 	if rule.Todo == nil || !rule.Todo.Enabled || s.closed {
-		return
+		return storage.TodoRecord{}, false
 	}
 	if err := s.pruneTodosLocked(now); err != nil {
 		s.state.Notice = err.Error()
 		s.todoNotice = err.Error()
-		return
+		return storage.TodoRecord{}, false
 	}
 	p, ok := s.todoProfileLocked()
 	if !ok || p.ID != profileID {
-		return
+		return storage.TodoRecord{}, false
+	}
+	source := todoSource{p.ID, p.BaseURL}
+	// 自动动作尚未返回时，同规则的连续日志视为同一次待办。
+	if rule.Todo.AutoApprove && s.todoInFlight[source].ruleID == rule.ID {
+		return storage.TodoRecord{}, false
 	}
 	for _, item := range s.todos {
 		if item.RuleID == rule.ID && item.ProfileID == p.ID && item.BaseURL == p.BaseURL {
-			return
+			// 已有手动待办保持首次快照，启用自动审批不会静默执行旧内容。
+			if rule.Todo.AutoApprove && !s.autoQueuedLocked(source, item.ID) && s.todoFeedback[source].Status != "sending" {
+				s.setAutoTodoFailureLocked(storage.TodoRecord{ID: item.ID, ProfileID: p.ID, BaseURL: p.BaseURL, Action: rule.Todo.Action, Target: rule.Todo.Target}, errors.New("此规则已有待办，请先手动处理或不管"))
+			}
+			return storage.TodoRecord{}, false
 		}
 	}
 	if len(s.todos) >= storage.TodoLimit {
 		s.todoNotice = "代办数量已达上限，请先处理或不管已有代办"
 		s.state.Notice = s.todoNotice
-		return
+		return storage.TodoRecord{}, false
 	}
 	item := storage.TodoRecord{
 		ID: randomID(), RuleID: rule.ID, ProfileID: p.ID, ProfileName: p.Name, BaseURL: p.BaseURL,
@@ -129,11 +150,38 @@ func (s *Service) createTodoLocked(rule profile.KeywordRule, profileID, text str
 	if err := s.store.SaveTodos(next); err != nil {
 		s.state.Notice = err.Error()
 		s.todoNotice = err.Error()
-		return
+		return storage.TodoRecord{}, false
 	}
 	s.todos = next
 	s.todoNotice = ""
 	s.scheduleTodoTimerLocked()
+	return item, true
+}
+
+// autoQueuedLocked 只检查当前进程中的队列，持久化记录本身不会在重启后自动执行。
+func (s *Service) autoQueuedLocked(source todoSource, id string) bool {
+	for _, entry := range s.todoAutoQueue[source] {
+		if entry.id == id {
+			return true
+		}
+	}
+	return false
+}
+
+// removeAutoQueuedLocked 在用户丢弃或消费代办时移除其待派发标记。
+func (s *Service) removeAutoQueuedLocked(source todoSource, id string) {
+	queue := s.todoAutoQueue[source]
+	for index, entry := range queue {
+		if entry.id == id {
+			queue = append(queue[:index], queue[index+1:]...)
+			if len(queue) == 0 {
+				delete(s.todoAutoQueue, source)
+			} else {
+				s.todoAutoQueue[source] = queue
+			}
+			return
+		}
+	}
 }
 
 // visibleTodosLocked 展示当前资料的记录；地址变化后的旧代办保留给用户放弃。
@@ -156,7 +204,7 @@ func (s *Service) visibleTodosLocked(now time.Time) ([]TodoItem, *TodoFeedback) 
 		result = append(result, TodoItem{
 			ID: item.ID, Text: item.Text, Action: item.Action, Target: item.Target,
 			ProfileID: p.ID, ProfileName: name, BaseURL: item.BaseURL,
-			CreatedAt: item.CreatedAt, ExpiresAt: item.ExpiresAt,
+			CreatedAt: item.CreatedAt, ExpiresAt: item.ExpiresAt, AutoQueued: s.autoQueuedLocked(todoSource{item.ProfileID, item.BaseURL}, item.ID),
 		})
 	}
 	if feedback, ok := s.todoFeedback[todoSource{p.ID, p.BaseURL}]; ok {
@@ -194,6 +242,7 @@ func (s *Service) takeTodoLocked(id string, requireOnline bool) (storage.TodoRec
 			return storage.TodoRecord{}, 0, err
 		}
 		s.todos = next
+		s.removeAutoQueuedLocked(todoSource{item.ProfileID, item.BaseURL}, item.ID)
 		s.todoNotice = ""
 		s.scheduleTodoTimerLocked()
 		return item, generation, nil
@@ -213,33 +262,144 @@ func (s *Service) DismissTodo(id string) (AppState, error) {
 	return s.GetState(), nil
 }
 
-// ProcessTodo 先删除代办并保留内存快照，再异步发送一次固定动作。
-func (s *Service) ProcessTodo(id string) (AppState, error) {
-	s.mu.Lock()
-	// 同一连接一次只处理一条，确保每次请求的最终结果都能留在对话中。
-	if p, ok := s.todoProfileLocked(); ok && s.todoFeedback[todoSource{p.ID, p.BaseURL}].Status == "sending" {
-		s.mu.Unlock()
-		return s.GetState(), errors.New("上一条代办的请求仍在处理，请先查看结果")
+// startTodoLocked 在同一临界区核对来源并持久删除，再异步发送一次固定动作。
+func (s *Service) startTodoLocked(id string, automatic bool, expectedGeneration uint64) error {
+	p, ok := s.todoProfileLocked()
+	if !ok {
+		return errors.New("代办来源连接已不存在")
+	}
+	source := todoSource{p.ID, p.BaseURL}
+	// 同一连接一次只处理一条，自动审批也复用相同门禁。
+	if s.todoFeedback[source].Status == "sending" {
+		return errors.New("上一条代办的请求仍在处理，请先查看结果")
+	}
+	if automatic && !s.menuConnectionMatchesLocked(p.ID, p.ID, expectedGeneration) {
+		return errors.New("连接已变化，未发送自动审批请求")
 	}
 	item, generation, err := s.takeTodoLocked(id, true)
 	if err != nil {
-		s.mu.Unlock()
-		return s.GetState(), err
+		return err
 	}
 	if s.todoFeedback == nil {
 		s.todoFeedback = make(map[todoSource]TodoFeedback)
 	}
-	source := todoSource{item.ProfileID, item.BaseURL}
-	s.todoFeedback[source] = TodoFeedback{ID: item.ID, ProfileID: item.ProfileID, BaseURL: item.BaseURL, Action: item.Action, Target: item.Target, Status: "sending", Message: "好，就由我来安排！正在提交请求……"}
+	if s.todoInFlight == nil {
+		s.todoInFlight = make(map[todoSource]todoFlight)
+	}
+	s.todoFeedback[source] = TodoFeedback{ID: item.ID, ProfileID: item.ProfileID, BaseURL: item.BaseURL, Action: item.Action, Target: item.Target, Status: "sending", Message: "好，就由我来安排！正在提交请求……", AutoApproved: automatic}
+	s.todoInFlight[source] = todoFlight{id: item.ID, ruleID: item.RuleID}
 	s.wg.Add(1)
+	go s.performTodo(item, generation, automatic)
+	return nil
+}
+
+// setAutoTodoFailureLocked 保留未开始的代办，并说明自动审批没有发送请求。
+func (s *Service) setAutoTodoFailureLocked(item storage.TodoRecord, err error) {
+	if s.todoFeedback == nil {
+		s.todoFeedback = make(map[todoSource]TodoFeedback)
+	}
+	s.todoFeedback[todoSource{item.ProfileID, item.BaseURL}] = TodoFeedback{
+		ID: item.ID, ProfileID: item.ProfileID, BaseURL: item.BaseURL, Action: item.Action, Target: item.Target,
+		Status: "error", Message: "自动审批未开始，代办仍可手动处理或不管：" + err.Error(), AutoApproved: true,
+	}
+}
+
+// enqueueAutoTodoLocked 空闲时立即派发，忙碌时保留快照并按来源顺序排队。
+func (s *Service) enqueueAutoTodoLocked(item storage.TodoRecord, generation uint64) {
+	source := todoSource{item.ProfileID, item.BaseURL}
+	if s.todoFeedback[source].Status == "sending" {
+		if s.todoAutoQueue == nil {
+			s.todoAutoQueue = make(map[todoSource][]todoAutoEntry)
+		}
+		s.todoAutoQueue[source] = append(s.todoAutoQueue[source], todoAutoEntry{id: item.ID, generation: generation})
+		return
+	}
+	if err := s.startTodoLocked(item.ID, true, generation); err != nil {
+		s.setAutoTodoFailureLocked(item, err)
+	}
+}
+
+// releaseAutoQueueLocked 停止自动派发，未消费的记录继续留在代办中供用户决定。
+func (s *Service) releaseAutoQueueLocked(source todoSource) int {
+	queue := s.todoAutoQueue[source]
+	delete(s.todoAutoQueue, source)
+	count := 0
+	for _, entry := range queue {
+		for _, item := range s.todos {
+			if item.ID == entry.id {
+				count++
+				break
+			}
+		}
+	}
+	return count
+}
+
+// continueAutoQueueLocked 上一条受理后才处理下一条；失败或换连接时不继续自动派发。
+func (s *Service) continueAutoQueueLocked(source todoSource, failed bool) {
+	if len(s.todoAutoQueue[source]) == 0 {
+		return
+	}
+	p, ok := s.todoProfileLocked()
+	if failed || !ok || p.ID != source.profileID || p.BaseURL != source.baseURL ||
+		!s.menuConnectionMatchesLocked(source.profileID, source.profileID, s.todoAutoQueue[source][0].generation) {
+		if count := s.releaseAutoQueueLocked(source); count > 0 {
+			feedback := s.todoFeedback[source]
+			feedback.Message += " 后续自动代办已保留，请手动处理或不管。"
+			s.todoFeedback[source] = feedback
+		}
+		return
+	}
+	// 排队可能跨过本机午夜，先清理过期记录，再跳过已失效的队列项。
+	if err := s.pruneTodosLocked(time.Now()); err != nil {
+		for _, item := range s.todos {
+			if item.ID == s.todoAutoQueue[source][0].id {
+				s.releaseAutoQueueLocked(source)
+				s.setAutoTodoFailureLocked(item, err)
+				return
+			}
+		}
+		s.releaseAutoQueueLocked(source)
+		s.todoNotice = err.Error()
+		return
+	}
+	s.scheduleTodoTimerLocked()
+	for len(s.todoAutoQueue[source]) > 0 {
+		entry := s.todoAutoQueue[source][0]
+		// 已被用户丢弃的排队项跳过，不能重新创建或发送。
+		var item storage.TodoRecord
+		for _, candidate := range s.todos {
+			if candidate.ID == entry.id {
+				item = candidate
+				break
+			}
+		}
+		if item.ID == "" {
+			s.removeAutoQueuedLocked(source, entry.id)
+			continue
+		}
+		if err := s.startTodoLocked(entry.id, true, entry.generation); err != nil {
+			s.releaseAutoQueueLocked(source)
+			s.setAutoTodoFailureLocked(item, err)
+		}
+		return
+	}
+}
+
+// ProcessTodo 按用户明确点击消费指定代办，不接收动作或目标参数。
+func (s *Service) ProcessTodo(id string) (AppState, error) {
+	s.mu.Lock()
+	err := s.startTodoLocked(id, false, 0)
 	s.mu.Unlock()
+	if err != nil {
+		return s.GetState(), err
+	}
 	s.publish()
-	go s.performTodo(item, generation)
 	return s.GetState(), nil
 }
 
 // performTodo 不接收前端传入的动作参数，网络失败或结果未知均不自动重发。
-func (s *Service) performTodo(item storage.TodoRecord, generation uint64) {
+func (s *Service) performTodo(item storage.TodoRecord, generation uint64, automatic bool) {
 	defer s.wg.Done()
 	var err error
 	switch item.Action {
@@ -267,10 +427,13 @@ func (s *Service) performTodo(item storage.TodoRecord, generation uint64) {
 	}
 	s.mu.Lock()
 	if !s.closed {
-		s.todoFeedback[todoSource{item.ProfileID, item.BaseURL}] = TodoFeedback{
+		source := todoSource{item.ProfileID, item.BaseURL}
+		delete(s.todoInFlight, source)
+		s.todoFeedback[source] = TodoFeedback{
 			ID: item.ID, ProfileID: item.ProfileID, BaseURL: item.BaseURL,
-			Action: item.Action, Target: item.Target, Status: status, Message: message,
+			Action: item.Action, Target: item.Target, Status: status, Message: message, AutoApproved: automatic,
 		}
+		s.continueAutoQueueLocked(source, err != nil)
 	}
 	closed := s.closed
 	s.mu.Unlock()

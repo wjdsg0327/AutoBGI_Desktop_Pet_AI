@@ -4,8 +4,8 @@ import { api, desktop, listen, type AppState } from '../bridge'
 import { useAppStore } from '../stores/app'
 
 // 代办对话只消费宿主保存的快照，按钮永远不携带动作或连接参数。
-type TodoItem = { id: string; text: string; action: string; target: string; profileId: string; baseUrl: string; createdAt: string; expiresAt: string }
-type TodoFeedback = { id: string; action: string; target: string; status: string; message: string }
+type TodoItem = { id: string; text: string; action: string; target: string; profileId: string; baseUrl: string; createdAt: string; expiresAt: string; autoQueued?: boolean }
+type TodoFeedback = { id: string; action: string; target: string; status: string; message: string; autoApproved?: boolean }
 type TodoState = AppState & { todos?: TodoItem[]; todoFeedback?: TodoFeedback | null }
 const store = useAppStore()
 const expanded = ref(false)
@@ -118,12 +118,13 @@ onBeforeUnmount(() => { disposed = true; stopWindow?.() })
         <div class="todo-action"><span>处理时</span><strong>{{ actionText }}</strong></div>
         <p v-if="impactText" class="todo-impact">{{ impactText }}</p>
         <p class="todo-source">来源：{{ sourceName }}</p>
-        <p v-if="feedback?.status === 'sending'" class="todo-error">上一条请求仍在处理，可以先选择不管这条。</p>
+        <p v-if="item.autoQueued" class="todo-error">自动审批正在排队，执行前可以选择不管。</p>
+        <p v-else-if="feedback?.status === 'sending'" class="todo-error">上一条请求仍在处理，可以先选择不管这条。</p>
         <p v-else-if="!sourceMatches" class="todo-error">这条代办的来源已变更，只能选择不管。</p>
         <p v-else-if="!canProcess" class="todo-error">请先连接这条代办所属的 AutoBGI，或选择不管。</p>
       </div>
       <div v-else class="todo-empty"><span>✧</span><strong>{{ todoNotice ? '代办暂时无法读取或保存。' : '今天的代办都落幕啦。' }}</strong><p>{{ todoNotice ? '请检查本地数据目录。' : '哼哼，本小姐可是记得很清楚！' }}</p></div>
-      <p v-if="localError || todoNotice || feedback?.message" class="todo-feedback" :class="{ error: localError || todoNotice || feedback?.status === 'error' }" role="status">{{ localError || todoNotice || `刚才的${describeAction(feedback)}：${feedback?.message}` }}</p>
+      <p v-if="localError || todoNotice || feedback?.message" class="todo-feedback" :class="{ error: localError || todoNotice || feedback?.status === 'error' }" role="status">{{ localError || todoNotice || `${feedback?.autoApproved ? '自动审批' : '刚才'}的${describeAction(feedback)}：${feedback?.message}` }}</p>
       <footer v-if="item" class="todo-actions"><button type="button" class="todo-ignore" :disabled="busy" @click="decide(false)">不管</button><button type="button" class="todo-process" :disabled="busy || !canProcess" @click="decide(true)">{{ busy ? '请稍候' : '处理' }}</button></footer>
     </section>
   </main>

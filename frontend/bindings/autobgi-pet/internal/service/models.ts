@@ -218,6 +218,11 @@ export interface TodoFeedback {
     "target": string;
     "status": string;
     "message": string;
+
+    /**
+     * 自动审批与手动操作共用结果格式，方便界面区分来源。
+     */
+    "autoApproved": boolean;
 }
 
 /**
@@ -233,4 +238,9 @@ export interface TodoItem {
     "baseUrl": string;
     "createdAt": string;
     "expiresAt": string;
+
+    /**
+     * 排队状态仅代表本次会话中的自动审批，重启后仍可手动决定。
+     */
+    "autoQueued": boolean;
 }
