@@ -1354,6 +1354,9 @@ func (d *DesktopService) StartKeywordTrigger(id uint64, generation uint64, attem
 		d.mu.Unlock()
 		return false
 	}
+	// 只有普通关键词动作在首帧确认后播放当前规则的独立音效，拾取动作始终不播放。
+	soundType := profile.NormalizeKeywordSoundType(trigger.SoundType)
+	playSound := trigger.Action != "eat" && trigger.SoundEnabled
 	entryID := logActionID(*trigger)
 	// 等待期限内确认后才启动五秒，前端与气泡共用本次动作的绝对截止时间。
 	plan, started := d.notices.startTrigger(entryID, time.Now())
@@ -1364,6 +1367,9 @@ func (d *DesktopService) StartKeywordTrigger(id uint64, generation uint64, attem
 	d.keywordTriggerUntil = plan.deadline
 	d.prepareBubbleLocked(plan)
 	d.mu.Unlock()
+	if playSound && (soundType != profile.KeywordSoundTypeCustom || d.service.KeywordSoundAvailable()) {
+		playKeywordSound(soundType, d.service.KeywordSoundPath())
+	}
 	d.dispatchConfirmedKeywordBubble(plan, generation)
 	return true
 }
@@ -1842,9 +1848,9 @@ func (d *DesktopService) rememberPosition() {
 	})
 }
 
-// watchScreens 只在显示器布局变化时纠正位置；退出时停止定时器，不持续干扰拖动。
+// watchScreens 只在显示器布局变化时纠正位置；隐藏桌宠时不枚举屏幕，降低后台唤醒频率。
 func (d *DesktopService) watchScreens() {
-	ticker := time.NewTicker(3 * time.Second)
+	ticker := time.NewTicker(15 * time.Second)
 	defer ticker.Stop()
 	for {
 		select {
@@ -1853,6 +1859,10 @@ func (d *DesktopService) watchScreens() {
 		case <-ticker.C:
 			application.InvokeAsync(func() {
 				if d.stopped() {
+					return
+				}
+				// 桌宠隐藏期间，下一次显示会主动校正位置，无需持续读取显示器布局。
+				if d.pet == nil || !d.pet.IsVisible() {
 					return
 				}
 				screens := d.app.Screen.GetAll()
@@ -1879,6 +1889,9 @@ func (d *DesktopService) watchScreens() {
 //wails:ignore
 func (d *DesktopService) Shutdown() {
 	d.once.Do(func() { close(d.done) })
+	// 退出前停止音效并清理本进程提取的内置 MP3 临时文件。
+	stopKeywordSound()
+	cleanupBuiltinSoundAssets()
 	// 网络通知句柄由工作协程在退出时注销，避免保留指向已关闭宿主的系统回调。
 	d.networkWorker.Wait()
 	d.mu.Lock()

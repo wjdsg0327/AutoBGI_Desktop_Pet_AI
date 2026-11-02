@@ -81,6 +81,20 @@ export function UpdateKeywordRules(rules: profile$0.KeywordRule[] | null): $Canc
 }
 
 /**
+ * UpdateKeywordSoundEnabled 兼容旧版全局音效开关，不参与当前规则的独立触发判断。
+ */
+export function UpdateKeywordSoundEnabled(enabled: boolean): $CancellablePromise<service$0.AppState> {
+    return $Call.ByID(921691734, enabled);
+}
+
+/**
+ * UpdateKeywordSoundType 兼容旧版全局音效类型，当前规则保存自己的音效类型。
+ */
+export function UpdateKeywordSoundType(soundType: string): $CancellablePromise<service$0.AppState> {
+    return $Call.ByID(2147683397, soundType);
+}
+
+/**
  * UpdatePickupEnabled 独立保存拾取通知开关，不覆盖关键词编辑草稿。
  */
 export function UpdatePickupEnabled(enabled: boolean): $CancellablePromise<service$0.AppState> {

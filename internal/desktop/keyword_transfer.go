@@ -21,11 +21,14 @@ const maxKeywordTransferBytes = 512 * 1024
 var keywordTransferGate sync.Mutex
 
 type keywordTransferRule struct {
-	Keywords *[]string            `json:"keywords"`
-	Action   *string              `json:"action"`
-	Text     *string              `json:"text"`
-	Enabled  *bool                `json:"enabled"`
-	Todo     *profile.KeywordTodo `json:"todo,omitempty"`
+	Keywords        *[]string            `json:"keywords"`
+	Action          *string              `json:"action"`
+	Text            *string              `json:"text"`
+	Enabled         *bool                `json:"enabled"`
+	SoundEnabled    *bool                `json:"soundEnabled,omitempty"`
+	SoundType       *string              `json:"soundType,omitempty"`
+	SoundCustomName *string              `json:"soundCustomName,omitempty"`
+	Todo            *profile.KeywordTodo `json:"todo,omitempty"`
 }
 
 type keywordTransferDocument struct {
@@ -72,7 +75,7 @@ func decodeKeywordTransfer(data []byte) ([]profile.KeywordRule, error) {
 	var document keywordTransferDocument
 	decoder := json.NewDecoder(bytes.NewReader(data))
 	decoder.DisallowUnknownFields()
-	if err := decoder.Decode(&document); err != nil || (document.Version != 1 && document.Version != 2 && document.Version != 3) || document.Rules == nil {
+	if err := decoder.Decode(&document); err != nil || (document.Version != 1 && document.Version != 2 && document.Version != 3 && document.Version != 4) || document.Rules == nil {
 		return nil, errors.New("规则文件格式无效或版本不受支持")
 	}
 	if err := decoder.Decode(new(any)); err != io.EOF {
@@ -99,24 +102,41 @@ func decodeKeywordTransfer(data []byte) ([]profile.KeywordRule, error) {
 				return nil, errors.New("单个关键词不能包含逗号")
 			}
 		}
-		rules = append(rules, profile.KeywordRule{Keywords: *item.Keywords, Action: *item.Action, Text: *item.Text, Enabled: *item.Enabled, Todo: item.Todo})
+		rule := profile.KeywordRule{Keywords: *item.Keywords, Action: *item.Action, Text: *item.Text, Enabled: *item.Enabled, Todo: item.Todo}
+		if item.SoundEnabled != nil {
+			rule.SoundEnabled = *item.SoundEnabled
+		}
+		if item.SoundType != nil {
+			rule.SoundType = *item.SoundType
+		}
+		if item.SoundCustomName != nil {
+			rule.SoundCustomName = *item.SoundCustomName
+		}
+		rules = append(rules, rule)
 	}
 	return service.ValidateKeywordRules(rules)
 }
 
-// encodeKeywordTransfer 校验草稿并按实际内容选择版本，不包含连接资料或本机标识。
+// encodeKeywordTransfer 校验草稿并导出第四版格式，不包含连接资料或本机标识。
 func encodeKeywordTransfer(input []profile.KeywordRule) ([]byte, error) {
 	rules, err := service.ValidateKeywordRules(input)
 	if err != nil {
 		return nil, err
 	}
-	// 没有自动审批时沿用第二版格式，开启时使用明确的新版本。
-	document := keywordTransferDocument{Version: 2, Rules: make([]keywordTransferRule, 0, len(rules))}
+	// 新版导出固定使用第四版，携带每条规则独立的音效设置。
+	document := keywordTransferDocument{Version: 4, Rules: make([]keywordTransferRule, 0, len(rules))}
 	for _, rule := range rules {
-		if rule.Todo != nil && rule.Todo.AutoApprove {
-			document.Version = 3
-		}
-		document.Rules = append(document.Rules, keywordTransferRule{Keywords: &rule.Keywords, Action: &rule.Action, Text: &rule.Text, Enabled: &rule.Enabled, Todo: rule.Todo})
+		soundEnabled, soundType, soundCustomName := rule.SoundEnabled, rule.SoundType, rule.SoundCustomName
+		document.Rules = append(document.Rules, keywordTransferRule{
+			Keywords:        &rule.Keywords,
+			Action:          &rule.Action,
+			Text:            &rule.Text,
+			Enabled:         &rule.Enabled,
+			SoundEnabled:    &soundEnabled,
+			SoundType:       &soundType,
+			SoundCustomName: &soundCustomName,
+			Todo:            rule.Todo,
+		})
 	}
 	data, err := json.MarshalIndent(document, "", "  ")
 	if err != nil || len(data) > maxKeywordTransferBytes {

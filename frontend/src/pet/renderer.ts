@@ -178,8 +178,12 @@ export class SpriteRenderer {
         context.drawImage(this.image, frame % manifest.columns * manifest.frameWidth, Math.floor(frame / manifest.columns) * manifest.frameHeight, manifest.frameWidth, manifest.frameHeight, (width - w) * anchor.x, (height - h) * anchor.y, w, h)
       }
     }
-    // 期限锚定动作起点而非上次回调，晚帧按真实经过时间跳帧，不逐次累积漂移。
-    if (this.animated) this.schedule(Math.max(1, this.started + (elapsedFrame + 1) * 1000 / action.fps - performance.now()))
+    // 单帧循环动作没有下一张画面，绘制一次后停止计时器，避免待机状态每秒唤醒 WebView。
+    // 非循环动作仍需等待完整时长，才能按协议回落到待机动作。
+    if (this.animated && (!action.loop || action.frames.length > 1)) {
+      // 期限锚定动作起点而非上次回调，晚帧按真实经过时间跳帧，不逐次累积漂移。
+      this.schedule(Math.max(1, this.started + (elapsedFrame + 1) * 1000 / action.fps - performance.now()))
+    }
   }
 
   // 卸载时注销监听与动画循环，不留下后台绘制任务。

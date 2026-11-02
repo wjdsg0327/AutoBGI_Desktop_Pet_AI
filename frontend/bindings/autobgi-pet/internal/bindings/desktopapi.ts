@@ -16,6 +16,9 @@ import * as desktop$0 from "../desktop/models.js";
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore: Unused imports
 import * as profile$0 from "../profile/models.js";
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore: Unused imports
+import * as service$0 from "../service/models.js";
 
 /**
  * BeginPetDrag 开始一次带令牌的窗口拖动。
@@ -29,6 +32,13 @@ export function BeginPetDrag(): $CancellablePromise<desktop$0.PetDragStart | nul
  */
 export function CancelPetDrag(token: string): $CancellablePromise<boolean> {
     return $Call.ByID(1905513732, token);
+}
+
+/**
+ * ClearKeywordCustomSound 删除用户导入的 WAV 并恢复默认内置语音。
+ */
+export function ClearKeywordCustomSound(): $CancellablePromise<service$0.AppState> {
+    return $Call.ByID(1183829007);
 }
 
 /**
@@ -92,6 +102,20 @@ export function PetClicked(): $CancellablePromise<void> {
  */
 export function PetDragged(token: string): $CancellablePromise<boolean> {
     return $Call.ByID(916763938, token);
+}
+
+/**
+ * PreviewKeywordSound 试听指定的关键词内置语音或自定义音效，不修改已保存配置。
+ */
+export function PreviewKeywordSound(soundType: string): $CancellablePromise<void> {
+    return $Call.ByID(3607442543, soundType);
+}
+
+/**
+ * SelectKeywordCustomSound 通过原生选择器导入 WAV，并切换到自定义关键词音效。
+ */
+export function SelectKeywordCustomSound(): $CancellablePromise<service$0.AppState> {
+    return $Call.ByID(3366020448);
 }
 
 /**

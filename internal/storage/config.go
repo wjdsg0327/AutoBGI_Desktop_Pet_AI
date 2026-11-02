@@ -90,6 +90,25 @@ func decode(path string) (profile.Config, error) {
 	if result.Preferences.Pet.RecoveryShortcut == "" {
 		result.Preferences.Pet.RecoveryShortcut = "Ctrl+Shift+P"
 	}
+	// 旧配置没有音效类型时使用稳定的安静陪伴语音，非法值也不能进入播放接口。
+	result.Preferences.Notifications.KeywordSoundType = profile.NormalizeKeywordSoundType(result.Preferences.Notifications.KeywordSoundType)
+	// 旧版本只有全局音效设置，首次读取时把它复制到每条规则，避免升级后规则静默或丢失选择。
+	for i := range result.KeywordRules {
+		rule := &result.KeywordRules[i]
+		if rule.SoundType == "" {
+			rule.SoundEnabled = result.Preferences.Notifications.KeywordSoundEnabled
+			if rule.SoundEnabled {
+				rule.SoundType = result.Preferences.Notifications.KeywordSoundType
+			} else {
+				rule.SoundType = profile.KeywordSoundTypeNone
+			}
+			if rule.SoundEnabled && rule.SoundType == profile.KeywordSoundTypeCustom {
+				rule.SoundCustomName = result.Preferences.Notifications.KeywordSoundCustomName
+			}
+		} else {
+			rule.SoundType = profile.NormalizeKeywordSoundType(rule.SoundType)
+		}
+	}
 	return result, nil
 }
 

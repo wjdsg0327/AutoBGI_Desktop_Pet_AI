@@ -108,7 +108,7 @@ export interface LogStreamState {
 }
 
 /**
- * LogTrigger 是一条规则命中后的独立事件，编号在应用运行期间递增。
+ * LogTrigger 是一条规则命中后的独立事件，编号在应用运行期间递增，并携带规则音效设置。
  */
 export interface LogTrigger {
     "id": number;
@@ -116,6 +116,9 @@ export interface LogTrigger {
     "action": string;
     "text": string;
     "keyword": string;
+    "soundEnabled": boolean;
+    "soundType": string;
+    "soundCustomName"?: string;
 }
 
 /**

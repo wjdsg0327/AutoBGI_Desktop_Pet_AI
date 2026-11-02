@@ -59,6 +59,16 @@ func (p *PetAPI) UpdatePickupEnabled(enabled bool) (service.AppState, error) {
 	return p.service.UpdatePickupEnabled(enabled)
 }
 
+// UpdateKeywordSoundEnabled 兼容旧版全局音效开关，不参与当前规则的独立触发判断。
+func (p *PetAPI) UpdateKeywordSoundEnabled(enabled bool) (service.AppState, error) {
+	return p.service.UpdateKeywordSoundEnabled(enabled)
+}
+
+// UpdateKeywordSoundType 兼容旧版全局音效类型，当前规则保存自己的音效类型。
+func (p *PetAPI) UpdateKeywordSoundType(soundType string) (service.AppState, error) {
+	return p.service.UpdateKeywordSoundType(soundType)
+}
+
 // DesktopAPI 限定窗口展示和拖动操作，不暴露宿主内部队列。
 type DesktopAPI struct {
 	desktop *desktop.DesktopService
@@ -69,6 +79,21 @@ func NewDesktopAPI(d *desktop.DesktopService) *DesktopAPI { return &DesktopAPI{d
 
 // GetPresentation 读取无密钥的窗口展示状态。
 func (d *DesktopAPI) GetPresentation() map[string]any { return d.desktop.GetPresentation() }
+
+// PreviewKeywordSound 试听指定的关键词内置语音或自定义音效，不修改已保存配置。
+func (d *DesktopAPI) PreviewKeywordSound(soundType string) error {
+	return d.desktop.PreviewKeywordSound(soundType)
+}
+
+// SelectKeywordCustomSound 通过原生选择器导入 WAV，并切换到自定义关键词音效。
+func (d *DesktopAPI) SelectKeywordCustomSound() (service.AppState, error) {
+	return d.desktop.SelectKeywordCustomSound()
+}
+
+// ClearKeywordCustomSound 删除用户导入的 WAV 并恢复默认内置语音。
+func (d *DesktopAPI) ClearKeywordCustomSound() (service.AppState, error) {
+	return d.desktop.ClearKeywordCustomSound()
+}
 
 // SetTodoPetHover 同步角色窗口悬停，三秒计时只由宿主管理。
 func (d *DesktopAPI) SetTodoPetHover(hover bool) { d.desktop.SetTodoPetHover(hover) }

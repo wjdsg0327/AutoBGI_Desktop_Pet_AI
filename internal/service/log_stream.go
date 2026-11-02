@@ -226,7 +226,16 @@ func (s *Service) acceptLogLine(ctx context.Context, profileID string, gen uint6
 		if strings.TrimSpace(text) == "" {
 			text = line
 		}
-		fired = &LogTrigger{ID: s.logTriggerSequence, Generation: gen, Action: rule.Action, Text: text, Keyword: keyword}
+		fired = &LogTrigger{
+			ID:              s.logTriggerSequence,
+			Generation:      gen,
+			Action:          rule.Action,
+			Text:            text,
+			Keyword:         keyword,
+			SoundEnabled:    rule.SoundEnabled,
+			SoundType:       rule.SoundType,
+			SoundCustomName: rule.SoundCustomName,
+		}
 		s.state.LogStream.LastTrigger = fired
 		// 代办与动画队列独立落盘；自动审批只处理本次新生成的快照。
 		if item, created := s.createTodoLocked(*rule, profileID, text, time.Now()); created && rule.Todo.AutoApprove {
@@ -248,8 +257,8 @@ func (s *Service) acceptLogLine(ctx context.Context, profileID string, gen uint6
 	emit := s.logTriggerEmit
 	emitPickup := s.logPickupEmit
 	s.mu.Unlock()
-	// 先广播已经刷新的活动时间，避免饿晕画面盖住这一行触发的新动作。
-	s.publish()
+	// 日志内容按短窗口合并广播，避免高频日志逐条触发完整状态序列化。
+	s.scheduleLogPublish()
 	// 每个命中单独投递，状态事件仅用于同步显示，不能作为可靠的动作队列。
 	if fired != nil && emit != nil {
 		emit(*fired)

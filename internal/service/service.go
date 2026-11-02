@@ -69,13 +69,15 @@ type Service struct {
 	targetCancel        context.CancelFunc
 	targetCollecting    bool
 	targetHistoryOnly   bool
-	notificationBlocked bool       // 宿主临时禁播事实不进入前端偏好，也不能由页面伪造来源。
-	petDragGeneration   uint64     // 只随已提交的交互策略变化递增，普通快照不能中断手势。
-	menuStartMu         sync.Mutex // 一条龙与配置组共用启动门禁，防止跨菜单重复派发。
-	menuStarting        bool       // 原生菜单启动期间拒绝重复点击，旧接口没有幂等保证。
-	hotKeyPressMu       sync.Mutex // 快捷键控制接口没有幂等保证，独立限制并发派发。
-	hotKeyPressing      bool       // 前一次按键尚未结束时拒绝后续点击。
-	adapterInitMu       sync.Mutex // 菜单首次读取时串行探测适配器，避免并发创建多个连接适配器。
+	notificationBlocked bool        // 宿主临时禁播事实不进入前端偏好，也不能由页面伪造来源。
+	petDragGeneration   uint64      // 只随已提交的交互策略变化递增，普通快照不能中断手势。
+	logPublishTimer     *time.Timer // 高频日志广播使用短暂合并计时器，避免每行都序列化完整状态。
+	logPublishPending   bool        // 标记是否已有日志广播排队，保证同一时间最多保留一个计时器。
+	menuStartMu         sync.Mutex  // 一条龙与配置组共用启动门禁，防止跨菜单重复派发。
+	menuStarting        bool        // 原生菜单启动期间拒绝重复点击，旧接口没有幂等保证。
+	hotKeyPressMu       sync.Mutex  // 快捷键控制接口没有幂等保证，独立限制并发派发。
+	hotKeyPressing      bool        // 前一次按键尚未结束时拒绝后续点击。
+	adapterInitMu       sync.Mutex  // 菜单首次读取时串行探测适配器，避免并发创建多个连接适配器。
 	// 代办与每个连接的处理结果分别保存，持久文件损坏时禁止覆盖。
 	todos        []storage.TodoRecord
 	todosBlocked bool
@@ -97,11 +99,33 @@ func New() (*Service, error) {
 	cache, cacheNotice := store.LoadCache()
 	journal, journalNotice := store.LoadJournal()
 	todos, todoErr := store.LoadTodos()
+	customSoundFallback := false
+	customSoundConfigured := config.Preferences.Notifications.KeywordSoundType == profile.KeywordSoundTypeCustom
+	for _, rule := range config.KeywordRules {
+		customSoundConfigured = customSoundConfigured || rule.SoundType == profile.KeywordSoundTypeCustom
+	}
+	// 启动时检查自定义音效，避免把失效文件继续写入运行状态。
+	if customSoundConfigured && !store.ValidKeywordSound() {
+		config.Preferences.Notifications.KeywordSoundType = profile.DefaultKeywordSoundType
+		config.Preferences.Notifications.KeywordSoundCustomName = ""
+		for i := range config.KeywordRules {
+			if config.KeywordRules[i].SoundType == profile.KeywordSoundTypeCustom {
+				config.KeywordRules[i].SoundType = profile.DefaultKeywordSoundType
+				config.KeywordRules[i].SoundCustomName = ""
+			}
+		}
+		customSoundFallback = true
+		_ = store.Save(config)
+	}
 	s := &Service{store: store, credentials: credential.New(), config: config, sessionKeys: map[string]string{}, cache: cache, journal: journal, journalBlocked: journalNotice != "", materialHistoryOnly: true, targetHistoryOnly: true}
 	// 本版动作与台词始终可展示，运行期间不沿用旧版气泡和勿扰偏好。
 	s.config.Preferences.Notifications.Bubble = true
 	s.config.Preferences.Notifications.QuietHoursEnabled = false
 	s.state = AppState{Connection: ConnectionState{Status: "disconnected"}, Notifications: []Notification{}, Commands: []autobgi.CommandReceipt{}, EventStatus: "disconnected", LogStream: LogStreamState{Status: "disconnected", Logs: []LogLine{}}, Notice: strings.Join(nonempty(notice, cacheNotice, journalNotice), "；")}
+	// 自定义音效文件缺失或损坏时自动回退内置提示音，不能阻止桌宠启动。
+	if customSoundFallback {
+		s.state.Notice = strings.Join(nonempty(s.state.Notice, "自定义关键词音效缺失或损坏，已回退安静陪伴语音"), "；")
+	}
 	// 恢复代办前保留损坏文件，过期记录清理失败时不伪造已经删除。
 	s.todos, s.todosBlocked = todos, todoErr != nil
 	if todoErr != nil {
@@ -218,6 +242,45 @@ func (s *Service) snapshotLocked() AppState {
 // publish 在锁外调用宿主事件回调，避免窗口事件回调造成死锁。
 func (s *Service) publish() {
 	s.mu.Lock()
+	// 普通状态已经需要立即可见时，取消等待中的日志合并，避免随后重复广播同一份快照。
+	if s.logPublishPending {
+		if s.logPublishTimer != nil {
+			s.logPublishTimer.Stop()
+		}
+		s.logPublishTimer = nil
+		s.logPublishPending = false
+	}
+	value := s.snapshotLocked()
+	emit := s.emit
+	s.mu.Unlock()
+	if emit != nil {
+		emit(value)
+	}
+}
+
+// scheduleLogPublish 将高频日志状态合并到 100 毫秒窗口，动作事件仍由独立队列逐条投递。
+func (s *Service) scheduleLogPublish() {
+	s.mu.Lock()
+	if s.closed || s.logPublishPending {
+		s.mu.Unlock()
+		return
+	}
+	s.logPublishPending = true
+	s.logPublishTimer = time.AfterFunc(100*time.Millisecond, s.flushLogPublish)
+	s.mu.Unlock()
+}
+
+// flushLogPublish 在合并窗口结束后只广播最新快照，减少 JSON 深拷贝和 WebView 重渲染。
+func (s *Service) flushLogPublish() {
+	s.mu.Lock()
+	if !s.logPublishPending || s.closed {
+		s.logPublishPending = false
+		s.logPublishTimer = nil
+		s.mu.Unlock()
+		return
+	}
+	s.logPublishPending = false
+	s.logPublishTimer = nil
 	value := s.snapshotLocked()
 	emit := s.emit
 	s.mu.Unlock()
@@ -749,6 +812,11 @@ func (s *Service) Shutdown() {
 		s.todoTimer.Stop()
 		s.todoTimer = nil
 	}
+	if s.logPublishTimer != nil {
+		s.logPublishTimer.Stop()
+		s.logPublishTimer = nil
+	}
+	s.logPublishPending = false
 	s.stopLocked()
 	s.emit = nil
 	s.logTriggerEmit = nil

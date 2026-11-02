@@ -10,11 +10,12 @@ import LiveLogPanel from '../components/LiveLogPanel.vue'
 type RuleAction = 'idle' | 'happy' | 'wave' | 'surprised' | 'sad'
 type TodoAction = '' | 'one_long' | 'script_group' | 'close_bgi_game' | 'shutdown'
 type KeywordTodo = { enabled: boolean; action: TodoAction; target: string; autoApprove: boolean }
-type KeywordRule = { id: string; keywords: string[]; action: RuleAction; text: string; enabled: boolean; todo?: KeywordTodo }
-type RuleDraft = { id: string; keywordsText: string; action: RuleAction; text: string; enabled: boolean; todo: KeywordTodo }
+type KeywordRule = { id: string; keywords: string[]; action: RuleAction; text: string; enabled: boolean; soundEnabled?: boolean; soundType?: string; soundCustomName?: string; todo?: KeywordTodo }
+type RuleDraft = { id: string; keywordsText: string; action: RuleAction; text: string; enabled: boolean; soundEnabled: boolean; soundType: KeywordSoundType; soundCustomName: string; todo: KeywordTodo }
 type LogEntry = { time: string; text: string }
 type LogStream = { status: string; fileName: string; logs: LogEntry[]; error: string; droppedTriggers?: number }
-type PanelState = AppState & { keywordRules?: KeywordRule[]; logStream?: LogStream; preferences: AppState['preferences'] & { notifications: AppState['preferences']['notifications'] & { pickupEnabled?: boolean } } }
+type KeywordSoundType = 'none' | 'info' | 'question' | 'warning' | 'error' | 'ok' | 'custom'
+type PanelState = AppState & { keywordRules?: KeywordRule[]; logStream?: LogStream; preferences: AppState['preferences'] & { notifications: AppState['preferences']['notifications'] & { pickupEnabled?: boolean; keywordSoundCustomName?: string } } }
 
 const store = useAppStore()
 const petState = computed(() => store.state as PanelState | null)
@@ -34,6 +35,15 @@ const actions: { value: RuleAction; label: string }[] = [
   { value: 'surprised', label: '惊讶' },
   { value: 'sad', label: '难过' },
 ]
+const soundOptions: { value: KeywordSoundType; label: string }[] = [
+  { value: 'none', label: '不播放音效' },
+  { value: 'info', label: '安静陪伴语音' },
+  { value: 'question', label: '开心语音' },
+  { value: 'warning', label: '挥手语音' },
+  { value: 'error', label: '难过语音' },
+  { value: 'ok', label: '惊讶语音' },
+  { value: 'custom', label: '自定义音效（WAV）' },
+]
 function navigate(section: string) { store.section = section === 'rules' ? 'settings' : section }
 
 // 即时保存拾取开关；失败时继续显示宿主中实际保存的状态。
@@ -43,6 +53,88 @@ async function setPickupEnabled(event: Event) {
   const enabled = input.checked
   input.checked = pickupEnabled.value
   await store.run(async () => store.accept(await api.updatePickupEnabled(enabled)))
+}
+// 只接受后端白名单中的规则音效类型，旧配置或损坏值统一回退为关闭。
+function normalizeKeywordSoundType(value?: string): KeywordSoundType {
+  return soundOptions.some(item => item.value === value) ? value as KeywordSoundType : 'none'
+}
+const keywordSoundCustomName = computed(() => petState.value?.preferences.notifications.keywordSoundCustomName?.trim() || '')
+const customSoundReady = computed(() => keywordSoundCustomName.value.length > 0)
+// 宿主负责选择并复制 WAV 文件；取消选择时保留当前状态，不触发错误提示。
+async function selectKeywordCustomSound(rule?: RuleDraft) {
+  if (!store.native || store.busy) return
+  const next = await store.run(async () => {
+    const state = await (await desktop()).SelectKeywordCustomSound()
+    store.accept(state)
+    return state
+  })
+  if (rule && next?.preferences.notifications.keywordSoundCustomName) {
+    rule.soundEnabled = true
+    rule.soundType = 'custom'
+    rule.soundCustomName = next.preferences.notifications.keywordSoundCustomName
+  } else if (next?.preferences.notifications.keywordSoundCustomName) {
+    // 替换共享 WAV 后同步未保存草稿中的展示文件名，导出规则不会携带旧名称。
+    for (const draft of rules.value) {
+      if (draft.soundType === 'custom') {
+        draft.soundCustomName = next.preferences.notifications.keywordSoundCustomName
+      }
+    }
+  }
+}
+// 规则选择自定义音效时先确保共享素材库已有可用 WAV，取消选择则恢复原规则类型。
+async function setRuleSoundType(rule: RuleDraft, event: Event) {
+  const input = event.target as HTMLSelectElement
+  const soundType = normalizeKeywordSoundType(input.value)
+  const previous = rule.soundType
+  if (soundType === 'custom' && !customSoundReady.value) {
+    input.value = previous
+    await selectKeywordCustomSound(rule)
+    return
+  }
+  rule.soundType = soundType
+  rule.soundCustomName = soundType === 'custom' ? keywordSoundCustomName.value : ''
+  rule.soundEnabled = soundType !== 'none'
+}
+// 清除自定义文件后由宿主删除共享素材，规则草稿中的自定义音效回退为安静陪伴。
+async function clearKeywordCustomSound() {
+  if (!store.native || store.busy) return
+  const result = await store.run(async () => {
+    const next = await (await desktop()).ClearKeywordCustomSound()
+    store.accept(next)
+    return next
+  })
+  if (result) {
+    // 清除共享 WAV 后，将草稿中依赖它的规则回退为安静陪伴语音，保持规则仍可提醒。
+    for (const rule of rules.value) {
+      if (rule.soundType === 'custom') {
+        rule.soundEnabled = true
+        rule.soundType = 'info'
+        rule.soundCustomName = ''
+      }
+    }
+  }
+}
+const soundPreviewingRule = ref('')
+// 试听是本地即时操作，不占用规则保存的忙碌状态，也不修改规则保存状态。
+async function previewKeywordSound(rule: RuleDraft) {
+  if (!store.native || soundPreviewingRule.value || !rule.soundEnabled || rule.soundType === 'none') return
+  if (rule.soundType === 'custom' && !customSoundReady.value) return
+  soundPreviewingRule.value = rule.id
+  try {
+    await store.runLocal(async () => (await desktop()).PreviewKeywordSound(rule.soundType))
+  } finally {
+    soundPreviewingRule.value = ''
+  }
+}
+// 开启本条规则音效时自动选择默认内置语音，避免 none 状态被误保存为无声。
+function toggleRuleSound(rule: RuleDraft) {
+  if (rule.soundEnabled && rule.soundType === 'none') {
+    rule.soundType = 'info'
+  }
+  if (!rule.soundEnabled) {
+    rule.soundType = 'none'
+    rule.soundCustomName = ''
+  }
 }
 
 // 保存中的状态广播不能覆盖正在编辑的草稿；规则保存成功后再同步服务端副本。
@@ -60,7 +152,14 @@ function normalizeTodo(todo?: Partial<KeywordTodo>): KeywordTodo {
 }
 function applyRules(items: KeywordRule[]) {
   applyingRules.value = true
-  rules.value = items.map(item => ({ ...item, keywordsText: (item.keywords || []).join('，'), todo: normalizeTodo(item.todo) }))
+  rules.value = items.map(item => ({
+    ...item,
+    keywordsText: (item.keywords || []).join('，'),
+    soundEnabled: item.soundEnabled === true,
+    soundType: normalizeKeywordSoundType(item.soundType),
+    soundCustomName: item.soundCustomName?.trim() || '',
+    todo: normalizeTodo(item.todo),
+  }))
   rulesDirty.value = false
   applyingRules.value = false
 }
@@ -81,7 +180,7 @@ function parseKeywords(value: string): string[] {
 }
 function addRule() {
   if (rules.value.length >= 40) { rulesNotice.value = '最多可以设置 40 条规则。'; return }
-  rules.value.push({ id: crypto.randomUUID(), keywordsText: '', action: 'wave', text: '', enabled: true, todo: normalizeTodo() })
+  rules.value.push({ id: crypto.randomUUID(), keywordsText: '', action: 'wave', text: '', enabled: true, soundEnabled: false, soundType: 'none', soundCustomName: '', todo: normalizeTodo() })
 }
 function moveRule(index: number, offset: number) {
   const next = index + offset
@@ -111,7 +210,17 @@ function prepareRules(): KeywordRule[] | null {
     if ([...rule.text].length > 300) { rulesNotice.value = `第 ${index + 1} 条台词不能超过 300 个字符。`; return null }
     if (rule.todo.enabled && !rule.todo.action) { rulesNotice.value = `第 ${index + 1} 条规则请选择代办处理动作。`; return null }
     if (rule.todo.enabled && (rule.todo.action === 'one_long' || rule.todo.action === 'script_group') && !rule.todo.target.trim()) { rulesNotice.value = `第 ${index + 1} 条规则请选择代办的配置名称。`; return null }
-    prepared.push({ id: rule.id, keywords, action: rule.action, text: rule.text, enabled: rule.enabled, todo: { ...rule.todo } })
+    prepared.push({
+      id: rule.id,
+      keywords,
+      action: rule.action,
+      text: rule.text,
+      enabled: rule.enabled,
+      soundEnabled: rule.soundEnabled === true,
+      soundType: rule.soundEnabled ? normalizeKeywordSoundType(rule.soundType) : 'none',
+      soundCustomName: rule.soundEnabled && rule.soundType === 'custom' ? rule.soundCustomName : '',
+      todo: { ...rule.todo },
+    })
   }
   return prepared
 }
@@ -125,7 +234,17 @@ async function importRules() {
     return
   }
   for (const rule of imported) {
-    rules.value.push({ id: crypto.randomUUID(), keywordsText: rule.keywords.join('，'), action: rule.action as RuleAction, text: rule.text, enabled: rule.enabled, todo: normalizeTodo(rule.todo ? { ...rule.todo, action: rule.todo.action as TodoAction } : undefined) })
+    rules.value.push({
+      id: crypto.randomUUID(),
+      keywordsText: rule.keywords.join('，'),
+      action: rule.action as RuleAction,
+      text: rule.text,
+      enabled: rule.enabled,
+      soundEnabled: rule.soundEnabled === true,
+      soundType: normalizeKeywordSoundType(rule.soundType),
+      soundCustomName: rule.soundCustomName?.trim() || '',
+      todo: normalizeTodo(rule.todo ? { ...rule.todo, action: rule.todo.action as TodoAction } : undefined),
+    })
   }
   rulesNotice.value = imported.length ? `已导入 ${imported.length} 条规则，请检查动作和自动审批设置后保存。` : '文件中没有规则。'
 }
@@ -262,6 +381,15 @@ function toggleConnection(id: string) {
         <div class="hero"><div class="hero-copy"><span class="hero-kicker"><i />YOUR DESKTOP COMPANION</span><h2>让日志有回应，<br /><em>让陪伴更有趣。</em></h2><p>设置关键词、动作和台词，让芙宁娜陪你留意 ABGI 的每个瞬间。</p><button class="hero-button" :disabled="rules.length >= 40 || store.busy" @click="addRule"><AppIcon name="plus" :size="16" />添加关键词规则</button></div><div class="hero-portrait" :class="`pet-action-${previewAction}`"><div class="portrait-ring" /><span class="portrait-star star-a">✦</span><span class="portrait-star star-b">✧</span><PetCanvas :key="previewRevision" :action="previewAction" :skin-id="store.state?.preferences.pet.skinId" /><span class="portrait-caption">ABGI-PET / FURINA</span></div></div>
         <!-- 拾取开关独立于规则草稿，即时保存且显示宿主实际状态。 -->
         <div class="pickup-setting"><div><strong>拾取通知</strong><p>收到交互或拾取日志时，芙宁娜会吃掉写有物品名称的小蛋糕。</p></div><label class="toggle-label"><input type="checkbox" :checked="pickupEnabled" :disabled="!store.native || store.busy" @change="setPickupEnabled" /><span class="toggle" /><span class="sr-only">开启拾取通知</span></label></div>
+        <!-- 自定义 WAV 是全局素材库，但每条关键词规则单独决定是否使用和播放哪一种音效。 -->
+        <div class="pickup-setting sound-setting">
+          <div class="sound-copy"><strong>关键词音效素材</strong><p>每条规则都可以单独开启音效并选择五种芙宁娜语音；需要时也可以导入一份自定义 WAV 作为规则音效素材。</p></div>
+          <div class="custom-sound-actions">
+            <strong class="custom-sound-name">{{ customSoundReady ? keywordSoundCustomName : '尚未导入自定义 WAV' }}</strong>
+            <button class="secondary-button" type="button" :disabled="!store.native || store.busy" @click="selectKeywordCustomSound()">选择 WAV 音效</button>
+            <button v-if="customSoundReady" class="text-action danger" type="button" :disabled="!store.native || store.busy" @click="clearKeywordCustomSound">清除自定义音效</button>
+          </div>
+        </div>
         <div class="content-heading"><div><span class="overline">KEYWORD AUTOMATION</span><h2>关键词规则 <span>{{ rules.length }} / 40</span></h2><p>关键词不区分大小写；一条日志只执行第一条匹配规则。动作持续 5 秒后恢复待机，连续命中依次播放。</p></div><div class="rule-actions"><button class="secondary-button" :disabled="!store.native || store.busy" @click="importRules">导入规则</button><button class="secondary-button" :disabled="!store.native || store.busy" @click="exportRules">导出规则</button><button class="secondary-button" :disabled="rules.length >= 40 || store.busy" @click="addRule"><AppIcon name="plus" :size="16" />添加规则</button></div></div>
         <div v-if="rulesNotice" class="message info-message" role="status">{{ rulesNotice }}</div>
         <div v-if="!rules.length" class="empty-rules"><span class="empty-diamond">✧</span><h3>还没有关键词规则</h3><p>添加一条规则，为日志中的关键词指定动作和台词。</p><button class="secondary-button" :disabled="store.busy" @click="addRule">添加第一条规则 <AppIcon name="arrow" :size="15" /></button></div>
@@ -269,6 +397,15 @@ function toggleConnection(id: string) {
           <article v-for="(rule, index) in rules" :key="rule.id" class="rule-card">
             <div class="rule-top"><span class="rule-number">{{ String(index + 1).padStart(2, '0') }}</span><div><strong>关键词规则</strong><small>{{ rule.enabled ? '已启用' : '已暂停' }}</small></div><button class="order-button" :disabled="store.busy || index === 0" :aria-label="`上移第 ${index + 1} 条规则`" title="上移规则" @click="moveRule(index, -1)">↑</button><button class="order-button" :disabled="store.busy || index === rules.length - 1" :aria-label="`下移第 ${index + 1} 条规则`" title="下移规则" @click="moveRule(index, 1)">↓</button><label class="toggle-label"><input v-model="rule.enabled" type="checkbox" :disabled="store.busy" /><span class="toggle" /><span class="sr-only">启用规则 {{ index + 1 }}</span></label><button class="remove-button" :disabled="store.busy" :aria-label="`删除第 ${index + 1} 条规则`" @click="rules.splice(index, 1)"><AppIcon name="close" :size="16" /></button></div>
             <div class="rule-fields"><label class="rule-keywords">触发关键词 <small>多个关键词用逗号或换行分隔</small><textarea v-model="rule.keywordsText" :disabled="store.busy" rows="2" placeholder="例如：完成，结束" /></label><label>桌宠动作<select v-model="rule.action" :disabled="store.busy" @change="preview(rule.action)"><option v-for="action in actions" :key="action.value" :value="action.value">{{ action.label }}</option></select></label><label>要说的话 <small>留空则显示日志</small><input v-model="rule.text" :disabled="store.busy" maxlength="300" placeholder="例如：演出圆满结束！" /></label></div>
+            <!-- 音效设置属于当前规则，切换规则不会覆盖其他规则的选择。 -->
+            <div class="rule-sound">
+              <label class="rule-sound-toggle"><input v-model="rule.soundEnabled" type="checkbox" :disabled="store.busy" @change="toggleRuleSound(rule)" /><span class="toggle" /><span>开启本规则音效</span></label>
+              <select class="sound-select rule-sound-select" :value="rule.soundType" :disabled="store.busy || !rule.soundEnabled" aria-label="选择本规则音效" @change="setRuleSoundType(rule, $event)">
+                <option v-for="option in soundOptions" :key="option.value" :value="option.value">{{ option.label }}</option>
+              </select>
+              <button class="sound-preview" type="button" :title="rule.soundEnabled ? '试听本条规则音效' : '请先开启本规则音效'" :aria-label="soundPreviewingRule === rule.id ? '正在试听本条规则音效' : '试听本条规则音效'" :disabled="!store.native || store.busy || !rule.soundEnabled || rule.soundType === 'none' || soundPreviewingRule !== '' || (rule.soundType === 'custom' && !customSoundReady)" @click="previewKeywordSound(rule)"><span class="sound-preview-mark" aria-hidden="true">{{ soundPreviewingRule === rule.id ? '…' : '▶' }}</span>{{ soundPreviewingRule === rule.id ? '试听中…' : '试听本条音效' }}</button>
+              <small v-if="rule.soundType === 'custom' && rule.soundEnabled" class="rule-sound-help">{{ customSoundReady ? '使用已导入的自定义 WAV。' : '请先在上方导入自定义 WAV。' }}</small>
+            </div>
             <!-- 自动审批逐条启用，关闭代办时同时清除自动审批授权。 -->
             <div class="todo-rule">
               <label class="todo-toggle"><input v-model="rule.todo.enabled" type="checkbox" :disabled="store.busy" @change="!rule.todo.enabled && (rule.todo.autoApprove = false)" /><span>命中时创建代办</span></label>
@@ -341,11 +478,17 @@ function toggleConnection(id: string) {
 .order-button{border:0;background:#f1f7f9;border-radius:7px;color:#6c91a3;padding:5px 8px;font-size:13px}
 /* 拾取通知与关键词规则分开保存，外观沿用当前水蓝色卡片。 */
 .pickup-setting{display:flex;align-items:center;justify-content:space-between;gap:18px;margin-top:18px;padding:17px 20px;background:#fff;border:1px solid var(--line);border-radius:13px;box-shadow:0 5px 18px #264b6410}.pickup-setting strong{font-size:12px;color:#48687e}.pickup-setting p{font-size:10px;color:#8a9ead;line-height:1.8;margin-top:5px}
+/* 每条规则的音效选择与试听按钮在窄窗口中保持可换行。 */
+.sound-copy{min-width:0;flex:1}.custom-sound-name{display:block;max-width:220px;overflow:hidden;color:#3c647b;font-size:11px;text-overflow:ellipsis;white-space:nowrap}.sound-select{min-width:132px;padding:8px 10px;border:1px solid #dce8ed;border-radius:7px;background:#f9fcfd;color:#294b61;font-size:11px}.sound-select:focus{border-color:#83acc0;box-shadow:0 0 0 3px #b8d8e52b;outline:none}.sound-preview{display:inline-flex;align-items:center;justify-content:center;gap:7px;min-width:104px;min-height:36px;padding:9px 15px;border:1px solid #2d6887;border-radius:9px;background:linear-gradient(135deg,#2d7899,#275a7a);box-shadow:0 5px 12px #275a7a2b;color:#fff;font-size:11px;font-weight:700;letter-spacing:.2px;transition:transform .18s ease,box-shadow .18s ease,background .18s ease}.sound-preview:hover{background:linear-gradient(135deg,#398aac,#2d6887);box-shadow:0 7px 15px #275a7a3d;transform:translateY(-1px)}.sound-preview:active{transform:translateY(0);box-shadow:0 3px 8px #275a7a2b}.sound-preview:disabled{cursor:wait;opacity:.58;transform:none;box-shadow:none}.sound-preview-mark{display:inline-grid;place-items:center;width:17px;height:17px;border:1px solid #ffffff80;border-radius:50%;font-size:8px;line-height:1}
+/* 规则级音效卡片明确显示开关、类型和试听入口。 */
+.rule-sound{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:16px;padding:12px 13px;border:1px solid #e3eef3;border-radius:9px;background:#f8fcfd}.rule-sound-toggle{display:inline-flex;align-items:center;gap:8px;color:#557184;font-size:11px;font-weight:600;cursor:pointer}.rule-sound-toggle input{position:absolute;opacity:0}.rule-sound-toggle .toggle{width:32px;height:19px}.rule-sound-toggle .toggle::after{width:13px;height:13px;top:3px;left:3px}.rule-sound-toggle input:checked+.toggle::after{transform:translateX(13px)}.rule-sound-select{min-width:150px}.rule-sound-help{color:#7892a1;font-size:10px;line-height:1.6}
+/* 自定义音效状态与操作单独成行，明确展示文件是否可试听。 */
+.custom-sound-row{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-basis:100%;padding-top:12px;margin-top:2px;border-top:1px solid #edf3f5}.custom-sound-status{min-width:0;display:flex;flex-direction:column;gap:4px}.custom-sound-status strong{overflow:hidden;color:#3c647b;font-size:11px;text-overflow:ellipsis;white-space:nowrap}.custom-sound-status small{color:#7892a1;font-size:10px;line-height:1.7}.custom-sound-actions{display:flex;align-items:center;justify-content:flex-end;flex-wrap:wrap;gap:10px}.custom-sound-actions .secondary-button{padding:8px 11px;font-size:10px}.custom-sound-actions .text-action{white-space:nowrap}
 /* 连接表单展示凭据状态，页脚沿用统一的间距与主题颜色。 */
 .page-intro{margin:4px 0 24px}.page-intro h2{font-family:Georgia,"Microsoft YaHei",serif;font-size:23px;font-weight:500;margin-top:12px}.page-intro p{max-width:520px}.connection-card{display:flex;align-items:center;gap:15px;padding:20px;margin-bottom:12px}.connection-icon{display:grid;place-items:center;flex:none;width:45px;height:45px;border-radius:12px;background:#eef6f8;color:#7098aa}.connection-details{min-width:0;flex:1}.connection-title{display:flex;align-items:center;gap:10px;flex-wrap:wrap}.connection-title strong{font-size:13px}.connection-details p{font-family:Consolas,monospace;font-size:11px;color:#7993a3;margin-top:7px;overflow-wrap:anywhere}.connection-details small{display:block;color:#a0b0ba;font-size:10px;margin-top:7px}.mini-badge{font-size:9px;padding:4px 8px}.connection-buttons{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.danger{color:#b77b71}.add-connection{margin-top:9px}.form-card{padding:23px;margin-top:18px}.form-title{display:flex;justify-content:space-between;align-items:center;margin-bottom:21px}.form-title h3{font-size:15px;margin-top:8px}.form-card>label{margin-bottom:18px}.form-card>label small{font-weight:400;line-height:1.8;color:#9aadb9}.check-options{display:flex;flex-wrap:wrap;gap:12px 22px;font-size:11px;color:#6c8798}.check-options label{display:flex;gap:7px;align-items:center}.check-options input{accent-color:#467a92}.form-warning{font-size:10px;color:#b58068;line-height:1.8;margin-top:12px}.form-actions{display:flex;justify-content:flex-end;gap:9px;border-top:1px solid #edf3f5;padding-top:18px;margin-top:21px}.panel-footer{display:flex;justify-content:space-between;gap:10px;border-top:1px solid #dce8ed;margin-top:38px;padding:18px 0 22px;color:#a4b4bd;font-family:Georgia,serif;font-size:9px;letter-spacing:.7px}.panel-footer span:first-child{font-style:italic}@keyframes rise{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:translateY(0)}}
 /* 窄窗口折叠侧栏和表单，仍保留所有编辑与连接入口。 */
 @media(max-width:1000px){.furina-sidebar{width:190px;padding:28px 14px}.furina-main{width:calc(100% - 190px);margin-left:190px;padding:30px 25px 0}.hero-copy{padding:30px}.hero h2{font-size:24px}.hero-portrait{right:0}.hero-portrait .pet-art{width:185px;height:205px}.portrait-ring{width:180px;height:180px}.connection-card{flex-wrap:wrap}.connection-buttons{width:100%;padding-left:60px}}
-@media(max-width:700px){.furina-sidebar{width:64px;padding:23px 9px}.brand-mark{justify-content:center}.brand-gem{width:38px;height:38px}.brand-mark div,.sidebar-caption,.furina-sidebar nav button span,.furina-sidebar nav button b,.sidebar-status div,.sidebar-foot{display:none}.furina-sidebar nav{margin-top:36px}.furina-sidebar nav button{justify-content:center;padding:13px 0}.sidebar-status{justify-content:center;padding:20px 0}.furina-main{width:calc(100% - 64px);margin-left:64px;padding:24px 18px 0}.topline h1{font-size:22px}.hero{min-height:320px}.hero-copy{max-width:100%;padding:26px}.hero h2{font-size:23px}.hero p{max-width:240px}.hero-portrait{top:auto;bottom:0;right:5px;width:145px;height:150px;opacity:.95}.hero-portrait .pet-art{width:140px;height:150px;bottom:0}.portrait-ring{width:130px;height:130px}.portrait-caption,.portrait-star{display:none}.content-heading{align-items:flex-start;flex-direction:column}.rule-fields{grid-template-columns:1fr}.rule-keywords{grid-column:auto}.connection-buttons{padding-left:0}}
+@media(max-width:700px){.furina-sidebar{width:64px;padding:23px 9px}.brand-mark{justify-content:center}.brand-gem{width:38px;height:38px}.brand-mark div,.sidebar-caption,.furina-sidebar nav button span,.furina-sidebar nav button b,.sidebar-status div,.sidebar-foot{display:none}.furina-sidebar nav{margin-top:36px}.furina-sidebar nav button{justify-content:center;padding:13px 0}.sidebar-status{justify-content:center;padding:20px 0}.furina-main{width:calc(100% - 64px);margin-left:64px;padding:24px 18px 0}.topline h1{font-size:22px}.hero{min-height:320px}.hero-copy{max-width:100%;padding:26px}.hero h2{font-size:23px}.hero p{max-width:240px}.hero-portrait{top:auto;bottom:0;right:5px;width:145px;height:150px;opacity:.95}.hero-portrait .pet-art{width:140px;height:150px;bottom:0}.portrait-ring{width:130px;height:130px}.portrait-caption,.portrait-star{display:none}.content-heading{align-items:flex-start;flex-direction:column}.rule-fields{grid-template-columns:1fr}.rule-keywords{grid-column:auto}.connection-buttons{padding-left:0}.sound-setting{align-items:flex-start;flex-direction:column}.sound-copy{width:100%}.custom-sound-actions{width:100%;justify-content:flex-start}.rule-sound{align-items:flex-start;flex-direction:column}.rule-sound-select,.rule-sound .sound-preview{width:100%}}
 @media(max-width:420px){.top-actions .round-button{display:none}.connection-badge{font-size:9px}.rule-card{padding:17px}.rule-bottom{align-items:flex-start;flex-direction:column}.save-bar{justify-content:space-between}.panel-footer{font-size:8px}}
 @media(prefers-reduced-motion:reduce){.page-content{animation:none}.toggle,.toggle::after{transition:none}}
 /* ABGI-PET 以深海蓝导航和清透蓝白卡片统一设置界面。 */

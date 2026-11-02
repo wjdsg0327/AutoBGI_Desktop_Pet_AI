@@ -46,7 +46,7 @@ onBeforeUnmount(() => { loadVersion++; renderer?.destroy(); renderer = null })
     <canvas v-show="!failed && action !== 'pickup'" ref="canvas" aria-label="芙宁娜桌宠" role="img" />
     <!-- 食物名称以普通文本叠加，碎屑只参与动画，不影响鼠标操作。 -->
     <div v-show="action === 'pickup' && visible" class="pickup-art">
-      <img class="pickup-character" src="/pets/furina/pickup.png" alt="芙宁娜吃小蛋糕" @load="emit('pickupReady')" @error="emit('pickupReady')" />
+      <img class="pickup-character" src="/pets/furina/pickup.webp" alt="芙宁娜吃小蛋糕" @load="emit('pickupReady')" @error="emit('pickupReady')" />
       <span class="pickup-crumb pickup-crumb-one" aria-hidden="true" />
       <span class="pickup-crumb pickup-crumb-two" aria-hidden="true" />
       <span class="pickup-crumb pickup-crumb-three" aria-hidden="true" />

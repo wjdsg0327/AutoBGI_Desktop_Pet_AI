@@ -30,13 +30,16 @@ type LogLine struct {
 	Text string `json:"text"`
 }
 
-// LogTrigger 是一条规则命中后的独立事件，编号在应用运行期间递增。
+// LogTrigger 是一条规则命中后的独立事件，编号在应用运行期间递增，并携带规则音效设置。
 type LogTrigger struct {
-	ID         uint64 `json:"id"`
-	Generation uint64 `json:"generation"`
-	Action     string `json:"action"`
-	Text       string `json:"text"`
-	Keyword    string `json:"keyword"`
+	ID              uint64 `json:"id"`
+	Generation      uint64 `json:"generation"`
+	Action          string `json:"action"`
+	Text            string `json:"text"`
+	Keyword         string `json:"keyword"`
+	SoundEnabled    bool   `json:"soundEnabled"`
+	SoundType       string `json:"soundType"`
+	SoundCustomName string `json:"soundCustomName,omitempty"`
 }
 
 // LogPickup 是一条拾取日志中的独立物品事件。

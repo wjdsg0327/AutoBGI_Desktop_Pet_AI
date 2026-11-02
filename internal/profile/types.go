@@ -56,11 +56,49 @@ type PetPreferences struct {
 	RecoveryShortcut string  `json:"recoveryShortcut"`
 }
 
-// NotificationPreferences 首版仅实现气泡及勿扰，不承诺未实现的声音渠道。
+// 关键词音效类型兼容旧配置，并映射到内置芙宁娜 MP3 或用户自定义 WAV。
+const (
+	// KeywordSoundTypeNone 表示当前规则关闭音效。
+	KeywordSoundTypeNone     = "none"
+	DefaultKeywordSoundType  = "info"
+	KeywordSoundTypeOK       = "ok"
+	KeywordSoundTypeInfo     = "info"
+	KeywordSoundTypeQuestion = "question"
+	KeywordSoundTypeWarning  = "warning"
+	KeywordSoundTypeError    = "error"
+	// KeywordSoundTypeCustom 表示用户复制到应用数据目录的 WAV 音效。
+	KeywordSoundTypeCustom = "custom"
+)
+
+// ValidKeywordSoundType 只接受关闭、内置语音和自定义 WAV 类型。
+func ValidKeywordSoundType(value string) bool {
+	switch value {
+	case KeywordSoundTypeNone, KeywordSoundTypeOK, KeywordSoundTypeInfo, KeywordSoundTypeQuestion, KeywordSoundTypeWarning, KeywordSoundTypeError, KeywordSoundTypeCustom:
+		return true
+	default:
+		return false
+	}
+}
+
+// NormalizeKeywordSoundType 兼容旧配置或手工修改配置时回退到安静陪伴语音。
+func NormalizeKeywordSoundType(value string) string {
+	if ValidKeywordSoundType(value) {
+		return value
+	}
+	return DefaultKeywordSoundType
+}
+
+// NotificationPreferences 保存桌宠气泡、勿扰、旧版全局音效兼容字段和拾取通知开关。
 type NotificationPreferences struct {
 	Bubble            bool `json:"bubble"`
 	QuietHoursEnabled bool `json:"quietHoursEnabled"`
-	PickupEnabled     bool `json:"pickupEnabled"` // 仅在用户开启后为拾取日志播放蛋糕动作。
+	// KeywordSoundEnabled 仅用于迁移旧配置，当前规则触发使用 KeywordRule.SoundEnabled。
+	KeywordSoundEnabled bool `json:"keywordSoundEnabled"`
+	// KeywordSoundType 仅用于迁移旧配置和兼容旧绑定，当前规则保存自己的音效类型。
+	KeywordSoundType string `json:"keywordSoundType"`
+	// KeywordSoundCustomName 仅保存用户选中音效的文件名，不保存外部绝对路径。
+	KeywordSoundCustomName string `json:"keywordSoundCustomName,omitempty"`
+	PickupEnabled          bool   `json:"pickupEnabled"` // 仅在用户开启后为拾取日志播放蛋糕动作。
 }
 
 // StartupPreferences 由原生桌面服务配置登录启动，默认关闭。
@@ -83,14 +121,20 @@ type KeywordTodo struct {
 	AutoApprove bool   `json:"autoApprove,omitempty"`
 }
 
-// KeywordRule 定义一条日志命中后的动作、台词和可选代办。
+// KeywordRule 定义一条日志命中后的动作、台词、独立音效和可选代办。
 type KeywordRule struct {
-	ID       string       `json:"id"`
-	Keywords []string     `json:"keywords"`
-	Action   string       `json:"action"`
-	Text     string       `json:"text"`
-	Enabled  bool         `json:"enabled"`
-	Todo     *KeywordTodo `json:"todo,omitempty"`
+	ID       string   `json:"id"`
+	Keywords []string `json:"keywords"`
+	Action   string   `json:"action"`
+	Text     string   `json:"text"`
+	Enabled  bool     `json:"enabled"`
+	// SoundEnabled 只控制当前规则，不受其他规则的音效设置影响。
+	SoundEnabled bool `json:"soundEnabled,omitempty"`
+	// SoundType 选择当前规则的内置 MP3 或应用中已导入的自定义 WAV 素材。
+	SoundType string `json:"soundType,omitempty"`
+	// SoundCustomName 仅保存当前规则展示用的自定义文件名，不保存绝对路径。
+	SoundCustomName string       `json:"soundCustomName,omitempty"`
+	Todo            *KeywordTodo `json:"todo,omitempty"`
 }
 
 // Config 按版本保存资料和偏好，不保存接口原始响应或密钥。
@@ -106,6 +150,6 @@ type Config struct {
 func DefaultConfig() Config {
 	return Config{SchemaVersion: 1, Profiles: []Profile{}, Preferences: Preferences{
 		Pet:           PetPreferences{SkinID: "abgi-buddy", Scale: 1, AlwaysOnTop: true, Visible: true, RecoveryShortcut: "Ctrl+Shift+P"},
-		Notifications: NotificationPreferences{Bubble: true},
+		Notifications: NotificationPreferences{Bubble: true, KeywordSoundType: DefaultKeywordSoundType},
 	}}
 }

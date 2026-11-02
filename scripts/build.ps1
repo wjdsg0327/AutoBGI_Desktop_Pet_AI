@@ -1,4 +1,4 @@
-# 使用项目专用工具链和锁文件构建，绝不修改 AutoBGI 主项目的 Go 配置。
+﻿# 使用项目专用工具链和锁文件构建，绝不修改 AutoBGI 主项目的 Go 配置。
 param([switch]$Package, [switch]$SkipInstall, [string]$OutputDirectory = 'bin')
 $ErrorActionPreference = 'Stop'
 $root = Split-Path -Parent $PSScriptRoot
@@ -24,9 +24,24 @@ try {
     $env:GOARCH = 'amd64'
     $env:GOBIN = Join-Path $root '.tools'
     $wails = Join-Path $env:GOBIN 'wails3.exe'
-    # CLI 将版本写到标准错误流，合并捕获后再比较，避免每次构建都重新安装。
+    # 使用 .NET 直接捕获 CLI 的两个输出流，避免 Windows PowerShell 5.1 把正常的 stderr 当成异常。
     $wailsVersion = ''
-    if (Test-Path -LiteralPath $wails) { $wailsVersion = (& $wails version 2>&1 | Out-String).Trim() }
+    if (Test-Path -LiteralPath $wails) {
+        $versionProcess = New-Object System.Diagnostics.Process
+        $versionProcess.StartInfo = New-Object System.Diagnostics.ProcessStartInfo
+        $versionProcess.StartInfo.FileName = $wails
+        $versionProcess.StartInfo.Arguments = 'version'
+        $versionProcess.StartInfo.UseShellExecute = $false
+        $versionProcess.StartInfo.CreateNoWindow = $true
+        $versionProcess.StartInfo.RedirectStandardOutput = $true
+        $versionProcess.StartInfo.RedirectStandardError = $true
+        [void]$versionProcess.Start()
+        $versionStdout = $versionProcess.StandardOutput.ReadToEnd()
+        $versionStderr = $versionProcess.StandardError.ReadToEnd()
+        $versionProcess.WaitForExit()
+        if ($versionProcess.ExitCode -eq 0) { $wailsVersion = ($versionStdout + "`n" + $versionStderr).Trim() }
+        $versionProcess.Dispose()
+    }
     # 将稳定版 CLI 安装在当前项目，避免覆盖用户已安装的其他版本。
     if ($wailsVersion -ne 'v3.0.0') {
         go install github.com/wailsapp/wails/v3/cmd/wails3@v3.0.0
@@ -55,7 +70,8 @@ try {
     go build -tags production -trimpath -ldflags '-s -w -H windowsgui' -o $executable .
     if ($LASTEXITCODE -ne 0) { throw 'Windows 程序构建失败' }
     # 同时核对字符串版本，避免只有固定数值版本而在 Windows 属性中显示为空。
-    $windowsInfo = Get-Content -LiteralPath 'build/windows/info.json' -Raw | ConvertFrom-Json
+    # 明确按 UTF-8 读取资源元数据，避免 Windows PowerShell 5.1 用系统编码误读中文字段。
+    $windowsInfo = [IO.File]::ReadAllText((Join-Path $root 'build/windows/info.json'), [Text.UTF8Encoding]::new($false)) | ConvertFrom-Json
     $versionInfo = [System.Diagnostics.FileVersionInfo]::GetVersionInfo($executable)
     if ($versionInfo.FileVersion -ne $windowsInfo.fixed.file_version -or $versionInfo.ProductVersion -ne $windowsInfo.info.'0804'.ProductVersion) { throw 'Windows 程序版本资源与构建元数据不一致' }
     # 便携包无需管理员安装；程序配置和凭据不会进入压缩包。

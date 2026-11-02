@@ -34,6 +34,10 @@ export interface KeywordRuleInput {
   action: string
   text: string
   enabled: boolean
+  // 音效是规则自身的设置，不再依赖全局音效选择。
+  soundEnabled?: boolean
+  soundType?: string
+  soundCustomName?: string
   todo?: { enabled: boolean; action: string; target: string; autoApprove?: boolean }
 }
 
@@ -74,6 +78,12 @@ export async function desktop() {
     ShowPet: () => invoke<void>('DesktopAPI', 'ShowPet'),
     ShowPanel: () => invoke<void>('DesktopAPI', 'ShowPanel'),
     ShowContextMenu: () => invoke<void>('DesktopAPI', 'ShowContextMenu'),
+    // 试听只接受宿主白名单中的内置语音类型或已保存的自定义音效。
+    PreviewKeywordSound: (soundType: string) => invoke<void>('DesktopAPI', 'PreviewKeywordSound', soundType),
+    // 自定义音效由宿主弹出文件选择器并复制到用户数据目录，前端不接收任意本地路径。
+    SelectKeywordCustomSound: () => invoke<AppState>('DesktopAPI', 'SelectKeywordCustomSound'),
+    // 清除已复制的自定义音效并恢复默认内置语音配置。
+    ClearKeywordCustomSound: () => invoke<AppState>('DesktopAPI', 'ClearKeywordCustomSound'),
     // 分享文件只传递规则草稿，由宿主负责文件选择和格式校验。
     ImportKeywordRulesFile: () => invoke<KeywordRuleInput[] | null>('DesktopAPI', 'ImportKeywordRulesFile'),
     ExportKeywordRulesFile: (rules: KeywordRuleInput[]) => invoke<boolean>('DesktopAPI', 'ExportKeywordRulesFile', rules),

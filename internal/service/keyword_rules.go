@@ -86,6 +86,17 @@ func validateKeywordRules(rules []profile.KeywordRule) ([]profile.KeywordRule, e
 			return nil, fmt.Errorf("第 %d 条规则至少填写一个关键词", i+1)
 		}
 		rule.Keywords = keywords
+		// 缺失音效字段按安静陪伴语音补齐；是否播放仍由当前规则的独立开关控制。
+		rule.SoundType = profile.NormalizeKeywordSoundType(rule.SoundType)
+		if rule.SoundEnabled && rule.SoundType == profile.KeywordSoundTypeNone {
+			rule.SoundType = profile.DefaultKeywordSoundType
+		}
+		if !rule.SoundEnabled {
+			rule.SoundType = profile.KeywordSoundTypeNone
+		}
+		if rule.SoundType != profile.KeywordSoundTypeCustom {
+			rule.SoundCustomName = ""
+		}
 		result = append(result, rule)
 	}
 	return result, nil
@@ -106,6 +117,17 @@ func (s *Service) UpdateKeywordRules(input []profile.KeywordRule) (AppState, err
 	if s.closed {
 		s.mu.Unlock()
 		return s.GetState(), errors.New("应用正在退出")
+	}
+	for _, rule := range rules {
+		if rule.SoundEnabled && rule.SoundType == profile.KeywordSoundTypeCustom && !s.store.ValidKeywordSound() {
+			s.mu.Unlock()
+			return s.GetState(), errors.New("启用自定义关键词音效前，请先导入有效的 WAV 文件")
+		}
+	}
+	for i := range rules {
+		if rules[i].SoundType == profile.KeywordSoundTypeCustom && strings.TrimSpace(rules[i].SoundCustomName) == "" {
+			rules[i].SoundCustomName = s.config.Preferences.Notifications.KeywordSoundCustomName
+		}
 	}
 	previous := s.config.KeywordRules
 	s.config.KeywordRules = rules
