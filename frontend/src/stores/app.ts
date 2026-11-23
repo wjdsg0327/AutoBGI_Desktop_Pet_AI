@@ -13,7 +13,8 @@ export const useAppStore = defineStore('app', () => {
   const panelDestination = ref({ target: '', revision: 0 })
   const bubble = ref({ text: '', kind: 'info' })
   // 原生控制台在宿主确认前按隐藏处理；浏览器预览保留当前页面的可见默认值。
-  const presentation = ref({ visible: true, panelVisible: !native, action: '' })
+  // 原生展示快照同时保留快捷键注册状态，设置页可据此显示冲突和待注册提示。
+  const presentation = ref<{ visible: boolean; panelVisible: boolean; action: string; recoveryShortcut?: NativePresentation['recoveryShortcut'] }>({ visible: true, panelVisible: !native, action: '' })
   const cleanups: (() => void)[] = []
   let disposed = false
   let presentationRevision = -1
@@ -31,7 +32,7 @@ export const useAppStore = defineStore('app', () => {
   function acceptPresentation(value: NativePresentation) {
     if (!Number.isSafeInteger(value.revision) || value.revision < 0 || value.revision <= presentationRevision) return
     presentationRevision = value.revision
-    presentation.value = { visible: value.visible, panelVisible: value.panelVisible === true, action: value.action || '' }
+    presentation.value = { visible: value.visible, panelVisible: value.panelVisible === true, action: value.action || '', recoveryShortcut: value.recoveryShortcut }
     if (typeof value.warning === 'string') nativeWarning.value = value.warning
     // 独立目的地版本只消费显式入口；普通显隐广播保留面板中的选择。
     const revision = value.panelSectionRevision
@@ -52,6 +53,7 @@ export const useAppStore = defineStore('app', () => {
       action: typeof initial.action === 'string' ? initial.action : '',
       revision: typeof initial.revision === 'number' ? initial.revision : -1,
       warning: typeof initial.warning === 'string' ? initial.warning : '',
+      recoveryShortcut: initial.recoveryShortcut,
       panelSection: initial.panelSection, panelTarget: initial.panelTarget, panelSectionRevision: initial.panelSectionRevision,
     })
   }

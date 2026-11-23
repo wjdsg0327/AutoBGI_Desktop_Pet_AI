@@ -59,6 +59,11 @@ func (p *PetAPI) UpdatePickupEnabled(enabled bool) (service.AppState, error) {
 	return p.service.UpdatePickupEnabled(enabled)
 }
 
+// UpdateRecoveryShortcut 只更新桌宠详情快捷键，不覆盖其他桌宠偏好。
+func (p *PetAPI) UpdateRecoveryShortcut(shortcut string) (service.AppState, error) {
+	return p.service.UpdateRecoveryShortcut(shortcut)
+}
+
 // UpdateKeywordSoundEnabled 兼容旧版全局音效开关，不参与当前规则的独立触发判断。
 func (p *PetAPI) UpdateKeywordSoundEnabled(enabled bool) (service.AppState, error) {
 	return p.service.UpdateKeywordSoundEnabled(enabled)

@@ -43,7 +43,8 @@ const sleeping = computed(() => store.presentation.action === 'sleep')
 const fainted = computed(() => store.presentation.action === 'fainted')
 // 连接尚未在线时使用哭泣姿态，避免把旧动作误认为 AutoBGI 仍可用。
 const disconnected = computed(() => store.status !== 'online')
-const available = computed(() => store.presentation.visible && store.state?.preferences.pet.visible !== false && documentVisible.value)
+// 宿主展示快照包含快捷键临时显示状态，不能再用持久化偏好二次拦截。
+const available = computed(() => store.presentation.visible && documentVisible.value)
 const mouseAvailable = computed(() => available.value && store.state?.preferences.pet.clickThrough !== true)
 const animated = computed(() => available.value && !sleeping.value)
 const interactive = computed(() => mouseAvailable.value && !sleeping.value)

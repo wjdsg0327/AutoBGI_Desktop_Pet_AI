@@ -16,5 +16,5 @@
 !/build/windows/*.manifest
 !/build/windows/*.json
 promo
-
+release
 .idea

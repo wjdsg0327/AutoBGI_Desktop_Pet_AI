@@ -6,7 +6,7 @@ import AppIcon from '../components/AppIcon.vue'
 import PetCanvas from '../components/PetCanvas.vue'
 import LiveLogPanel from '../components/LiveLogPanel.vue'
 
-// 面板只编辑日志关键词规则，连接和日志状态始终以原生服务广播为准。
+// 面板只编辑日志关键词规则与桌宠快捷键，连接和日志状态始终以原生服务广播为准。
 type RuleAction = 'idle' | 'happy' | 'wave' | 'surprised' | 'sad'
 type TodoAction = '' | 'one_long' | 'script_group' | 'close_bgi_game' | 'shutdown'
 type KeywordTodo = { enabled: boolean; action: TodoAction; target: string; autoApprove: boolean }
@@ -19,12 +19,13 @@ type PanelState = AppState & { keywordRules?: KeywordRule[]; logStream?: LogStre
 
 const store = useAppStore()
 const petState = computed(() => store.state as PanelState | null)
-const activeSection = computed(() => store.section === 'connections' ? 'connections' : store.section === 'logs' ? 'logs' : 'rules')
+const activeSection = computed(() => store.section === 'connections' ? 'connections' : store.section === 'logs' ? 'logs' : store.section === 'shortcuts' ? 'shortcuts' : 'rules')
 const stream = computed(() => petState.value?.logStream)
 const streamStatus = computed(() => stream.value?.status || 'disconnected')
 const streamLabel = computed(() => ({ online: '连接正常', connecting: '正在连接', backoff: '等待重连', paused: '连接已暂停', auth_failed: '密钥验证失败', error: '连接异常', disconnected: '尚未连接' })[streamStatus.value] || '状态未知')
 const navigation = [
   { id: 'rules', label: '桌宠设置', icon: 'settings' },
+  { id: 'shortcuts', label: '快捷键设置', icon: 'settings' },
   { id: 'connections', label: '连接设置', icon: 'link' },
   { id: 'logs', label: '实时日志', icon: 'list' },
 ]
@@ -45,6 +46,108 @@ const soundOptions: { value: KeywordSoundType; label: string }[] = [
   { value: 'custom', label: '自定义音效（WAV）' },
 ]
 function navigate(section: string) { store.section = section === 'rules' ? 'settings' : section }
+
+// 快捷键状态只读取宿主脱敏快照，避免把原生错误细节或系统上下文暴露给页面。
+type ShortcutView = { requested?: string; registered?: string; status?: string; retryable?: boolean; warning?: string }
+const shortcutView = computed<ShortcutView>(() => {
+  const value = store.presentation.recoveryShortcut
+  return value && typeof value === 'object' ? value as ShortcutView : {}
+})
+// 宿主内部用 Super 表示 Windows 键，界面统一显示为用户熟悉的 Win。
+function displayShortcut(value: unknown) { return typeof value === 'string' ? value.replace(/\bSuper\b/g, 'Win') : '' }
+const shortcutCurrent = computed(() => displayShortcut(petState.value?.preferences.pet.recoveryShortcut || shortcutView.value.requested || 'Ctrl+Shift+P'))
+const shortcutRegistered = computed(() => displayShortcut(shortcutView.value.registered || shortcutCurrent.value))
+const shortcutDraft = ref('')
+const shortcutCapturing = ref(false)
+const shortcutNotice = ref('')
+const shortcutStatusLabel = computed(() => {
+  switch (shortcutView.value.status) {
+    case 'registered': return '已注册'
+    case 'pending': return '正在注册'
+    case 'conflict': return '注册冲突'
+    case 'unavailable': return '不可用'
+    default: return '状态待确认'
+  }
+})
+const shortcutStatusClass = computed(() => `shortcut-status-${shortcutView.value.status || 'unknown'}`)
+
+// 将浏览器按键统一转换为 Wails 全局快捷键使用的规范名称。
+function normalizeShortcutKey(event: KeyboardEvent): string {
+  const named: Record<string, string> = {
+    ' ': 'Space', '+': 'plus', 'Escape': 'Escape', 'Enter': 'Enter', 'Return': 'Return',
+    'Backspace': 'Backspace', 'Tab': 'Tab', 'Delete': 'Delete', 'ArrowLeft': 'Left',
+    'ArrowRight': 'Right', 'ArrowUp': 'Up', 'ArrowDown': 'Down', 'Home': 'Home',
+    'End': 'End', 'PageUp': 'Page Up', 'PageDown': 'Page Down',
+    'ForwardDelete': 'Forward Delete', 'NumLock': 'NumLock',
+  }
+  if (named[event.key]) return named[event.key]
+  if (/^F\d{1,2}$/i.test(event.key)) return event.key.toUpperCase()
+  if (event.key.length === 1) return event.key.toUpperCase()
+  return ''
+}
+
+// 停止录入监听，确保切换页面或组件销毁后不会截获用户输入。
+function stopShortcutCapture() {
+  if (!shortcutCapturing.value) return
+  window.removeEventListener('keydown', captureShortcutKeydown, true)
+  shortcutCapturing.value = false
+}
+
+// 录入时要求至少一个修饰键，Escape 取消，纯修饰键只更新提示而不保存。
+function captureShortcutKeydown(event: KeyboardEvent) {
+  if (!shortcutCapturing.value) return
+  event.preventDefault()
+  event.stopPropagation()
+  if (event.key === 'Escape') {
+    stopShortcutCapture()
+    shortcutNotice.value = '已取消快捷键录入。'
+    return
+  }
+  const modifiers = [
+    event.ctrlKey ? 'Ctrl' : '',
+    event.altKey ? 'Alt' : '',
+    event.shiftKey ? 'Shift' : '',
+    event.metaKey ? 'Win' : '',
+  ].filter(Boolean)
+  const key = normalizeShortcutKey(event)
+  if (!key || ['Ctrl', 'Alt', 'Shift', 'Meta', 'Win'].includes(key)) {
+    shortcutNotice.value = '请继续按下一个主键，不能只使用修饰键。'
+    return
+  }
+  if (!modifiers.length) {
+    shortcutNotice.value = '快捷键至少需要包含 Ctrl、Alt、Shift 或 Win。'
+    return
+  }
+  shortcutDraft.value = `${modifiers.join('+')}+${key}`
+  shortcutNotice.value = ''
+  stopShortcutCapture()
+}
+
+// 开始录入前清除旧提示，并在捕获阶段拦截按键避免触发页面快捷操作。
+function startShortcutCapture() {
+  if (store.busy) return
+  shortcutNotice.value = '请按下包含修饰键的组合，按 Esc 取消。'
+  shortcutCapturing.value = true
+  window.addEventListener('keydown', captureShortcutKeydown, true)
+}
+
+// 保存只提交快捷键字段，成功后等待宿主展示快照更新注册状态。
+async function saveShortcut() {
+  const next = shortcutDraft.value.trim()
+  if (!next) {
+    shortcutNotice.value = '请先录入一个快捷键组合。'
+    return
+  }
+  const result = await store.run(async () => {
+    const state = await api.updateRecoveryShortcut(next)
+    store.accept(state)
+    return state
+  })
+  if (result) {
+    shortcutDraft.value = ''
+    shortcutNotice.value = '快捷键已保存，正在确认系统注册状态。'
+  }
+}
 
 // 即时保存拾取开关；失败时继续显示宿主中实际保存的状态。
 const pickupEnabled = computed(() => petState.value?.preferences.notifications.pickupEnabled === true)
@@ -198,7 +301,11 @@ function preview(action: RuleAction) {
     previewRevision.value++
   }, 5000)
 }
-onBeforeUnmount(() => clearTimeout(previewTimer))
+onBeforeUnmount(() => {
+  clearTimeout(previewTimer)
+  // 组件卸载时释放快捷键录入监听，避免后续窗口继续拦截键盘。
+  stopShortcutCapture()
+})
 
 // 保存和导出共用草稿检查，避免分享不完整的规则。
 function prepareRules(): KeywordRule[] | null {
@@ -356,10 +463,10 @@ function toggleConnection(id: string) {
 
 <template>
   <div class="furina-panel" :class="{ 'furina-panel--logs': activeSection === 'logs' }">
-    <!-- 窗口内导航始终围绕关键词、连接和日志三个基础功能。 -->
+    <!-- 窗口内导航分开管理桌宠规则、快捷键、连接和日志。 -->
     <aside class="furina-sidebar">
       <div class="brand-mark"><span class="brand-gem">A<span>·</span>P</span><div><strong>ABGI<span>-PET</span></strong><small>DESKTOP COMPANION</small></div></div>
-      <p class="sidebar-caption">WORKSPACE <span>01 — 03</span></p>
+      <p class="sidebar-caption">WORKSPACE <span>01 — 04</span></p>
       <nav aria-label="桌宠设置导航">
         <button v-for="item in navigation" :key="item.id" :class="{ active: activeSection === item.id }" @click="navigate(item.id)">
           <AppIcon :name="item.icon" :size="19" /><span><strong>{{ item.label }}</strong></span><b v-if="activeSection === item.id">●</b>
@@ -371,7 +478,7 @@ function toggleConnection(id: string) {
 
     <main class="furina-main">
       <!-- 顶部说明保留当前连接状态，并提供回到桌宠窗口的入口。 -->
-      <header class="topline"><div><span class="overline">ABGI-PET / CONTROL CENTER</span><h1>{{ activeSection === 'rules' ? '桌宠设置' : activeSection === 'connections' ? '连接设置' : '实时日志' }}</h1></div><div class="top-actions"><span class="connection-badge"><i class="light" :class="streamStatus" />{{ streamLabel }}</span><button class="round-button" title="显示桌宠" aria-label="显示桌宠" :disabled="!store.native || store.busy" @click="store.run(async () => (await desktop()).ShowPet())"><AppIcon name="paw" :size="17" /></button></div></header>
+      <header class="topline"><div><span class="overline">ABGI-PET / CONTROL CENTER</span><h1>{{ activeSection === 'rules' ? '桌宠设置' : activeSection === 'shortcuts' ? '快捷键设置' : activeSection === 'connections' ? '连接设置' : '实时日志' }}</h1></div><div class="top-actions"><span class="connection-badge"><i class="light" :class="streamStatus" />{{ streamLabel }}</span><button class="round-button" title="显示桌宠" aria-label="显示桌宠" :disabled="!store.native || store.busy" @click="store.run(async () => (await desktop()).ShowPet())"><AppIcon name="paw" :size="17" /></button></div></header>
       <div v-if="!store.native" class="message info-message">当前是浏览器预览；连接、保存和桌宠动作需要在 Windows 桌宠中使用。</div>
       <div v-if="store.error || stream?.error || petState?.todoNotice" class="message error-message" role="alert"><span>{{ store.error || stream?.error || petState?.todoNotice }}</span><button v-if="store.error" aria-label="关闭提示" @click="store.error = ''"><AppIcon name="close" :size="15" /></button></div>
       <div v-if="store.nativeWarning" class="message error-message" role="alert">{{ store.nativeWarning }}</div>
@@ -426,6 +533,23 @@ function toggleConnection(id: string) {
         <div class="save-bar"><span>{{ rulesDirty ? '修改尚未保存' : '规则已同步' }}</span><button class="primary-button" :disabled="!store.native || store.busy || !rulesDirty" @click="saveRules"><AppIcon name="check" :size="16" />保存规则</button></div>
       </section>
 
+      <!-- 快捷键独立管理桌宠详情入口，不与日志规则草稿共用保存状态。 -->
+      <section v-else-if="activeSection === 'shortcuts'" class="page-content">
+        <div class="page-intro"><span class="overline">DESKTOP HOTKEY</span><h2>桌宠详情快捷键</h2><p>按下指定组合键即可显示当前 BGI 状态详情；桌宠隐藏时会临时出现，详情展示 3 秒后恢复隐藏。</p></div>
+        <div class="shortcut-card">
+          <div class="shortcut-card-heading"><div><span class="shortcut-icon"><AppIcon name="settings" :size="22" /></span><div><strong>当前快捷键</strong><small>{{ shortcutCurrent }}</small></div></div><span class="shortcut-status" :class="shortcutStatusClass">{{ shortcutStatusLabel }}</span></div>
+          <div class="shortcut-display"><span>已注册组合</span><strong>{{ shortcutRegistered }}</strong></div>
+          <div class="shortcut-actions">
+            <button class="secondary-button" type="button" :disabled="store.busy" @click="startShortcutCapture">{{ shortcutCapturing ? '请按下组合键…' : '按下组合键设置' }}</button>
+            <span v-if="shortcutDraft" class="shortcut-draft">待保存：{{ shortcutDraft }}</span>
+          </div>
+          <p class="shortcut-help">至少包含一个修饰键，触发后显示桌宠详情 3 秒。修饰键支持 Ctrl、Alt、Shift 或 Win；按 Esc 可取消录入。保存后若组合被其他程序占用，会保留旧组合并显示冲突状态。</p>
+          <div v-if="shortcutNotice" class="message info-message" role="status">{{ shortcutNotice }}</div>
+          <div v-if="shortcutView.warning" class="message error-message" role="alert">{{ shortcutView.warning }}</div>
+          <div class="save-bar"><span>{{ shortcutDraft ? '快捷键尚未保存' : '快捷键已同步' }}</span><button class="primary-button" type="button" :disabled="!store.native || store.busy || !shortcutDraft || shortcutCapturing" @click="saveShortcut"><AppIcon name="check" :size="16" />保存快捷键</button></div>
+        </div>
+      </section>
+
       <!-- API 密钥只在本次保存时提交，不在连接列表中回显。 -->
       <section v-else-if="activeSection === 'connections'" class="page-content">
         <div class="page-intro"><span class="overline">ABGI CONNECTION</span><h2>连接你的 ABGI</h2><p>填写 AutoBGI 服务地址和 API 密钥，连接成功后即可接收日志并触发规则。</p></div>
@@ -458,6 +582,8 @@ function toggleConnection(id: string) {
 .furina-panel--logs .logs-page{display:flex;flex:1;flex-direction:column;min-height:0;animation:none}
 .logs-hint{flex:none;margin:0 0 14px;color:#627d8e;font-size:12px;line-height:1.8}
 .logs-help{flex:none;margin-top:12px;color:#627d8e;font-size:11px;line-height:1.8}.logs-help summary{width:fit-content;cursor:pointer}.logs-help p{margin-top:6px;overflow-wrap:anywhere}
+/* 快捷键卡片沿用设置页的蓝白层次，集中展示当前组合和注册状态。 */
+.shortcut-card{max-width:720px;padding:24px;background:#fff;border:1px solid var(--line);border-radius:14px;box-shadow:0 5px 18px #2c5a7410}.shortcut-card-heading{display:flex;align-items:center;justify-content:space-between;gap:16px}.shortcut-card-heading>div{display:flex;align-items:center;gap:12px}.shortcut-icon{display:grid;place-items:center;width:44px;height:44px;border-radius:12px;background:#edf7fb;color:#4285a5}.shortcut-card-heading strong{display:block;color:#274b63;font-size:14px}.shortcut-card-heading small{display:block;margin-top:5px;color:#7892a1;font-size:11px}.shortcut-status{padding:6px 10px;border-radius:999px;font-size:10px;font-weight:700}.shortcut-status-registered{background:#e7f5ef;color:#398061}.shortcut-status-pending{background:#fff4dc;color:#a47736}.shortcut-status-conflict,.shortcut-status-unavailable{background:#fbeceb;color:#a65f58}.shortcut-status-unknown{background:#edf3f6;color:#708b9c}.shortcut-display{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-top:24px;padding:14px 16px;border:1px solid #e3eef3;border-radius:10px;background:#f8fcfd;color:#6b8797;font-size:11px}.shortcut-display strong{color:#285d78;font:700 15px Consolas,monospace}.shortcut-actions{display:flex;align-items:center;flex-wrap:wrap;gap:12px;margin-top:18px}.shortcut-draft{padding:9px 12px;border-radius:8px;background:#edf7fb;color:#3d7794;font:11px Consolas,monospace}.shortcut-help{margin:14px 0;color:#7892a1;font-size:11px;line-height:1.8}
 .furina-panel--logs .panel-footer{flex:none;margin-top:14px;padding:12px 0 16px}
 /* 导入、导出与新增操作在窄窗口中自动换行。 */
 .rule-actions{display:flex;flex-wrap:wrap;gap:8px}

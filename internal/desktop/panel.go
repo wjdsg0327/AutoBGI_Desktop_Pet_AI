@@ -31,7 +31,7 @@ func (d *DesktopService) HandleHostWarning(warning string) {
 	}
 }
 
-// RestoreFromHost 将快捷键或第二次启动的恢复请求锁存到 UI 队列，允许早于宿主启动。
+// RestoreFromHost 将第二次启动的恢复请求锁存到 UI 队列，允许早于宿主启动。
 //
 //wails:ignore
 func (d *DesktopService) RestoreFromHost() {

@@ -744,10 +744,12 @@ func (s *Service) Refresh() AppState {
 
 // UpdatePreferences 校验所有原生选项；未实现的开机启动明确拒绝而非假保存。
 func (s *Service) UpdatePreferences(prefs profile.Preferences) (AppState, error) {
-	// 恢复快捷键仅允许三个固定组合，防止前端传入任意系统按键串。
-	if prefs.Pet.RecoveryShortcut != "Ctrl+Shift+P" && prefs.Pet.RecoveryShortcut != "Ctrl+Alt+P" && prefs.Pet.RecoveryShortcut != "Ctrl+Shift+Y" {
-		return s.GetState(), errors.New("请选择支持的恢复快捷键：Ctrl+Shift+P、Ctrl+Alt+P 或 Ctrl+Shift+Y")
+	// 恢复快捷键统一经过共享规范化校验，确保全局注册器收到稳定格式。
+	normalizedShortcut, shortcutErr := profile.NormalizeRecoveryShortcut(prefs.Pet.RecoveryShortcut)
+	if shortcutErr != nil {
+		return s.GetState(), shortcutErr
 	}
+	prefs.Pet.RecoveryShortcut = normalizedShortcut
 	if math.IsNaN(prefs.Pet.Scale) || math.IsInf(prefs.Pet.Scale, 0) || prefs.Pet.Scale < 0.6 || prefs.Pet.Scale > 2 {
 		return s.GetState(), errors.New("桌宠缩放范围为 0.6 至 2")
 	}
@@ -781,6 +783,31 @@ func (s *Service) UpdatePreferences(prefs profile.Preferences) (AppState, error)
 	s.mu.Unlock()
 	s.publish()
 	return s.GetState(), notificationErr
+}
+
+// UpdateRecoveryShortcut 只保存桌宠详情快捷键，避免前端提交整份偏好覆盖其他设置。
+func (s *Service) UpdateRecoveryShortcut(shortcut string) (AppState, error) {
+	normalized, err := profile.NormalizeRecoveryShortcut(shortcut)
+	if err != nil {
+		return s.GetState(), err
+	}
+	s.mu.Lock()
+	old := s.config.Preferences
+	if old.Pet.RecoveryShortcut == normalized {
+		s.mu.Unlock()
+		return s.GetState(), nil
+	}
+	next := old
+	next.Pet.RecoveryShortcut = normalized
+	s.config.Preferences = next
+	if err := s.store.Save(s.config); err != nil {
+		s.config.Preferences = old
+		s.mu.Unlock()
+		return s.GetState(), err
+	}
+	s.mu.Unlock()
+	s.publish()
+	return s.GetState(), nil
 }
 
 // Pause 保持原生电源调用兼容，只更新休眠原因，不解除仍存在的断网暂停。

@@ -56,6 +56,8 @@ export const api = {
   connect: (id: string) => invoke<AppState>('PetAPI', 'Connect', id),
   disconnect: () => invoke<AppState>('PetAPI', 'Disconnect'),
   updateKeywordRules: (rules: KeywordRuleInput[]) => invoke<AppState>('PetAPI', 'UpdateKeywordRules', rules),
+  // 桌宠详情快捷键只通过窄接口保存，避免前端覆盖其他偏好字段。
+  updateRecoveryShortcut: (shortcut: string) => invoke<AppState>('PetAPI', 'UpdateRecoveryShortcut', shortcut),
   // 代办动作和目标只从宿主读取，处理时不接受页面传入的任意动作。
   listTodoTargets: (action: string) => invoke<string[]>('PetAPI', 'ListTodoTargets', action),
   processTodo: (id: string) => invoke<AppState>('PetAPI', 'ProcessTodo', id),

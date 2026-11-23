@@ -47,33 +47,38 @@ type DesktopService struct {
 	bubbleTimer          *time.Timer
 	bubbleTimerVersion   uint64
 	bubbleVersion        uint64
-	done                 chan struct{}
-	once                 sync.Once
-	monitorSignature     string
-	monitor              monitorTracker
-	drag                 petDragState
-	dragPreferenceApply  int
-	applyRunning         bool
-	applyingRevision     uint64
-	pendingApply         *service.AppState
-	nativeApplyUncertain bool
-	positionRestore      *savedPosition
-	positionResetPending bool
-	shortcut             recoveryShortcutController
-	shortcutRetryQueued  bool
-	trayWarning          string
-	networkWarning       string
-	networkWorker        sync.WaitGroup
-	panelLifecycle       panelLifecycle
-	panelNavigation      panelNavigation
-	panelVisible         bool
-	documentHidden       bool
-	restorePetPending    bool
-	appliedRevision      uint64
-	presentationRevision uint64
-	sleeping             bool
-	powerSleepingIntent  bool
-	power                powerController
+	// shortcutDetailVisible 只表示快捷键详情会话的临时显示，不写回持久化偏好。
+	shortcutDetailVisible bool
+	// shortcutDetailVersion 用于让重复触发和用户手动操作失效旧的异步查询与定时器。
+	shortcutDetailVersion uint64
+	shortcutDetailTimer   *time.Timer
+	done                  chan struct{}
+	once                  sync.Once
+	monitorSignature      string
+	monitor               monitorTracker
+	drag                  petDragState
+	dragPreferenceApply   int
+	applyRunning          bool
+	applyingRevision      uint64
+	pendingApply          *service.AppState
+	nativeApplyUncertain  bool
+	positionRestore       *savedPosition
+	positionResetPending  bool
+	shortcut              recoveryShortcutController
+	shortcutRetryQueued   bool
+	trayWarning           string
+	networkWarning        string
+	networkWorker         sync.WaitGroup
+	panelLifecycle        panelLifecycle
+	panelNavigation       panelNavigation
+	panelVisible          bool
+	documentHidden        bool
+	restorePetPending     bool
+	appliedRevision       uint64
+	presentationRevision  uint64
+	sleeping              bool
+	powerSleepingIntent   bool
+	power                 powerController
 	// 一条龙菜单只保留当前连接的读取结果，连接代次变化时立即失效旧名称。
 	oneLongMenuStatus          string
 	oneLongMenuHint            string
@@ -177,6 +182,8 @@ func (d *DesktopService) Attach(app *application.App, icon []byte) {
 	d.tray.SetTooltip("芙宁娜桌宠 · 双击打开设置")
 	d.tray.SetMenu(menu)
 	d.tray.OnClick(d.ShowPet)
+	// 显式绑定托盘右键菜单，避免系统托盘智能默认回调在重建菜单或不同 Windows 消息类型下丢失。
+	d.tray.OnRightClick(d.tray.ShowMenu)
 	d.tray.OnDoubleClick(d.ShowPanel)
 	// 初次连接前先保留禁用提示，连接状态变化后由 Apply 异步读取真实配置。
 	d.scheduleOneLongMenuRefresh(state, false)
@@ -265,6 +272,10 @@ func (d *DesktopService) drainDesktopApply() {
 		d.mu.Unlock()
 		// 相关门禁持续覆盖整个消费周期；无关轮询和同值偏好不会取消正常手势。
 		p := state.Preferences.Pet
+		if force || p.Visible != before.Pet.Visible {
+			// 外部偏好变化代表用户已接管显隐状态，终止旧的快捷键临时会话。
+			d.cancelShortcutDetail()
+		}
 		if force || p.Scale != before.Pet.Scale {
 			d.pet.SetSize(int(224*p.Scale), int(240*p.Scale))
 			d.correctPosition()
@@ -326,6 +337,16 @@ func (d *DesktopService) GetPresentation() map[string]any {
 	return d.presentationLocked()
 }
 
+// petVisibleLocked 合并持久化可见偏好和快捷键详情的临时显示状态。
+func (d *DesktopService) petVisibleLocked() bool {
+	return d.prefs.Pet.Visible || d.shortcutDetailVisible
+}
+
+// presentationVisibleLocked 统一桌宠与详情气泡的宿主可见判断；快捷键会话可暂时绕过隐藏页面标记。
+func (d *DesktopService) presentationVisibleLocked() bool {
+	return d.petVisibleLocked() && !d.sleeping && (!d.documentHidden || d.shortcutDetailVisible)
+}
+
 // presentationLocked 让初始化读取与广播共用同一份显隐合同，面板显隐独立于角色偏好。
 func (d *DesktopService) presentationLocked() map[string]any {
 	action := ""
@@ -341,7 +362,7 @@ func (d *DesktopService) presentationLocked() map[string]any {
 	if d.keywordTriggerVisibleLocked(time.Now()) {
 		keywordTrigger = d.triggerPayloadLocked(*d.activeKeywordTrigger)
 	}
-	return map[string]any{"visible": d.prefs.Pet.Visible && !d.sleeping && !d.documentHidden, "panelVisible": d.panelVisible, "action": action, "revision": d.presentationRevision, "text": d.bubbleText, "kind": d.bubbleKind, "warning": d.hostWarningLocked(shortcut.Warning), "recoveryShortcut": shortcut, "keywordTrigger": keywordTrigger,
+	return map[string]any{"visible": d.presentationVisibleLocked(), "panelVisible": d.panelVisible, "action": action, "revision": d.presentationRevision, "text": d.bubbleText, "kind": d.bubbleKind, "warning": d.hostWarningLocked(shortcut.Warning), "recoveryShortcut": shortcut, "keywordTrigger": keywordTrigger,
 		"panelSection": d.panelNavigation.section, "panelTarget": d.panelNavigation.target, "panelSectionRevision": d.panelNavigation.revision}
 }
 
@@ -387,10 +408,10 @@ func (d *DesktopService) emitPresentation() {
 	d.app.Event.Emit("pet:presentation", snapshot)
 }
 
-// updateShortcut 先注册新的恢复组合再释放旧组合；冲突时保留可用的旧恢复入口。
+// updateShortcut 先注册新的详情组合再释放旧组合；冲突时保留可用的旧详情入口。
 func (d *DesktopService) updateShortcut(shortcut string) {
 	d.shortcut.apply(shortcut, func(value string) error {
-		return d.app.GlobalShortcut.Register(value, d.RestoreFromHost)
+		return d.app.GlobalShortcut.Register(value, d.TriggerShortcutDetail)
 	}, d.app.GlobalShortcut.Unregister)
 	d.emitPresentation()
 }
@@ -401,7 +422,7 @@ func (d *DesktopService) RetryRecoveryShortcut() error {
 		return errors.New("桌面宿主尚未就绪，请从系统托盘恢复交互")
 	}
 	if !supportedRecoveryShortcut(d.service.GetState().Preferences.Pet.RecoveryShortcut) {
-		return errors.New("请先在设置中选择支持的恢复快捷键")
+		return errors.New("请先在设置中选择支持的桌宠详情快捷键")
 	}
 	d.mu.Lock()
 	if d.shortcutRetryQueued {
@@ -452,6 +473,8 @@ func (d *DesktopService) setPetPreference(change func(*profile.PetPreferences)) 
 
 // ShowPet 通过无激活工具窗恢复角色，不调用 Focus，因此不会主动切走游戏输入。
 func (d *DesktopService) ShowPet() {
+	// 用户主动显示时取消快捷键临时会话，避免旧计时器再次隐藏桌宠。
+	d.cancelShortcutDetail()
 	if !d.setPetPreference(func(p *profile.PetPreferences) { p.Visible = true }) {
 		return
 	}
@@ -462,6 +485,8 @@ func (d *DesktopService) ShowPet() {
 
 // HidePet 只隐藏动画窗口，采集仍继续运行。
 func (d *DesktopService) HidePet() {
+	// 用户主动隐藏时取消快捷键临时会话，保持用户最后一次操作。
+	d.cancelShortcutDetail()
 	if !d.setPetPreference(func(p *profile.PetPreferences) { p.Visible = false }) {
 		return
 	}
@@ -1110,9 +1135,8 @@ func (d *DesktopService) notificationStateLocked() service.AppState {
 
 // visibleNotificationStateLocked 仅修改临时通知策略，页面隐藏不写入用户设置。
 func (d *DesktopService) visibleNotificationStateLocked(state service.AppState) service.AppState {
-	if d.documentHidden {
-		state.Preferences.Pet.Visible = false
-	}
+	// 临时快捷键展示也必须让通知中心认为角色可见，否则状态气泡会被隐藏策略拒绝。
+	state.Preferences.Pet.Visible = d.presentationVisibleLocked()
 	return state
 }
 
@@ -1455,6 +1479,9 @@ func (d *DesktopService) prepareBubbleLocked(plan bubblePlan) {
 		d.bubbleTimer.Stop()
 		d.bubbleTimer = nil
 	}
+	// 快捷键详情只有在通知中心实际选中该条气泡后才按三秒绝对截止时间计时；
+	// 查询失败、通知关闭或宿主退出等没有当前气泡的路径由触发时的兜底计时器收尾。
+	d.armShortcutDetailTimerLocked(plan)
 	if !plan.timed || d.stopped() {
 		return
 	}
@@ -1496,7 +1523,7 @@ func (d *DesktopService) dispatchBubble(plan bubblePlan) {
 		d.mu.Lock()
 		valid := !d.stopped() && plan.version == d.bubbleVersion
 		bubble := d.bubble
-		visible := !d.sleeping && d.prefs.Pet.Visible && d.prefs.Notifications.Bubble && !d.prefs.Notifications.QuietHoursEnabled && plan.entry.ID != ""
+		visible := d.presentationVisibleLocked() && d.prefs.Notifications.Bubble && !d.prefs.Notifications.QuietHoursEnabled && plan.entry.ID != ""
 		d.mu.Unlock()
 		if !valid {
 			return
@@ -1547,7 +1574,7 @@ func (d *DesktopService) dispatchBubble(plan bubblePlan) {
 			return
 		}
 		d.mu.Lock()
-		valid = !d.stopped() && !d.sleeping && plan.version == d.bubbleVersion && d.prefs.Pet.Visible && d.prefs.Notifications.Bubble && !d.prefs.Notifications.QuietHoursEnabled
+		valid = !d.stopped() && d.presentationVisibleLocked() && plan.version == d.bubbleVersion && d.prefs.Notifications.Bubble && !d.prefs.Notifications.QuietHoursEnabled
 		trigger, hasTrigger := d.logTriggerLocked(plan.entry.ID)
 		started := hasTrigger && d.activeKeywordTrigger != nil &&
 			d.activeKeywordTrigger.ID == trigger.ID && d.activeKeywordTrigger.Generation == trigger.Generation &&
@@ -1661,7 +1688,7 @@ func (d *DesktopService) moveBubble() {
 func (d *DesktopService) moveBubbleOnScreens(screens []*application.Screen) {
 	d.mu.Lock()
 	bubble := d.bubble
-	visible := !d.stopped() && !d.sleeping && d.prefs.Pet.Visible && d.bubbleText != ""
+	visible := !d.stopped() && d.presentationVisibleLocked() && d.bubbleText != ""
 	d.mu.Unlock()
 	if visible && bubble != nil {
 		d.placeBubbleOnScreens(bubble, screens)
@@ -1913,6 +1940,12 @@ func (d *DesktopService) Shutdown() {
 	if d.todoHideTimer != nil {
 		d.todoHideTimer.Stop()
 		d.todoHideTimer = nil
+	}
+	d.shortcutDetailVersion++
+	d.shortcutDetailVisible = false
+	if d.shortcutDetailTimer != nil {
+		d.shortcutDetailTimer.Stop()
+		d.shortcutDetailTimer = nil
 	}
 	d.mu.Unlock()
 	d.rememberPosition()

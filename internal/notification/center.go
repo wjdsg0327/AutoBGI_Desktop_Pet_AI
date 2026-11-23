@@ -30,6 +30,10 @@ type Entry struct {
 	Kind      string
 	Message   string
 	CreatedAt string
+	// Duration 允许单条本地通知覆盖默认展示时长，零值继续使用默认时长。
+	Duration time.Duration
+	// Priority 允许快捷键详情等即时交互覆盖同类普通通知，零值使用 Kind 的默认优先级。
+	Priority int
 }
 
 // Policy 区分勿扰计数与禁止补播；隐藏、休眠和关闭气泡的优先级高于勿扰。
@@ -168,7 +172,8 @@ func (c *Center) Current(now time.Time) (Entry, bool) {
 		}
 		return c.active.entry, true
 	}
-	if c.active == nil || c.pending[index].entry.Kind == "error" && c.active.entry.Kind != "error" && c.active.entry.Kind != "trigger" && c.active.entry.Kind != "pickup" {
+	if c.active == nil || c.pending[index].entry.Kind == "error" &&
+		c.active.entry.Kind != "error" && c.active.entry.Kind != "trigger" && c.active.entry.Kind != "pickup" {
 		// 被抢占的提醒已经尝试展示，不重新排队，以免同一 ID 被再次弹出。
 		item := c.pending[index]
 		c.pending = append(c.pending[:index], c.pending[index+1:]...)
@@ -241,7 +246,11 @@ func (c *Center) activate(item queued, now time.Time) {
 	c.deadline = time.Time{}
 	c.confirmUntil = time.Time{}
 	if item.entry.Kind != "trigger" && item.entry.Kind != "pickup" {
-		c.deadline = now.Add(displayTime)
+		duration := displayTime
+		if item.entry.Duration > 0 {
+			duration = item.entry.Duration
+		}
+		c.deadline = now.Add(duration)
 	}
 }
 
@@ -262,8 +271,25 @@ func (c *Center) OfferManual(scope Scope, entry Entry, now time.Time) bool {
 	if !fresh || c.blocked() || c.policy.DoNotDisturb {
 		return false
 	}
+	if isShortcutDetailEntry(entry) {
+		// 重复触发时只保留最后一条桌宠详情，避免旧气泡占用当前三秒窗口。
+		if c.active != nil && isShortcutDetailEntry(c.active.entry) {
+			c.active = nil
+			c.deadline, c.confirmUntil = time.Time{}, time.Time{}
+		}
+		kept := c.pending[:0]
+		for _, pending := range c.pending {
+			if !isShortcutDetailEntry(pending.entry) {
+				kept = append(kept, pending)
+			}
+		}
+		c.pending = kept
+	}
 	_, _ = c.Current(now)
-	if !c.fainted && (c.active == nil || priority(c.active.entry.Kind) < priority(item.entry.Kind) && c.active.entry.Kind != "pickup" && c.active.entry.Kind != "trigger") {
+	if !c.fainted && (isShortcutDetailEntry(entry) ||
+		c.active == nil || entryPriority(c.active.entry) < entryPriority(item.entry) &&
+		c.active.entry.Kind != "pickup" && c.active.entry.Kind != "trigger") {
+		// 快捷键是用户主动查询入口，即使当前正在播放动作，也立即切换到最新详情。
 		c.activate(item, now)
 	} else {
 		// 本地动作不能变成摘要；队列满时明确拒绝，由调用方显示未播放数量。
@@ -502,7 +528,7 @@ func (c *Center) bestIndex(now time.Time) int {
 		if !item.retryAt.IsZero() && now.Before(item.retryAt) {
 			continue
 		}
-		if best < 0 || priority(item.entry.Kind) > priority(c.pending[best].entry.Kind) {
+		if best < 0 || entryPriority(item.entry) > entryPriority(c.pending[best].entry) {
 			best = index
 		}
 	}
@@ -513,16 +539,24 @@ func (c *Center) bestIndex(now time.Time) int {
 func (c *Center) lowestIndex() int {
 	lowest := -1
 	for index, item := range c.pending {
-		if item.entry.Kind != "pickup" && item.entry.Kind != "trigger" && (lowest < 0 || priority(item.entry.Kind) <= priority(c.pending[lowest].entry.Kind)) {
+		if item.entry.Kind != "pickup" && item.entry.Kind != "trigger" && (lowest < 0 || entryPriority(item.entry) <= entryPriority(c.pending[lowest].entry)) {
 			lowest = index
 		}
 	}
 	return lowest
 }
 
-// priority 仅对已知事实种类排序，手动交互低于错误和命令结果，其余信息按普通提醒处理。
-func priority(kind string) int {
-	switch kind {
+// isShortcutDetailEntry 判断快捷键详情通知，避免通知中心把同一会话的旧结果继续排队。
+func isShortcutDetailEntry(entry Entry) bool {
+	return strings.HasPrefix(entry.ID, "shortcut:")
+}
+
+// entryPriority 先使用单条通知的即时优先级，再按已知事实种类排序。
+func entryPriority(entry Entry) int {
+	if entry.Priority > 0 {
+		return entry.Priority
+	}
+	switch entry.Kind {
 	case "error":
 		return 5
 	case "command":

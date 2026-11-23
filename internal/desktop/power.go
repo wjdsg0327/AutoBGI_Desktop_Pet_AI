@@ -74,6 +74,10 @@ func (d *DesktopService) setSleeping(sleeping bool) {
 	if d.stopped() {
 		return
 	}
+	if sleeping {
+		// 进入休眠立即结束快捷键详情会话，避免唤醒后旧定时器再次改变桌宠状态。
+		d.cancelShortcutDetail()
+	}
 	var plan bubblePlan
 	// 直接消费入口也保留中断保护，系统重复恢复不能让旧手势重新有效。
 	d.invalidatePetDrag()

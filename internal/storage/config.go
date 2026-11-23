@@ -89,6 +89,9 @@ func decode(path string) (profile.Config, error) {
 	}
 	if result.Preferences.Pet.RecoveryShortcut == "" {
 		result.Preferences.Pet.RecoveryShortcut = "Ctrl+Shift+P"
+	} else if normalized, shortcutErr := profile.NormalizeRecoveryShortcut(result.Preferences.Pet.RecoveryShortcut); shortcutErr == nil {
+		// 读取旧配置时统一保存字段的修饰键别名，避免 Win/Super 只改写名称却触发重复注册。
+		result.Preferences.Pet.RecoveryShortcut = normalized
 	}
 	// 旧配置没有音效类型时使用稳定的安静陪伴语音，非法值也不能进入播放接口。
 	result.Preferences.Notifications.KeywordSoundType = profile.NormalizeKeywordSoundType(result.Preferences.Notifications.KeywordSoundType)

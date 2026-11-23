@@ -100,3 +100,10 @@ export function UpdateKeywordSoundType(soundType: string): $CancellablePromise<s
 export function UpdatePickupEnabled(enabled: boolean): $CancellablePromise<service$0.AppState> {
     return $Call.ByID(3599140928, enabled);
 }
+
+/**
+ * UpdateRecoveryShortcut 只更新桌宠详情快捷键，不覆盖其他桌宠偏好。
+ */
+export function UpdateRecoveryShortcut(shortcut: string): $CancellablePromise<service$0.AppState> {
+    return $Call.ByID(4245815738, shortcut);
+}
