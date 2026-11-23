@@ -1,6 +1,7 @@
 package desktop
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"strings"
@@ -28,7 +29,6 @@ type DesktopService struct {
 	prefs                profile.Preferences
 	notices              bubbleState
 	manualNoticeSequence uint64
-	petClickSequence     uint64
 	keywordActions       map[string]service.LogTrigger
 	activeKeywordTrigger *service.LogTrigger
 	keywordTriggerUntil  time.Time
@@ -41,44 +41,45 @@ type DesktopService struct {
 	faintActivity        string
 	faintGeneration      uint64
 	faintStateRevision   uint64
-	bubbleText           string
-	bubbleKind           string
-	manualWarning        bool
-	bubbleTimer          *time.Timer
-	bubbleTimerVersion   uint64
-	bubbleVersion        uint64
+	// 仅当前条目可以经同源图片路由读取；过期或切换窗口时整条替换。
+	bubbleEntry        notification.Entry
+	manualWarning      bool
+	bubbleTimer        *time.Timer
+	bubbleTimerVersion uint64
+	bubbleVersion      uint64
 	// shortcutDetailVisible 只表示快捷键详情会话的临时显示，不写回持久化偏好。
 	shortcutDetailVisible bool
-	// shortcutDetailVersion 用于让重复触发和用户手动操作失效旧的异步查询与定时器。
-	shortcutDetailVersion uint64
-	shortcutDetailTimer   *time.Timer
-	done                  chan struct{}
-	once                  sync.Once
-	monitorSignature      string
-	monitor               monitorTracker
-	drag                  petDragState
-	dragPreferenceApply   int
-	applyRunning          bool
-	applyingRevision      uint64
-	pendingApply          *service.AppState
-	nativeApplyUncertain  bool
-	positionRestore       *savedPosition
-	positionResetPending  bool
-	shortcut              recoveryShortcutController
-	shortcutRetryQueued   bool
-	trayWarning           string
-	networkWarning        string
-	networkWorker         sync.WaitGroup
-	panelLifecycle        panelLifecycle
-	panelNavigation       panelNavigation
-	panelVisible          bool
-	documentHidden        bool
-	restorePetPending     bool
-	appliedRevision       uint64
-	presentationRevision  uint64
-	sleeping              bool
-	powerSleepingIntent   bool
-	power                 powerController
+	// 两个详情入口共享请求身份，新请求取消上一次读取和临时显示计时。
+	detailID             string
+	detailCancel         context.CancelFunc
+	shortcutDetailTimer  *time.Timer
+	done                 chan struct{}
+	once                 sync.Once
+	monitorSignature     string
+	monitor              monitorTracker
+	drag                 petDragState
+	dragPreferenceApply  int
+	applyRunning         bool
+	applyingRevision     uint64
+	pendingApply         *service.AppState
+	nativeApplyUncertain bool
+	positionRestore      *savedPosition
+	positionResetPending bool
+	shortcut             recoveryShortcutController
+	shortcutRetryQueued  bool
+	trayWarning          string
+	networkWarning       string
+	networkWorker        sync.WaitGroup
+	panelLifecycle       panelLifecycle
+	panelNavigation      panelNavigation
+	panelVisible         bool
+	documentHidden       bool
+	restorePetPending    bool
+	appliedRevision      uint64
+	presentationRevision uint64
+	sleeping             bool
+	powerSleepingIntent  bool
+	power                powerController
 	// 一条龙菜单只保留当前连接的读取结果，连接代次变化时立即失效旧名称。
 	oneLongMenuStatus          string
 	oneLongMenuHint            string
@@ -362,7 +363,8 @@ func (d *DesktopService) presentationLocked() map[string]any {
 	if d.keywordTriggerVisibleLocked(time.Now()) {
 		keywordTrigger = d.triggerPayloadLocked(*d.activeKeywordTrigger)
 	}
-	return map[string]any{"visible": d.presentationVisibleLocked(), "panelVisible": d.panelVisible, "action": action, "revision": d.presentationRevision, "text": d.bubbleText, "kind": d.bubbleKind, "warning": d.hostWarningLocked(shortcut.Warning), "recoveryShortcut": shortcut, "keywordTrigger": keywordTrigger,
+	return map[string]any{"visible": d.presentationVisibleLocked(), "panelVisible": d.panelVisible, "action": action, "revision": d.presentationRevision, "text": d.bubbleEntry.Message, "kind": d.bubbleEntry.Kind,
+		"screenshotUrl": screenshotURL(d.bubbleEntry), "screenshotFailed": d.bubbleEntry.ScreenshotFailed, "warning": d.hostWarningLocked(shortcut.Warning), "recoveryShortcut": shortcut, "keywordTrigger": keywordTrigger,
 		"panelSection": d.panelNavigation.section, "panelTarget": d.panelNavigation.target, "panelSectionRevision": d.panelNavigation.revision}
 }
 
@@ -876,41 +878,9 @@ func (d *DesktopService) startOneLongFromMenu(name, expectedProfileID, expectedA
 	}()
 }
 
-// PetClicked 按需展示当前 BGI 状态，较早请求不能覆盖较新的点击结果。
+// PetClicked 在单击手势确认后获取本次详情，网络读取由后台完成。
 func (d *DesktopService) PetClicked() {
-	generation := d.service.GetState().Connection.Generation
-	d.mu.Lock()
-	d.petClickSequence++
-	sequence := d.petClickSequence
-	d.mu.Unlock()
-	// 网络读取在后台进行，避免阻塞桌宠和设置窗口。
-	go func() {
-		text, err := d.service.QueryBGIStatus()
-		kind := "status"
-		if err != nil {
-			text = err.Error()
-			kind = "info"
-		}
-		// 检查序号和排队必须同时持锁，避免新的点击插入旧结果的提交过程。
-		now := time.Now()
-		d.mu.Lock()
-		// 在桌面锁内重新读取连接并核对队列来源，不能把旧结果归入新的通知范围。
-		state := d.service.GetState()
-		if d.stopped() || !petStatusCurrent(sequence, generation, d.petClickSequence, state, d.notices.scope) {
-			d.mu.Unlock()
-			return
-		}
-		d.manualNoticeSequence++
-		plan := d.notices.offer(notification.Entry{ID: fmt.Sprintf("manual:%d", d.manualNoticeSequence), Kind: kind, Message: text, CreatedAt: now.Format(time.RFC3339Nano)}, now)
-		d.prepareBubbleLocked(plan)
-		d.mu.Unlock()
-		d.dispatchBubble(plan)
-	}()
-}
-
-// petStatusCurrent 同时核验点击顺序、实时连接与通知队列的来源。
-func petStatusCurrent(sequence, generation, latestSequence uint64, state service.AppState, scope notification.Scope) bool {
-	return sequence == latestSequence && state.Connection.Generation == generation && notificationScope(state) == scope
+	application.InvokeAsync(func() { d.beginPetDetail(false) })
 }
 
 // BeginPetDrag 返回一次手势令牌和逻辑原点，后续位移必须携带同一仍有效的令牌。
@@ -1448,7 +1418,7 @@ func (d *DesktopService) dispatchConfirmedKeywordBubble(plan bubblePlan, generat
 		if !valid {
 			return
 		}
-		d.app.Event.Emit("pet:bubble", map[string]string{"text": plan.entry.Message, "kind": plan.entry.Kind})
+		d.app.Event.Emit("pet:bubble", bubblePayload(plan.entry))
 		bubble.Show()
 	})
 }
@@ -1468,8 +1438,7 @@ func (d *DesktopService) prepareBubbleLocked(plan bubblePlan) {
 	}
 	d.bubbleVersion = plan.version
 	if plan.changed {
-		d.bubbleText = plan.entry.Message
-		d.bubbleKind = plan.entry.Kind
+		d.bubbleEntry = plan.entry
 		// 持久错误由前端未读历史决定，宿主仅发布本地手动错误的短时动作。
 		d.manualWarning = plan.entry.Kind == "error" && strings.HasPrefix(plan.entry.ID, "manual:") && plan.entry.Message != ""
 	}
@@ -1479,8 +1448,7 @@ func (d *DesktopService) prepareBubbleLocked(plan bubblePlan) {
 		d.bubbleTimer.Stop()
 		d.bubbleTimer = nil
 	}
-	// 快捷键详情只有在通知中心实际选中该条气泡后才按三秒绝对截止时间计时；
-	// 查询失败、通知关闭或宿主退出等没有当前气泡的路径由触发时的兜底计时器收尾。
+	// 临时显示的桌宠跟随详情的实际截止时间，避免截图读取占用用户看图的时间。
 	d.armShortcutDetailTimerLocked(plan)
 	if !plan.timed || d.stopped() {
 		return
@@ -1528,11 +1496,17 @@ func (d *DesktopService) dispatchBubble(plan bubblePlan) {
 		if !valid {
 			return
 		}
+		// 排队的详情可能在恢复展示时才被选中，显示前再次收起期间打开的代办。
+		if visible && plan.entry.IsPetDetail() {
+			d.hideTodoOnUI()
+		}
 		// 截止、拖动关闭和禁播也更新动作；不能等下次业务轮询才清除短时警告。
 		d.emitPresentation()
 		if !visible {
 			if bubble != nil {
 				bubble.Hide()
+				// 隐藏的 WebView 会复用，及时清空其中已解码的上一张桌面图。
+				d.app.Event.Emit("pet:bubble", bubblePayload(notification.Entry{}))
 			}
 			// 通知策略与窗口偏好更新可能交错；不让无法展示的动作无限占用队首。
 			d.cancelUnstartedLogTrigger(plan.entry.ID)
@@ -1546,6 +1520,7 @@ func (d *DesktopService) dispatchBubble(plan bubblePlan) {
 		if silent {
 			if bubble != nil {
 				bubble.Hide()
+				d.app.Event.Emit("pet:bubble", bubblePayload(notification.Entry{}))
 			}
 			if !d.emitLogTrigger(silentTrigger) {
 				d.cancelUnstartedLogTrigger(plan.entry.ID)
@@ -1615,17 +1590,23 @@ func (d *DesktopService) dispatchBubble(plan bubblePlan) {
 				d.cancelUnstartedLogTrigger(plan.entry.ID)
 				return
 			}
-			d.app.Event.Emit("pet:bubble", map[string]string{"text": plan.entry.Message, "kind": plan.entry.Kind})
+			d.app.Event.Emit("pet:bubble", bubblePayload(plan.entry))
 			if !d.emitLogTrigger(trigger) {
 				d.cancelUnstartedLogTrigger(plan.entry.ID)
 			}
 			return
 		}
-		// 台词较长时扩展气泡高度，避免固定四行裁掉用户设置的文字。
-		bubble.SetSize(300, bubbleHeightForKind(plan.entry.Message, plan.entry.Kind))
-		d.placeBubble(bubble)
+		// 按当前文字和预览布置窗口，跨屏调整尺寸时原生窗口可能重入更新。
+		d.layoutEntryBubble(bubble, plan.entry, d.app.Screen.GetAll())
+		d.mu.Lock()
+		valid = d.bubble == bubble && plan.version == d.bubbleVersion && !d.stopped() && d.presentationVisibleLocked()
+		d.mu.Unlock()
+		if !valid {
+			return
+		}
+		// 先交付匹配当前详情的文字和图片地址，再显示复用的气泡。
+		d.app.Event.Emit("pet:bubble", bubblePayload(plan.entry))
 		bubble.Show()
-		d.app.Event.Emit("pet:bubble", map[string]string{"text": plan.entry.Message, "kind": plan.entry.Kind})
 	})
 }
 
@@ -1688,10 +1669,11 @@ func (d *DesktopService) moveBubble() {
 func (d *DesktopService) moveBubbleOnScreens(screens []*application.Screen) {
 	d.mu.Lock()
 	bubble := d.bubble
-	visible := !d.stopped() && d.presentationVisibleLocked() && d.bubbleText != ""
+	entry := d.bubbleEntry
+	visible := !d.stopped() && d.presentationVisibleLocked() && entry.Message != ""
 	d.mu.Unlock()
 	if visible && bubble != nil {
-		d.placeBubbleOnScreens(bubble, screens)
+		d.layoutEntryBubble(bubble, entry, screens)
 	}
 	d.moveTodoOnScreens(screens)
 }
@@ -1941,12 +1923,8 @@ func (d *DesktopService) Shutdown() {
 		d.todoHideTimer.Stop()
 		d.todoHideTimer = nil
 	}
-	d.shortcutDetailVersion++
-	d.shortcutDetailVisible = false
-	if d.shortcutDetailTimer != nil {
-		d.shortcutDetailTimer.Stop()
-		d.shortcutDetailTimer = nil
-	}
+	d.clearPetDetailLocked()
+	d.bubbleEntry = notification.Entry{}
 	d.mu.Unlock()
 	d.rememberPosition()
 	if d.stopActivationGuard != nil {

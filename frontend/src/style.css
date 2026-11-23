@@ -91,6 +91,11 @@ html[data-view=todo],html[data-view=todo] body{background:transparent;min-width:
 .bubble-progress-heading span:last-child{color:#376eaa;text-align:right}
 .bubble-progress-track{height:7px;margin-top:6px;overflow:hidden;border-radius:999px;background:#dceaf5}
 .bubble-progress-fill{height:100%;border-radius:inherit;background:linear-gradient(90deg,#83b9df,#478bc4);transition:width .25s ease}
+/* 详情和截图纵向排列；工作区较矮时优先缩小图片，完整保留桌面宽高比。 */
+.bubble-window--preview{flex-direction:column;align-items:stretch;gap:8px;padding:14px 16px;overflow:hidden}
+.bubble-window--preview>.bubble-status{flex:0 1 auto;min-height:0}
+.bubble-screenshot{display:block;flex:0 3 175px;width:100%;min-height:0;max-height:min(175px,52vh);object-fit:contain;background:#e0eaf3;border-radius:6px}
+.bubble-window .bubble-screenshot-error{flex:none;margin:0;color:#59728d;font-size:12px;line-height:18px}
 @keyframes furina-breathe{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-3px) scale(1.015)}}
 @keyframes furina-wave{from{transform:rotate(-4deg)}to{transform:rotate(4deg)}}
 @keyframes furina-happy{from{transform:translateY(0) rotate(-3deg)}to{transform:translateY(-10px) rotate(3deg)}}

@@ -11,7 +11,8 @@ export const useAppStore = defineStore('app', () => {
   const native = isNative()
   const section = ref('overview')
   const panelDestination = ref({ target: '', revision: 0 })
-  const bubble = ref({ text: '', kind: 'info' })
+  // 气泡只保存宿主提供的本次截图地址，切换台词时随文字一起替换。
+  const bubble = ref({ text: '', kind: 'info', screenshotUrl: '', screenshotFailed: false })
   // 原生控制台在宿主确认前按隐藏处理；浏览器预览保留当前页面的可见默认值。
   // 原生展示快照同时保留快捷键注册状态，设置页可据此显示冲突和待注册提示。
   const presentation = ref<{ visible: boolean; panelVisible: boolean; action: string; recoveryShortcut?: NativePresentation['recoveryShortcut'] }>({ visible: true, panelVisible: !native, action: '' })
@@ -79,6 +80,16 @@ export const useAppStore = defineStore('app', () => {
     }
   }
 
+  // 首次打开和后续广播使用同一份气泡字段，旧宿主省略截图时按普通台词显示。
+  function acceptBubble(value: Record<string, unknown>) {
+    bubble.value = {
+      text: typeof value.text === 'string' ? value.text : '',
+      kind: typeof value.kind === 'string' ? value.kind : 'info',
+      screenshotUrl: typeof value.screenshotUrl === 'string' ? value.screenshotUrl : '',
+      screenshotFailed: value.screenshotFailed === true,
+    }
+  }
+
   // 先订阅事件再读取快照，并在卸载后停止使用迟到的初始化结果。
   async function initialize() {
     if (!native) return
@@ -86,7 +97,10 @@ export const useAppStore = defineStore('app', () => {
     await run(async () => {
       let bubbleVersion = 0
       const offState = await listen<AppState>('pet:state', accept)
-      const offBubble = await listen<{ text: string; kind?: string }>('pet:bubble', value => { bubbleVersion++; bubble.value = { text: value.text, kind: value.kind || 'info' } })
+      const offBubble = await listen<Record<string, unknown>>('pet:bubble', value => {
+        bubbleVersion++
+        acceptBubble(value)
+      })
       const offPresentation = await listen<NativePresentation>('pet:presentation', acceptPresentation)
       if (disposed) { offState(); offBubble(); offPresentation(); return }
       cleanups.push(offState, offBubble, offPresentation)
@@ -97,7 +111,7 @@ export const useAppStore = defineStore('app', () => {
       const initial = await (await desktop()).GetPresentation() || {}
       if (disposed) return
       acceptHostPresentation(initial)
-      if (bubbleVersion === 0) bubble.value = { text: typeof initial.text === 'string' ? initial.text : '', kind: typeof initial.kind === 'string' ? initial.kind : 'info' }
+      if (bubbleVersion === 0) acceptBubble(initial)
     })
   }
 

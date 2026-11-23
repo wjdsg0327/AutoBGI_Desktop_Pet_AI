@@ -535,7 +535,7 @@ function toggleConnection(id: string) {
 
       <!-- 快捷键独立管理桌宠详情入口，不与日志规则草稿共用保存状态。 -->
       <section v-else-if="activeSection === 'shortcuts'" class="page-content">
-        <div class="page-intro"><span class="overline">DESKTOP HOTKEY</span><h2>桌宠详情快捷键</h2><p>按下指定组合键即可显示当前 BGI 状态详情；桌宠隐藏时会临时出现，详情展示 3 秒后恢复隐藏。</p></div>
+        <div class="page-intro"><span class="overline">DESKTOP HOTKEY</span><h2>桌宠详情快捷键</h2><p>按下组合键可查看 BGI 状态和当前 AutoBGI 所在电脑的桌面截图。桌宠隐藏时会临时出现，展示 3 秒后恢复隐藏。</p></div>
         <div class="shortcut-card">
           <div class="shortcut-card-heading"><div><span class="shortcut-icon"><AppIcon name="settings" :size="22" /></span><div><strong>当前快捷键</strong><small>{{ shortcutCurrent }}</small></div></div><span class="shortcut-status" :class="shortcutStatusClass">{{ shortcutStatusLabel }}</span></div>
           <div class="shortcut-display"><span>已注册组合</span><strong>{{ shortcutRegistered }}</strong></div>

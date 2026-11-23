@@ -6,8 +6,15 @@ import (
 	"github.com/wailsapp/wails/v3/pkg/application"
 )
 
-// todoAllowedLocked 与角色的可见、休眠和鼠标穿透状态保持一致。
+// todoAllowedLocked 统一控制代办的悬停、延迟显示和展开；用户主动查看详情时优先展示详情。
 func (d *DesktopService) todoAllowedLocked() bool {
+	if d.detailCancel != nil || d.bubbleEntry.IsPetDetail() {
+		return false
+	}
+	// 等待其他气泡结束的详情也占用展示。饿晕会暂停整个气泡队列，期间仍可重新悬停处理代办。
+	if !d.fainted && d.detailID != "" && d.notices.center != nil && d.notices.center.HasAction(d.detailID) {
+		return false
+	}
 	return !d.stopped() && !d.sleeping && !d.powerSleepingIntent && !d.documentHidden &&
 		d.prefs.Pet.Visible && !d.prefs.Pet.ClickThrough
 }
@@ -115,6 +122,13 @@ func (d *DesktopService) showTodoCircleOnUI(revision uint64) {
 	window.SetSize(76, 76)
 	window.SetAlwaysOnTop(onTop)
 	d.moveTodoOnScreens(d.app.Screen.GetAll())
+	// 调整原生窗口时可能重入详情入口，旧回调不能在已收起后再次 Show。
+	d.mu.Lock()
+	valid = d.todoViewRevision == revisionState && d.todoVisible && d.todoAllowedLocked()
+	d.mu.Unlock()
+	if !valid {
+		return
+	}
 	d.app.Event.Emit("pet:todo-window", map[string]any{"visible": true, "expanded": false, "revision": revisionState})
 	window.Show()
 }
@@ -161,11 +175,15 @@ func (d *DesktopService) HideTodoWindow() {
 // hideTodoOnUI 在释放状态锁后隐藏原生窗口，避免窗口回调重入死锁。
 func (d *DesktopService) hideTodoOnUI() {
 	d.mu.Lock()
+	// 详情展示期间可能收到多次状态同步，已收起的窗口无需重复隐藏或广播。
+	if !d.todoVisible && !d.todoPetHover && !d.todoWindowHover && d.todoShowTimer == nil && d.todoHideTimer == nil {
+		d.mu.Unlock()
+		return
+	}
+	wasVisible := d.todoVisible
 	d.todoHoverRevision++
 	d.todoPetHover, d.todoWindowHover = false, false
 	d.todoVisible, d.todoExpanded = false, false
-	d.todoViewRevision++
-	revisionState := d.todoViewRevision
 	if d.todoShowTimer != nil {
 		d.todoShowTimer.Stop()
 		d.todoShowTimer = nil
@@ -174,6 +192,13 @@ func (d *DesktopService) hideTodoOnUI() {
 		d.todoHideTimer.Stop()
 		d.todoHideTimer = nil
 	}
+	// 只有悬停计时时撤销回调即可，前端仍保持原有隐藏状态。
+	if !wasVisible {
+		d.mu.Unlock()
+		return
+	}
+	d.todoViewRevision++
+	revisionState := d.todoViewRevision
 	window := d.todoWindow
 	d.mu.Unlock()
 	if window != nil {

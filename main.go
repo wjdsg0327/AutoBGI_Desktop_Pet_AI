@@ -42,6 +42,10 @@ func main() {
 				w.Header().Set("Content-Security-Policy", "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self'; font-src 'self'; object-src 'none'; frame-src 'none'; base-uri 'none'; form-action 'none'")
 				w.Header().Set("X-Content-Type-Options", "nosniff")
 				w.Header().Set("Permissions-Policy", "camera=(), microphone=(), geolocation=(), clipboard-read=(), display-capture=(), usb=(), serial=(), bluetooth=()")
+				// 详情图只可从当前气泡的内存条目读取，不进入静态资源目录。
+				if desktopService.ServeDetailScreenshot(w, r) {
+					return
+				}
 				// 自定义皮肤只允许专用同源路由，不能把整个用户目录交给文件服务器。
 				if srv.ServeSkinAsset(w, r) {
 					return

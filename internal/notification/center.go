@@ -3,6 +3,7 @@ package notification
 
 import (
 	"fmt"
+	"slices"
 	"strings"
 	"time"
 )
@@ -34,6 +35,9 @@ type Entry struct {
 	Duration time.Duration
 	// Priority 允许快捷键详情等即时交互覆盖同类普通通知，零值使用 Kind 的默认优先级。
 	Priority int
+	// 详情截图只随本次内存通知流转，前端通过宿主的临时图片地址读取。
+	Screenshot       []byte `json:"-"`
+	ScreenshotFailed bool   `json:"-"`
 }
 
 // Policy 区分勿扰计数与禁止补播；隐藏、休眠和关闭气泡的优先级高于勿扰。
@@ -164,6 +168,8 @@ func (c *Center) Current(now time.Time) (Entry, bool) {
 			kept = append(kept, item)
 		}
 	}
+	// 清空底层切片的尾部，过期的截图字节即可随通知一起释放。
+	clear(c.pending[len(kept):])
 	c.pending = kept
 	index := c.bestIndex(now)
 	if index < 0 {
@@ -176,7 +182,7 @@ func (c *Center) Current(now time.Time) (Entry, bool) {
 		c.active.entry.Kind != "error" && c.active.entry.Kind != "trigger" && c.active.entry.Kind != "pickup" {
 		// 被抢占的提醒已经尝试展示，不重新排队，以免同一 ID 被再次弹出。
 		item := c.pending[index]
-		c.pending = append(c.pending[:index], c.pending[index+1:]...)
+		c.pending = slices.Delete(c.pending, index, index+1)
 		c.activate(item, now)
 	}
 	return c.active.entry, true
@@ -271,22 +277,18 @@ func (c *Center) OfferManual(scope Scope, entry Entry, now time.Time) bool {
 	if !fresh || c.blocked() || c.policy.DoNotDisturb {
 		return false
 	}
-	if isShortcutDetailEntry(entry) {
-		// 重复触发时只保留最后一条桌宠详情，避免旧气泡占用当前三秒窗口。
-		if c.active != nil && isShortcutDetailEntry(c.active.entry) {
+	if entry.IsPetDetail() {
+		// 两个详情入口共享最新一次预览，旧图不会占用下一次展示时间。
+		if c.active != nil && c.active.entry.IsPetDetail() {
 			c.active = nil
 			c.deadline, c.confirmUntil = time.Time{}, time.Time{}
 		}
-		kept := c.pending[:0]
-		for _, pending := range c.pending {
-			if !isShortcutDetailEntry(pending.entry) {
-				kept = append(kept, pending)
-			}
-		}
-		c.pending = kept
+		c.pending = slices.DeleteFunc(c.pending, func(pending queued) bool {
+			return pending.entry.IsPetDetail()
+		})
 	}
 	_, _ = c.Current(now)
-	if !c.fainted && (isShortcutDetailEntry(entry) ||
+	if !c.fainted && (strings.HasPrefix(entry.ID, "shortcut:") ||
 		c.active == nil || entryPriority(c.active.entry) < entryPriority(item.entry) &&
 		c.active.entry.Kind != "pickup" && c.active.entry.Kind != "trigger") {
 		// 快捷键是用户主动查询入口，即使当前正在播放动作，也立即切换到最新详情。
@@ -333,13 +335,7 @@ func (c *Center) SetFainted(fainted bool) {
 
 // ClearPickups 在关闭拾取通知时移除当前及所有待播蛋糕动作。
 func (c *Center) ClearPickups() {
-	kept := c.pending[:0]
-	for _, item := range c.pending {
-		if item.entry.Kind != "pickup" {
-			kept = append(kept, item)
-		}
-	}
-	c.pending = kept
+	c.pending = slices.DeleteFunc(c.pending, func(item queued) bool { return item.entry.Kind == "pickup" })
 	if c.active != nil && c.active.entry.Kind == "pickup" {
 		c.active, c.deadline, c.confirmUntil = nil, time.Time{}, time.Time{}
 	}
@@ -460,7 +456,7 @@ func (c *Center) enqueue(item queued) {
 	if kind == "progress" || kind == "manual" {
 		for index := len(c.pending) - 1; index >= 0; index-- {
 			if mergeKind(c.pending[index].entry.Kind) == kind {
-				c.pending = append(c.pending[:index], c.pending[index+1:]...)
+				c.pending = slices.Delete(c.pending, index, index+1)
 			}
 		}
 	}
@@ -479,7 +475,7 @@ func (c *Center) enqueue(item queued) {
 	var aggregate queued
 	if aggregateIndex >= 0 {
 		aggregate = c.pending[aggregateIndex]
-		c.pending = append(c.pending[:aggregateIndex], c.pending[aggregateIndex+1:]...)
+		c.pending = slices.Delete(c.pending, aggregateIndex, aggregateIndex+1)
 	}
 	for c.mergeablePending() >= queueLimit {
 		victim := c.lowestIndex()
@@ -488,7 +484,7 @@ func (c *Center) enqueue(item queued) {
 		if c.pending[victim].createdAt.After(aggregate.createdAt) {
 			aggregate.createdAt = c.pending[victim].createdAt
 		}
-		c.pending = append(c.pending[:victim], c.pending[victim+1:]...)
+		c.pending = slices.Delete(c.pending, victim, victim+1)
 	}
 	if aggregate.entry.ID == "" {
 		aggregate = c.summary(aggregate.count, aggregate.errors, "另有 %d 条状态提醒已合并。", aggregate.createdAt)
@@ -546,9 +542,9 @@ func (c *Center) lowestIndex() int {
 	return lowest
 }
 
-// isShortcutDetailEntry 判断快捷键详情通知，避免通知中心把同一会话的旧结果继续排队。
-func isShortcutDetailEntry(entry Entry) bool {
-	return strings.HasPrefix(entry.ID, "shortcut:")
+// IsPetDetail 通过入口标识识别单击和快捷键详情，覆盖查询失败时的文字气泡。
+func (entry Entry) IsPetDetail() bool {
+	return strings.HasPrefix(entry.ID, "detail:") || strings.HasPrefix(entry.ID, "shortcut:")
 }
 
 // entryPriority 先使用单条通知的即时优先级，再按已知事实种类排序。

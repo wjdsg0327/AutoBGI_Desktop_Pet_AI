@@ -77,6 +77,17 @@ func (c *Client) requestQuery(ctx context.Context, method, route string, query u
 
 // requestQueryWithHTTP 复用固定路由和鉴权规则，允许耗时的关闭操作使用专用超时。
 func (c *Client) requestQueryWithHTTP(ctx context.Context, client *http.Client, method, route string, query url.Values, body any, dest any) error {
+	// JSON 接口和桌面截图共用同一套来源、认证和网络错误处理。
+	response, err := c.doRequest(ctx, client, method, route, query, body, "application/json")
+	if err != nil {
+		return err
+	}
+	defer response.Body.Close()
+	return decodeResponse(response, dest)
+}
+
+// doRequest 向当前实例发送固定路由的请求，响应由调用方按约定格式读取并关闭。
+func (c *Client) doRequest(ctx context.Context, client *http.Client, method, route string, query url.Values, body any, accept string) (*http.Response, error) {
 	u := *c.base
 	u.Path = strings.TrimRight(c.base.Path, "/") + route
 	u.RawPath = ""
@@ -85,28 +96,27 @@ func (c *Client) requestQueryWithHTTP(ctx context.Context, client *http.Client, 
 	if body != nil {
 		data, err := json.Marshal(body)
 		if err != nil {
-			return &APIError{Code: "INVALID_ARGUMENT", Message: "请求参数无效"}
+			return nil, &APIError{Code: "INVALID_ARGUMENT", Message: "请求参数无效"}
 		}
 		reader = bytes.NewReader(data)
 	}
 	req, err := http.NewRequestWithContext(ctx, method, u.String(), reader)
 	if err != nil {
-		return &APIError{Code: "INVALID_ARGUMENT", Message: "无法建立请求"}
+		return nil, &APIError{Code: "INVALID_ARGUMENT", Message: "无法建立请求"}
 	}
 	req.Header.Set("apiKey", c.key)
-	req.Header.Set("Accept", "application/json")
+	req.Header.Set("Accept", accept)
 	if body != nil {
 		req.Header.Set("Content-Type", "application/json")
 	}
 	response, err := client.Do(req)
 	if err != nil {
 		if ctx.Err() != nil {
-			return ctx.Err()
+			return nil, ctx.Err()
 		}
-		return &APIError{Code: "NETWORK_ERROR", Message: "无法连接服务，请检查地址、网络、TLS 证书或服务是否启动"}
+		return nil, &APIError{Code: "NETWORK_ERROR", Message: "无法连接服务，请检查地址、网络、TLS 证书或服务是否启动"}
 	}
-	defer response.Body.Close()
-	return decodeResponse(response, dest)
+	return response, nil
 }
 
 // decodeResponse 仅接受有限 JSON；业务错误使用本地文案而不反射远端错误文本。

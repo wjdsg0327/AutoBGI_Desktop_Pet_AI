@@ -1,9 +1,19 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import { useAppStore } from '../stores/app'
 
 // 状态摘要按字段分行，普通台词保持原样。
 const store = useAppStore()
+// 每次查看使用独立图片地址，旧图片迟到的解码错误不会覆盖新截图。
+const failedImageUrl = ref('')
+const hasScreenshot = computed(() => Boolean(store.bubble.screenshotUrl || store.bubble.screenshotFailed))
+function onScreenshotError(event: Event) {
+  const image = event.currentTarget as HTMLImageElement
+  const url = image.getAttribute('src')
+  if (url && url === store.bubble.screenshotUrl) failedImageUrl.value = url
+}
+
+// 将接口返回的状态文本拆成标签和值，便于与截图在同一气泡内阅读。
 const parsedRows = computed(() => store.bubble.text.split('\n').filter(Boolean).map(line => {
   const text = line.replace(/^【|】$/g, '')
   const separator = text.search(/[：:]/)
@@ -38,7 +48,7 @@ const runtimeProgress = computed(() => {
 </script>
 
 <template>
-  <main class="bubble-window" :class="{ 'bubble-window--status': store.bubble.kind === 'status' }">
+  <main class="bubble-window" :class="{ 'bubble-window--status': store.bubble.kind === 'status', 'bubble-window--preview': hasScreenshot }">
     <div v-if="store.bubble.kind === 'status'" class="bubble-status">
       <div v-for="(row, index) in statusRows" :key="index" class="bubble-status-row">
         <span v-if="row.label" class="bubble-status-label">{{ row.label }}</span>
@@ -56,5 +66,10 @@ const runtimeProgress = computed(() => {
       </div>
     </div>
     <p v-else>{{ store.bubble.text }}</p>
+    <!-- 状态与截图分别展示，任一读取失败时仍保留另一项。 -->
+    <template v-if="hasScreenshot">
+      <small v-if="store.bubble.screenshotFailed || failedImageUrl === store.bubble.screenshotUrl" class="bubble-screenshot-error" role="status">桌面截图获取失败</small>
+      <img v-else :key="store.bubble.screenshotUrl" :src="store.bubble.screenshotUrl" class="bubble-screenshot" alt="当前 AutoBGI 所在电脑的桌面截图" draggable="false" @error="onScreenshotError">
+    </template>
   </main>
 </template>
